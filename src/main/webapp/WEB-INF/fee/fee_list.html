@@ -32,12 +32,42 @@
                 $.ajax({
                     url: "/allcost",
                     success: function (result) {
-                        console.log(result);
+                        for (var i = 0; i < result.length; i++) {
+                            addNewTr(result[i].data);
+                        }
                     }
                 })
             }
 
             allCost();
+            function addNewTr(msg) {
+                var tr = $("<tr></tr>");
+                var td1 = $("<td></td>").append(msg.costId).appendTo(tr);
+                var td2 = $("<td><a href='fee_detail.html'></td>").append(msg.name).appendTo(tr);
+                var td3 = $("<td></td>").append(msg.baseDuration).appendTo(tr);
+                var td4 = $("<td></td>").append(msg.baseCost).appendTo(tr);
+                var td5 = $("<td></td>").append(msg.descr).appendTo(tr);
+                var td6 = $("<td></td>").append(msg.creatime).appendTo(tr);
+                var td7 = $("<td></td>").append(msg.startime).appendTo(tr);
+                var td8 = $("<td></td>").append(msg.status).appendTo(tr);
+                var td9 = $("<td></td>").append(msg.status).appendTo(tr);
+                $("#tab").append(tr);
+//            <tr>
+//                <td>1</td>
+//                <td><a href="fee_detail.html">包 20 小时</a></td>
+//                <td>20 小时</td>
+//                <td>24.50 元</td>
+//                <td>3.00 元/小时</td>
+//                <td>2013/01/01 00:00:00</td>
+//                <td></td>
+//                <td>暂停</td>
+//                <td>
+//                <input type="button" value="启用" class="btn_start" onclick="startFee();"/>
+//                        <input type="button" value="修改" class="btn_modify" onclick="location.href='fee_modi.html';"/>
+//                        <input type="button" value="删除" class="btn_delete" onclick="deleteFee();"/>
+//                        </td>
+//                        </tr>
+            }
         })
     </script>
 </head>
@@ -84,6 +114,7 @@
         <!--数据区域：用表格展示数据-->
         <div id="data">
             <table id="datalist">
+                <thead>
                 <tr>
                     <th>资费ID</th>
                     <th class="width100">资费名称</th>
@@ -95,33 +126,10 @@
                     <th class="width50">状态</th>
                     <th class="width200"></th>
                 </tr>
-                <tr>
-                    <td>1</td>
-                    <td><a href="fee_detail.html">包 20 小时</a></td>
-                    <td>20 小时</td>
-                    <td>24.50 元</td>
-                    <td>3.00 元/小时</td>
-                    <td>2013/01/01 00:00:00</td>
-                    <td></td>
-                    <td>暂停</td>
-                    <td>
-                        <input type="button" value="启用" class="btn_start" onclick="startFee();"/>
-                        <input type="button" value="修改" class="btn_modify" onclick="location.href='fee_modi.html';"/>
-                        <input type="button" value="删除" class="btn_delete" onclick="deleteFee();"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td><a href="fee_detail.html">包 40 小时</a></td>
-                    <td>40 小时</td>
-                    <td>40.50 元</td>
-                    <td>3.00 元/小时</td>
-                    <td>2013/01/21 00:00:00</td>
-                    <td>2013/01/23 00:00:00</td>
-                    <td>开通</td>
-                    <td>
-                    </td>
-                </tr>
+                </thead>
+                <tbody id="tab">
+
+                </tbody>
             </table>
             <p>业务说明：<br/>
                 1、创建资费时，状态为暂停，记载创建时间；<br/>
