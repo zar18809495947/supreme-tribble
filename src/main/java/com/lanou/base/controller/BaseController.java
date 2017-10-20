@@ -1,4 +1,4 @@
-package com.lanou.cost.controller;
+package com.lanou.base.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -7,9 +7,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author zar on 2017/10/20.
  */
 @Controller
-public class MainController {
+public class BaseController {
     @RequestMapping(value = "/")
-    public String home() {
+    public String homepage() {
         return "index";
+    }
+
+    @RequestMapping(value = "/feelistpage")
+    public String feeListPage() {
+        return "fee/fee_list";
     }
 }
