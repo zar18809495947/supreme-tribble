@@ -23,6 +23,11 @@
     from cost
     where cost_id = #{costId,jdbcType=INTEGER}
   </select>
+  <select id="findAllCost" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM cost
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from cost
     where cost_id = #{costId,jdbcType=INTEGER}
