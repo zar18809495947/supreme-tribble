@@ -9,7 +9,12 @@ public interface CostMapper {
 
     int insert(Cost record);
 
-    int insertSelective(Cost record);
+    /**
+     * 添加资费
+     *
+     * @param record 资费
+     */
+    void insertSelective(Cost record);
 
     Cost selectByPrimaryKey(Integer costId);
 

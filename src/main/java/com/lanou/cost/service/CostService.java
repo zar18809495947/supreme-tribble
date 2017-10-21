@@ -14,4 +14,9 @@ public interface CostService {
      * @return 费用集合
      */
     List<Cost> findAllCost();
+
+    /**
+     * 添加费用
+     */
+    void addCost(Cost cost);
 }

@@ -32,7 +32,7 @@
     delete from cost
     where cost_id = #{costId,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.lanou.cost.bean.Cost">
+  <insert id="insert" parameterType="com.lanou.cost.bean.Cost" useGeneratedKeys="true" keyProperty="costId">
     insert into cost (cost_id, name, base_duration, 
       base_cost, unit_cost, status, 
       descr, creatime, startime, 

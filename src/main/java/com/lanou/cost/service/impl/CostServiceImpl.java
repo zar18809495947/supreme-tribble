@@ -21,4 +21,9 @@ public class CostServiceImpl implements CostService {
     public List<Cost> findAllCost() {
         return costMapper.findAllCost();
     }
+
+    @Override
+    public void addCost(Cost cost) {
+        costMapper.insert(cost);
+    }
 }

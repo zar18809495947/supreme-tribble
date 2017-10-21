@@ -46,27 +46,19 @@
                 var td2 = $("<td><a href='fee_detail.html'></td>").append(msg.name).appendTo(tr);
                 var td3 = $("<td></td>").append(msg.baseDuration).appendTo(tr);
                 var td4 = $("<td></td>").append(msg.baseCost).appendTo(tr);
-                var td5 = $("<td></td>").append(msg.descr).appendTo(tr);
+                var td5 = $("<td></td>").append(msg.unitCost).appendTo(tr);
                 var td6 = $("<td></td>").append(msg.creatime).appendTo(tr);
                 var td7 = $("<td></td>").append(msg.startime).appendTo(tr);
-                var td8 = $("<td></td>").append(msg.status).appendTo(tr);
-                var td9 = $("<td></td>").append(msg.status).appendTo(tr);
+                if (msg.status == 1) {
+                    var td8 = $("<td>开通</td>").appendTo(tr);
+                } else {
+                    var td8 = $("<td>暂停</td>").appendTo(tr);
+                }
+                var btnStart = $("<input type='button' value='启用' class='btn_start'/>").click(startFee);
+                var btnModify = $("<input type='button' value='修改' class='btn_modify' onclick='location.href='fee_modi.html';'/>");
+                var btnDel = $("<input type='button' value='删除' class='btn_delete'/>").click(deleteFee);
+                var td9 = $("<td></td>").append(btnStart).append(btnModify).append(btnDel).appendTo(tr);
                 $("#tab").append(tr);
-//            <tr>
-//                <td>1</td>
-//                <td><a href="fee_detail.html">包 20 小时</a></td>
-//                <td>20 小时</td>
-//                <td>24.50 元</td>
-//                <td>3.00 元/小时</td>
-//                <td>2013/01/01 00:00:00</td>
-//                <td></td>
-//                <td>暂停</td>
-//                <td>
-//                <input type="button" value="启用" class="btn_start" onclick="startFee();"/>
-//                        <input type="button" value="修改" class="btn_modify" onclick="location.href='fee_modi.html';"/>
-//                        <input type="button" value="删除" class="btn_delete" onclick="deleteFee();"/>
-//                        </td>
-//                        </tr>
             }
         })
     </script>
@@ -104,7 +96,7 @@
                 <input type="button" value="基费" class="sort_asc" onclick="sort(this);"/>
                 <input type="button" value="时长" class="sort_asc" onclick="sort(this);"/>
             </div>
-            <input type="button" value="增加" class="btn_add" onclick="location.href='fee_add.html';"/>
+            <input type="button" value="增加" class="btn_add" onclick="window.location.href='/toaddcost';"/>
         </div>
         <!--启用操作的操作提示-->
         <div id="operate_result_info" class="operate_success">
