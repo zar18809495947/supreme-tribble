@@ -75,6 +75,10 @@
                     },
                     success: function (result) {
                         console.log(result);
+                        if (result.errorCode == 0) {
+                            window.location.href = "/feelistpage";
+                        }
+
                     }
                 });
             })

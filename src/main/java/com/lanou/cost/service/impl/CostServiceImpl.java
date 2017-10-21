@@ -26,4 +26,9 @@ public class CostServiceImpl implements CostService {
     public void addCost(Cost cost) {
         costMapper.insert(cost);
     }
+
+    @Override
+    public void delCost(Cost cost) {
+        costMapper.deleteByPrimaryKey(cost.getCostId());
+    }
 }

@@ -1,5 +1,6 @@
 package com.lanou.cost.bean;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Cost {

@@ -5,7 +5,12 @@ import com.lanou.cost.bean.Cost;
 import java.util.List;
 
 public interface CostMapper {
-    int deleteByPrimaryKey(Integer costId);
+    /**
+     * 删除资费
+     *
+     * @param costId 资费id
+     */
+    void deleteByPrimaryKey(Integer costId);
 
     int insert(Cost record);
 

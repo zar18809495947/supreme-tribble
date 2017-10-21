@@ -23,8 +23,18 @@
         }
         //删除
         function deleteFee() {
-            var r = window.confirm("确定要删除此资费吗？");
-            document.getElementById("operate_result_info").style.display = "block";
+//            var r = window.confirm("确定要删除此资费吗？");
+//            document.getElementById("operate_result_info").style.display = "block";
+            var attr = $(this).attr("num");
+            $.ajax({
+                url: "/delcost",
+                data: {
+                    costId: attr
+                },
+                success:function (result) {
+                    $("#tr" + result.data.costId).remove();
+                }
+            })
         }
 
         $(document).ready(function () {
@@ -41,7 +51,7 @@
 
             allCost();
             function addNewTr(msg) {
-                var tr = $("<tr></tr>");
+                var tr = $("<tr></tr>").attr("id", "tr" + msg.costId);
                 var td1 = $("<td></td>").append(msg.costId).appendTo(tr);
                 var td2 = $("<td><a href='fee_detail.html'></td>").append(msg.name).appendTo(tr);
                 var td3 = $("<td></td>").append(msg.baseDuration).appendTo(tr);
@@ -56,7 +66,7 @@
                 }
                 var btnStart = $("<input type='button' value='启用' class='btn_start'/>").click(startFee);
                 var btnModify = $("<input type='button' value='修改' class='btn_modify' onclick='location.href='fee_modi.html';'/>");
-                var btnDel = $("<input type='button' value='删除' class='btn_delete'/>").click(deleteFee);
+                var btnDel = $("<input type='button' value='删除' class='btn_delete'/>").attr("num", msg.costId).click(deleteFee);
                 var td9 = $("<td></td>").append(btnStart).append(btnModify).append(btnDel).appendTo(tr);
                 $("#tab").append(tr);
             }

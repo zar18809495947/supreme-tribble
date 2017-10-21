@@ -19,4 +19,11 @@ public interface CostService {
      * 添加费用
      */
     void addCost(Cost cost);
+
+    /**
+     * 删除费用
+     *
+     * @param cost id
+     */
+    void delCost(Cost cost);
 }

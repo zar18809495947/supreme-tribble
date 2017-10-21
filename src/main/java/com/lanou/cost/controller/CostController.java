@@ -39,12 +39,21 @@ public class CostController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/addcost", method = RequestMethod.POST)
+    @RequestMapping(value = "/addcost", method = {RequestMethod.POST, RequestMethod.GET})
     public AjaxResult addCost(Cost cost) {
         cost.setStatus("0");
         cost.setCreatime(new Timestamp(System.currentTimeMillis()));
         System.out.println(cost);
         costService.addCost(cost);
+        return new AjaxResult(cost);
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/delcost")
+    public AjaxResult delCost(Cost cost) {
+        System.out.println(cost);
+        costService.delCost(cost);
         return new AjaxResult(cost);
     }
 }
