@@ -23,7 +23,12 @@ public interface CostMapper {
 
     Cost selectByPrimaryKey(Integer costId);
 
-    int updateByPrimaryKeySelective(Cost record);
+    /**
+     * 修改资费
+     *
+     * @param record 资费
+     */
+    void updateByPrimaryKeySelective(Cost record);
 
     int updateByPrimaryKey(Cost record);
 

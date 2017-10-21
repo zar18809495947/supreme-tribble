@@ -27,6 +27,7 @@
         <javaModelGenerator targetPackage="com.lanou.cost.bean" targetProject="./src/main/java">
             <property name="enableSubPackages" value="false"/>
             <property name="trimStrings" value="true"/>
+
         </javaModelGenerator>
 
         <!-- !!!! Mapper XML Configurations !!!! -->

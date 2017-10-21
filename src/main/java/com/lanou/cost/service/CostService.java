@@ -1,5 +1,6 @@
 package com.lanou.cost.service;
 
+import com.github.pagehelper.PageInfo;
 import com.lanou.cost.bean.Cost;
 
 import java.util.List;
@@ -26,4 +27,13 @@ public interface CostService {
      * @param cost id
      */
     void delCost(Cost cost);
+
+    /**
+     * 修改资费
+     *
+     * @param cost 资费
+     */
+    void updateCost(Cost cost);
+
+    PageInfo<Cost> findWithPageInfo(Integer pageNum, Integer pageSize);
 }

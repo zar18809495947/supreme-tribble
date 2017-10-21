@@ -1,11 +1,13 @@
 package com.lanou.cost.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.lanou.cost.bean.Cost;
 import com.lanou.cost.service.CostService;
 import com.lanou.cost.utils.AjaxResult;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
@@ -55,5 +57,20 @@ public class CostController {
         System.out.println(cost);
         costService.delCost(cost);
         return new AjaxResult(cost);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/startcost")
+    public AjaxResult startCost(Cost cost) {
+        costService.updateCost(cost);
+        return new AjaxResult(cost);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/costlistinfo")
+    public AjaxResult costListInfo(@RequestParam("no") Integer pageNum,
+                                   @RequestParam("size") Integer pageSize) {
+        PageInfo<Cost> costPageInfo = costService.findWithPageInfo(pageNum, pageSize);
+        return new AjaxResult(costPageInfo);
     }
 }
