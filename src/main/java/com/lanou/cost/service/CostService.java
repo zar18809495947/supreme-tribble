@@ -17,6 +17,14 @@ public interface CostService {
     List<Cost> findAllCost();
 
     /**
+     * 通过id查询资费
+     *
+     * @param costId id
+     * @return 资费
+     */
+    Cost findByCostId(Integer costId);
+
+    /**
      * 添加费用
      */
     void addCost(Cost cost);
@@ -35,5 +43,12 @@ public interface CostService {
      */
     void updateCost(Cost cost);
 
+    /**
+     * 分页
+     *
+     * @param pageNum  第几页
+     * @param pageSize 一页信息数
+     * @return 分页信息
+     */
     PageInfo<Cost> findWithPageInfo(Integer pageNum, Integer pageSize);
 }

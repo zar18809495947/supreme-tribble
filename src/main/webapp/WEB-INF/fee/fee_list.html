@@ -49,7 +49,6 @@
                     },
                     success: function (result) {
                         $("#tr" + result.data.costId).remove();
-                        console.log($("#tab").children());
                         if ($("#tab").children().length == 0) {
                             $("#prePage").click();
                         }
@@ -57,9 +56,23 @@
                 })
             }
 
+            // 修改
+            function modifyFee() {
+                var num = $(this).attr("num");
+                console.log(123);
+                $.ajax({
+                    url: "/savecostid",
+                    data: {
+                        costId: num
+                    },
+                    success:function (result) {
+                        window.location.href="/tomodicost";
+                    }
+                })
+            }
+
             // 添加tr
             function addNewTr(msg, pageNum) {
-                console.log(msg);
                 var tr = $("<tr></tr>").attr("id", "tr" + msg.costId);
                 var td1 = $("<td></td>").append(msg.costId).appendTo(tr);
                 var td2 = $("<td><a href='fee_detail.html'></td>").append(msg.name).appendTo(tr);
@@ -74,7 +87,7 @@
                     var td8 = $("<td>暂停</td>").appendTo(tr);
                 }
                 var btnStart = $("<input type='button' value='启用' class='btn_start'/>").attr("pageNum", pageNum).attr("num", msg.costId).click(startFee);
-                var btnModify = $("<input type='button' value='修改' class='btn_modify' onclick='location.href='fee_modi.html';'/>");
+                var btnModify = $("<input type='button' value='修改' class='btn_modify'>").attr("num", msg.costId).click(modifyFee);
                 var btnDel = $("<input type='button' value='删除' class='btn_delete'/>").attr("num", msg.costId).click(deleteFee);
                 var td9 = $("<td></td>").append(btnStart).append(btnModify).append(btnDel).appendTo(tr);
                 $("#tab").append(tr);

@@ -21,6 +21,12 @@ public interface CostMapper {
      */
     void insertSelective(Cost record);
 
+    /**
+     * 通过id查询资费
+     *
+     * @param costId 资费id
+     * @return 返回资费
+     */
     Cost selectByPrimaryKey(Integer costId);
 
     /**

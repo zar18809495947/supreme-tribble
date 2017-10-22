@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.lanou.cost.bean.Cost;
 import com.lanou.cost.service.CostService;
 import com.lanou.cost.utils.AjaxResult;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,6 +29,18 @@ public class CostController {
     @RequestMapping(value = "/toaddcost")
     public String toAddCost() {
         return "fee/fee_add";
+    }
+
+    @RequestMapping(value = "/tomodicost")
+    public String toModiCost() {
+        return "fee/fee_modi";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/savecostid")
+    public Cost saveCostId(HttpServletRequest request,Cost cost) {
+        request.getSession().setAttribute("costId",cost.getCostId());
+        return cost;
     }
 
     @ResponseBody
@@ -62,6 +76,7 @@ public class CostController {
     @ResponseBody
     @RequestMapping(value = "/startcost")
     public AjaxResult startCost(Cost cost) {
+        cost.setStartime(new Timestamp(System.currentTimeMillis()));
         costService.updateCost(cost);
         return new AjaxResult(cost);
     }
@@ -72,5 +87,22 @@ public class CostController {
                                    @RequestParam("size") Integer pageSize) {
         PageInfo<Cost> costPageInfo = costService.findWithPageInfo(pageNum, pageSize);
         return new AjaxResult(costPageInfo);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/getcost")
+    public AjaxResult getCostById(HttpServletRequest request) {
+        Integer costId = (Integer) request.getSession().getAttribute("costId");
+        Cost cost = costService.findByCostId(costId);
+        return new AjaxResult(cost);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/modifycost",method = RequestMethod.POST)
+    public AjaxResult modifyCost(Cost cost) {
+        cost.setCreatime(new Timestamp(System.currentTimeMillis()));
+        System.out.println(cost);
+        costService.updateCost(cost);
+        return new AjaxResult(cost);
     }
 }

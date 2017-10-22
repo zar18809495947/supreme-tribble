@@ -25,6 +25,11 @@ public class CostServiceImpl implements CostService {
     }
 
     @Override
+    public Cost findByCostId(Integer costId) {
+        return costMapper.selectByPrimaryKey(costId);
+    }
+
+    @Override
     public void addCost(Cost cost) {
         costMapper.insert(cost);
     }
@@ -49,9 +54,9 @@ public class CostServiceImpl implements CostService {
         pageSize = pageSize == null ? 5 : pageSize;
         PageHelper.startPage(pageNum, pageSize);
         List<Cost> costList = costMapper.findAllCost();
-        System.out.println(costList);
+//        System.out.println(costList);
         PageInfo<Cost> pageInfo = new PageInfo<Cost>(costList);
-        System.out.println(pageInfo);
+//        System.out.println(pageInfo);
         return pageInfo;
     }
 }
