@@ -33,7 +33,7 @@ public class CostController {
     @RequestMapping(value = "/allcost")
     public List<AjaxResult> allCost() {
         List<Cost> allCost = costService.findAllCost();
-        List<AjaxResult> ajaxResultList = new ArrayList<>();
+        List<AjaxResult> ajaxResultList = new ArrayList<AjaxResult>();
         for (Cost cost : allCost) {
             ajaxResultList.add(new AjaxResult(cost));
         }

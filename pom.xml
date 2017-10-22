@@ -10,15 +10,13 @@
     <properties>
         <spring.version>4.3.6.RELEASE</spring.version>
         <spring-data.version>1.11.0.RELEASE</spring-data.version>
-
-        <aaa>4.12</aaa>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>${aaa}</version>
+            <version>4.12</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.mybatis/mybatis -->
@@ -144,17 +142,5 @@
                 <filtering>false</filtering>
             </resource>
         </resources>
-
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-            </plugin>
-        </plugins>
     </build>
 </project>

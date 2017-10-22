@@ -22,6 +22,8 @@
 //            var r = window.confirm("确定要启用此资费吗？资费启用后将不能修改和删除。");
 //            document.getElementById("operate_result_info").style.display = "block";
                 var attr = $(this).attr("num");
+                var pageNum = $(this).attr("pageNum");
+                console.log(pageNum);
                 $.ajax({
                     url: "/startcost",
                     data: {
@@ -30,7 +32,7 @@
                     },
                     success: function (result) {
                         $("#tab").children().remove();
-                        allCost();
+                        page(pageNum, 4);
                     }
                 });
             }
@@ -47,25 +49,17 @@
                     },
                     success: function (result) {
                         $("#tr" + result.data.costId).remove();
+                        console.log($("#tab").children());
+                        if ($("#tab").children().length == 0) {
+                            $("#prePage").click();
+                        }
                     }
                 })
             }
 
-
-//            function allCost() {
-//                $.ajax({
-//                    url: "/allcost",
-//                    success: function (result) {
-//                        for (var i = 0; i < result.length; i++) {
-//                            addNewTr(result[i].data);
-//                        }
-//                    }
-//                })
-//            }
-//
-//            allCost();
-
-            function addNewTr(msg) {
+            // 添加tr
+            function addNewTr(msg, pageNum) {
+                console.log(msg);
                 var tr = $("<tr></tr>").attr("id", "tr" + msg.costId);
                 var td1 = $("<td></td>").append(msg.costId).appendTo(tr);
                 var td2 = $("<td><a href='fee_detail.html'></td>").append(msg.name).appendTo(tr);
@@ -79,41 +73,45 @@
                 } else {
                     var td8 = $("<td>暂停</td>").appendTo(tr);
                 }
-                var btnStart = $("<input type='button' value='启用' class='btn_start'/>").attr("num", msg.costId).click(startFee);
+                var btnStart = $("<input type='button' value='启用' class='btn_start'/>").attr("pageNum", pageNum).attr("num", msg.costId).click(startFee);
                 var btnModify = $("<input type='button' value='修改' class='btn_modify' onclick='location.href='fee_modi.html';'/>");
                 var btnDel = $("<input type='button' value='删除' class='btn_delete'/>").attr("num", msg.costId).click(deleteFee);
                 var td9 = $("<td></td>").append(btnStart).append(btnModify).append(btnDel).appendTo(tr);
                 $("#tab").append(tr);
             }
 
+            // 添加页码
             function pageInfo(type) {
+                $("#pages").children().remove();
                 var pa = $("#pages");
-                if (type.prePage == 0) {
-                    $("<a onclick='page(1,4)'></a>").append("上一页").attr("href", "##").appendTo(pa);
+                var size = 4;
+                if (type.isFirstPage) {
+                    $("<a></a>").attr("id", "prePage").click(pages).append("上一页").attr("no", 1).attr("size", size).attr("href", "#").appendTo(pa);
                 } else {
-                    $("<a onclick='page(" + type.prePage + ",4)'></a>").append("上一页").attr("href", "##").appendTo(pa);
+                    $("<a></a>").attr("id", "prePage").click(pages).attr("no", type.prePage).attr("size", size).append("上一页").attr("href", "#").appendTo(pa);
                 }
                 for (var i = 0; i < type.navigatepageNums.length; i++) {
-                    $("<a></a>").append(type.navigatepageNums[i]).appendTo(pa);
+                    $("<a></a>").click(pages).attr("no", type.navigatepageNums[i]).attr("size", size).append(type.navigatepageNums[i]).appendTo(pa);
                 }
-                if (type.nextPage > type.lastPage) {
-                    $("<a onclick='page(" + type.lastPage + ",4)'></a>").append("下一页").attr("href", "##").appendTo(pa);
+                if (type.isLastPage) {
+                    $("<a></a>").attr("id", "nextPage").click(pages).attr("no", type.lastPage).attr("size", size).append("下一页").attr("href", "#").appendTo(pa);
                 } else {
-                    $("<a onclick='page(" + type.nextPage + ",4)'></a>").append("下一页").attr("href", "##").appendTo(pa);
+                    $("<a></a>").attr("id", "nextPage").click(pages).attr("no", type.nextPage).attr("size", size).append("下一页").attr("href", "#").appendTo(pa);
                 }
             }
 
+            // 第一次获取信息
             function page(no, size) {
                 $.ajax({
-                    url: "costlistinfo",
+                    url: "/costlistinfo",
                     data: {
                         no: no,
                         size: size
                     },
                     success: function (result) {
-                        console.log(result.data.navigatepageNums);
+                        $("#tab").children().remove();
                         for (var i = 0; i < result.data.list.length; i++) {
-                            addNewTr(result.data.list[i]);
+                            addNewTr(result.data.list[i], result.data.pageNum);
                         }
                         pageInfo(result.data);
                     }
@@ -121,6 +119,26 @@
             }
 
             page(1, 4);
+
+            // 之后获取信息
+            function pages() {
+                var no = $(this).attr("no");
+                var size = $(this).attr("size");
+                $.ajax({
+                    url: "/costlistinfo",
+                    data: {
+                        no: no,
+                        size: size
+                    },
+                    success: function (result) {
+                        $("#tab").children().remove();
+                        for (var i = 0; i < result.data.list.length; i++) {
+                            addNewTr(result.data.list[i], result.data.pageNum);
+                        }
+                        pageInfo(result.data);
+                    }
+                })
+            }
         })
     </script>
 </head>

@@ -3,12 +3,11 @@
   <component name="GitSharedSettings">
     <option name="FORCE_PUSH_PROHIBITED_PATTERNS">
       <list>
-        <option value="master1" />
+        <option value="master2" />
       </list>
     </option>
   </component>
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/../../netctoss" vcs="Git" />
   </component>
 </project>
