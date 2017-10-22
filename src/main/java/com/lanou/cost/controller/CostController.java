@@ -58,7 +58,7 @@ public class CostController {
     @RequestMapping(value = "/addcost", method = {RequestMethod.POST, RequestMethod.GET})
     public AjaxResult addCost(Cost cost) {
         cost.setStatus("0");
-        cost.setCreatime(new Timestamp(System.currentTimeMillis()));
+        cost.setCreatime(new Timestamp(System.currentTimeMillis()).toString());
         System.out.println(cost);
         costService.addCost(cost);
         return new AjaxResult(cost);
@@ -76,7 +76,7 @@ public class CostController {
     @ResponseBody
     @RequestMapping(value = "/startcost")
     public AjaxResult startCost(Cost cost) {
-        cost.setStartime(new Timestamp(System.currentTimeMillis()));
+        cost.setStartime(new Timestamp(System.currentTimeMillis()).toString());
         costService.updateCost(cost);
         return new AjaxResult(cost);
     }
@@ -100,7 +100,7 @@ public class CostController {
     @ResponseBody
     @RequestMapping(value = "/modifycost",method = RequestMethod.POST)
     public AjaxResult modifyCost(Cost cost) {
-        cost.setCreatime(new Timestamp(System.currentTimeMillis()));
+        cost.setCreatime(new Timestamp(System.currentTimeMillis()).toString());
         System.out.println(cost);
         costService.updateCost(cost);
         return new AjaxResult(cost);

@@ -53,15 +53,9 @@
                 inputArray[6].className = "width100";
             }
         }
+
         $(document).ready(function () {
             $("#save").click(function () {
-                if ($("#monthly")[0].checked) {
-                    var type = $("#monthly").attr("num");
-                } else if ($("#package")[0].checked) {
-                    var type = $("#package").attr("num");
-                } else {
-                    var type = $("#timeBased").attr("num");
-                }
                 $.ajax({
                     url: "/addcost",
                     method: "post",
@@ -71,7 +65,7 @@
                         baseCost: $("#baseCost").val(),
                         unitCost: $("#unitCost").val(),
                         descr: $("#descr").val(),
-                        costType: type
+                        costType: $(":checked").attr("num")
                     },
                     success: function (result) {
                         console.log(result);
