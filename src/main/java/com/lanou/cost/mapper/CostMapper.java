@@ -44,4 +44,12 @@ public interface CostMapper {
      * @return 费用集合
      */
     List<Cost> findAllCost();
+
+    /**
+     * 通过名字查找费用
+     *
+     * @param name 费用名字
+     * @return 费用
+     */
+    List<Cost> findByName(String name);
 }

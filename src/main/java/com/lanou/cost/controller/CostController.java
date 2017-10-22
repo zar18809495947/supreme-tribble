@@ -3,6 +3,7 @@ package com.lanou.cost.controller;
 import com.github.pagehelper.PageInfo;
 import com.lanou.cost.bean.Cost;
 import com.lanou.cost.service.CostService;
+import com.lanou.cost.service.exception.add.AddCostException;
 import com.lanou.cost.utils.AjaxResult;
 import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
@@ -104,5 +105,17 @@ public class CostController {
         System.out.println(cost);
         costService.updateCost(cost);
         return new AjaxResult(cost);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/judgename")
+    public AjaxResult judgeName(@RequestParam("name") String name) {
+        String s = null;
+        try {
+            s = costService.judgeName(name);
+        } catch (AddCostException e) {
+            return new AjaxResult(e.getMessage(), 1, null);
+        }
+        return new AjaxResult(s);
     }
 }

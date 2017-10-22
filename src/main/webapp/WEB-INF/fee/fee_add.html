@@ -55,6 +55,8 @@
         }
 
         $(document).ready(function () {
+
+            // 保存
             $("#save").click(function () {
                 $.ajax({
                     url: "/addcost",
@@ -76,6 +78,26 @@
                 });
             })
         });
+
+        // 名字判断
+        function judgeName() {
+            $.ajax({
+                url: "/judgename",
+                data: {
+                    name: $("#name").val()
+                },
+                success: function (result) {
+                    if (result.errorCode != 0) {
+//                        console.log($("#name_msg_text"));
+                        $("#name_msg_red").html("*");
+                        $("#name_msg_text").html(result.msg);
+                    } else {
+                        $("#name_msg_red").html("");
+                        $("#name_msg_text").html("");
+                    }
+                }
+            })
+        }
     </script>
 </head>
 <body>
@@ -107,9 +129,9 @@
     <form action="" method="" class="main_form">
         <div class="text_info clearfix"><span>资费名称：</span></div>
         <div class="input_info">
-            <input type="text" class="width300" value="" id="name"/>
-            <span class="required">*</span>
-            <div class="validate_msg_short">50长度的字母、数字、汉字和下划线的组合</div>
+            <input type="text" class="width300" value="" id="name" onblur="judgeName()"/>
+            <span class="required" id="name_msg_red"></span>
+            <div class="validate_msg_short" id="name_msg_text"></div>
         </div>
         <div class="text_info clearfix"><span>资费类型：</span></div>
         <div class="input_info fee_type">
