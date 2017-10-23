@@ -168,24 +168,24 @@
             // 添加tr
             function addNewTr(msg, pageNum) {
                 var tr = $("<tr></tr>").attr("id", "tr" + msg.costId);
-                var td1 = $("<td></td>").append(msg.costId).appendTo(tr);
+                $("<td></td>").append(msg.costId).appendTo(tr);
                 var td2 = $("<td></td>");
                 $("<a href='#'></a>").click(findById).attr("num", msg.costId).append(msg.name).appendTo(td2);
                 td2.appendTo(tr);
-                var td3 = $("<td></td>").append(msg.baseDuration).appendTo(tr);
-                var td4 = $("<td></td>").append(msg.baseCost).appendTo(tr);
-                var td5 = $("<td></td>").append(msg.unitCost).appendTo(tr);
-                var td6 = $("<td></td>").append(msg.creatime).appendTo(tr);
-                var td7 = $("<td></td>").append(msg.startime).appendTo(tr);
+                $("<td></td>").append(msg.baseDuration).appendTo(tr);
+                $("<td></td>").append(msg.baseCost).appendTo(tr);
+                $("<td></td>").append(msg.unitCost).appendTo(tr);
+                $("<td></td>").append(msg.creatime).appendTo(tr);
+                $("<td></td>").append(msg.startime).appendTo(tr);
                 if (msg.status == 1) {
-                    var td8 = $("<td>开通</td>").appendTo(tr);
+                    $("<td>开通</td>").appendTo(tr);
                 } else {
-                    var td8 = $("<td>暂停</td>").appendTo(tr);
+                    $("<td>暂停</td>").appendTo(tr);
                     var btnStart = $("<input type='button' value='启用' class='btn_start'/>").attr("pageNum", pageNum).attr("num", msg.costId).click(startFee);
                     var btnModify = $("<input type='button' value='修改' class='btn_modify'>").attr("num", msg.costId).click(modifyFee);
                     var btnDel = $("<input type='button' value='删除' class='btn_delete'/>").attr("pageNum", pageNum).attr("num", msg.costId).click(deleteFee);
                 }
-                var td9 = $("<td></td>").append(btnStart).append(btnModify).append(btnDel).appendTo(tr);
+                $("<td></td>").append(btnStart).append(btnModify).append(btnDel).appendTo(tr);
                 $("#tab").append(tr);
             }
 

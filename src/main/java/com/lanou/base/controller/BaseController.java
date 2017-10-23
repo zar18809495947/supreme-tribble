@@ -17,4 +17,9 @@ public class BaseController {
     public String feeListPage() {
         return "fee/fee_list";
     }
+
+    @RequestMapping(value = "/accountlistpage")
+    public String accountListPage() {
+        return "account/account_list";
+    }
 }

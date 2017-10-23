@@ -1,4 +1,4 @@
-package com.lanou.cost.utils;
+package com.lanou.utils;
 
 import org.mybatis.generator.api.MyBatisGenerator;
 import org.mybatis.generator.config.Configuration;

@@ -1,4 +1,4 @@
-package com.lanou.cost.utils;
+package com.lanou.utils;
 
 /**
  * Created by zar on 2017/10/10.
