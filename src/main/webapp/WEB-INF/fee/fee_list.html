@@ -202,7 +202,11 @@
                     $("<a></a>").attr("id", "prePage").click(pages).attr("no", type.prePage).attr("size", size).append("上一页").attr("href", "#").appendTo(pa);
                 }
                 for (var i = 0; i < type.navigatepageNums.length; i++) {
-                    $("<a></a>").click(pages).attr("no", type.navigatepageNums[i]).attr("size", size).append(type.navigatepageNums[i]).appendTo(pa);
+                    if (type.navigatepageNums[i] == type.pageNum) {
+                        $("<a></a>").click(pages).attr("no", type.navigatepageNums[i]).attr("class", "current_page").attr("size", size).append(type.navigatepageNums[i]).appendTo(pa);
+                    } else {
+                        $("<a></a>").click(pages).attr("no", type.navigatepageNums[i]).attr("size", size).append(type.navigatepageNums[i]).appendTo(pa);
+                    }
                 }
                 if (type.isLastPage) {
                     $("<a></a>").attr("id", "nextPage").click(pages).attr("no", type.lastPage).attr("size", size).append("下一页").attr("href", "#").appendTo(pa);
