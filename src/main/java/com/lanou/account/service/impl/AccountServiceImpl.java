@@ -30,6 +30,16 @@ public class AccountServiceImpl implements AccountService {
         return queryCostByPage(pageNum, size);
     }
 
+    @Override
+    public void stopAccount(Account account) {
+        accountMapper.updateByPrimaryKeySelective(account);
+    }
+
+    @Override
+    public List<Account> findByFuzzy(Account account) {
+        return accountMapper.findByFuzzy(account);
+    }
+
     private PageInfo<Account> queryCostByPage(Integer pageNum, Integer pageSize) {
         pageNum = pageNum == null ? 1 : pageNum;
         pageSize = pageSize == null ? 5 : pageSize;

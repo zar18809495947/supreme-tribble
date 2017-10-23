@@ -8,43 +8,202 @@
     <link type="text/css" rel="stylesheet" media="all" href="../styles/global_color.css"/>
     <script type="text/javascript" src="/js/jquery-3.2.1.js"></script>
     <script language="javascript" type="text/javascript">
+        var pageSize = 5;
+
         //删除
         function deleteAccount() {
+            var pageNum = $(this).attr("pageNum");
             var r = window.confirm("确定要删除此账务账号吗？\r\n删除后将不能恢复，且会删除其下属的所有业务账号。");
-            document.getElementById("operate_result_info").style.display = "block";
-        }
-        //开通或暂停
-        function setState() {
-            var r = window.confirm("确定要开通此账务账号吗？");
-            document.getElementById("operate_result_info").style.display = "block";
+            if (r) {
+                $.ajax({
+                    url: "stopaccount",
+                    data: {
+                        accountId: $(this).attr("id"),
+                        status: "3"
+                    },
+                    success: function (result) {
+                        if (result.errorCode == 0) {
+                            findAllAccount(pageNum, pageSize);
+                        }
+                    }
+                });
+                document.getElementById("operate_result_info").style.display = "block";
+                document.getElementById("operate_result_info").innerText = "删除成功！";
+                window.setTimeout(function () {
+                    document.getElementById("operate_result_info").style.display = "none";
+                }, 1500);
+            }
         }
 
-        function findAllAccount() {
+        //开通或暂停
+        function setState() {
+            var status = $(this).attr("status");
+            var pageNum = $(this).attr("pageNum");
+            if (status == 1) {
+                var r = window.confirm("确定要暂停此账务账号吗？");
+                if (r) {
+                    $.ajax({
+                        url: "stopaccount",
+                        data: {
+                            accountId: $(this).attr("id"),
+                            status: "2"
+                        },
+                        success: function (result) {
+                            if (result.errorCode == 0) {
+                                findAllAccount(pageNum, pageSize);
+                            }
+                        }
+                    });
+                    document.getElementById("operate_result_info").style.display = "block";
+                    document.getElementById("operate_result_info").innerText = "暂停成功！";
+                    window.setTimeout(function () {
+                        document.getElementById("operate_result_info").style.display = "none";
+                    }, 1500);
+                }
+            } else {
+                var r = window.confirm("确定要开通此账务账号吗？");
+                if (r) {
+                    $.ajax({
+                        url: "stopaccount",
+                        data: {
+                            accountId: $(this).attr("id"),
+                            status: "1"
+                        },
+                        success: function (result) {
+                            if (result.errorCode == 0) {
+                                findAllAccount(pageNum, pageSize);
+                            }
+                        }
+                    });
+                    document.getElementById("operate_result_info").style.display = "block";
+                    document.getElementById("operate_result_info").innerText = "开通成功！";
+                    window.setTimeout(function () {
+                        document.getElementById("operate_result_info").style.display = "none";
+                    }, 1500);
+                }
+            }
+        }
+
+        function findAllAccount(no, size) {
             $.ajax({
-                url: "/findallaccount",
+                url: "/findaccountpageinfo",
+                data: {
+                    no: no,
+                    size: size
+                },
                 success: function (result) {
-                    for (var i = 0; i < result.length; i++) {
-                        console.log(result[i]);
-                        addNewTr(result[i].data);
+                    $("#tab").children().remove();
+                    for (var i = 0; i < result.data.list.length; i++) {
+                        addNewTr(result.data.list[i], result.data.pageNum);
                     }
+                    pageInfo(result.data);
                 }
             })
         }
-        findAllAccount();
 
-        function addNewTr(msg) {
+        findAllAccount(1, pageSize);
+
+        function addNewTr(msg, pageNum) {
             var tab = $("#tab");
             var tr = $("<tr></tr>");
             $("<td></td>").append(msg.accountId).appendTo(tr);
             $("<td></td>").append(msg.realName).appendTo(tr);
             $("<td></td>").append(msg.idcardNo).appendTo(tr);
             $("<td></td>").append(msg.loginName).appendTo(tr);
-            $("<td></td>").append(msg.status).appendTo(tr);
-            $("<td></td>").append(msg.createDate).appendTo(tr);
-            $("<td></td>").append(msg.lastLoginTime).appendTo(tr);
-            $("<td></td>");
+            if (msg.status == 1) {
+                $("<td></td>").append("开通").appendTo(tr);
+                $("<td></td>").append(msg.createDate).appendTo(tr);
+                $("<td></td>").append(msg.lastLoginTime).appendTo(tr);
+                var td = $("<td></td>");
+                $("<input type='button' value='暂停' class='btn_pause'>").click(setState).attr("pageNum", pageNum).attr("status", 1).attr("id", msg.accountId).appendTo(td);
+                $("<input type='button' value='修改' class='btn_modify' onclick='setState()'>").appendTo(td);
+                $("<input type='button' value='删除' class='btn_delete'>").click(deleteAccount).attr("pageNum", pageNum).attr("id", msg.accountId).appendTo(td);
+                td.appendTo(tr);
+            } else if (msg.status == 2) {
+                $("<td></td>").append("暂停").appendTo(tr);
+                $("<td></td>").append(msg.createDate).appendTo(tr);
+                $("<td></td>").append(msg.lastLoginTime).appendTo(tr);
+                var td = $("<td></td>");
+                $("<input type='button' value='开通' class='btn_start'>").click(setState).attr("pageNum", pageNum).attr("status", 2).attr("id", msg.accountId).appendTo(td);
+                $("<input type='button' value='修改' class='btn_modify' onclick='setState()'>").appendTo(td);
+                $("<input type='button' value='删除' class='btn_delete'>").click(deleteAccount).attr("pageNum", pageNum).attr("id", msg.accountId).appendTo(td);
+                td.appendTo(tr);
+            } else {
+                $("<td></td>").append("删除").appendTo(tr);
+                $("<td></td>").append(msg.createDate).appendTo(tr);
+                $("<td></td>").append(msg.lastLoginTime).appendTo(tr);
+                $("<td></td>").appendTo(tr);
+            }
             tab.append(tr);
         }
+
+        // 添加页码
+        function pageInfo(type) {
+            $("#baseCost").attr("num", type.pageNum);
+            $("#baseDuration").attr("num", type.pageNum);
+            $("#pages").children().remove();
+            var pa = $("#pages");
+            $("<a></a>").click(pages).append("首页").attr("no", 1).attr("size", pageSize).attr("href", "###").appendTo(pa);
+            if (type.isFirstPage) {
+                $("<a></a>").attr("id", "prePage").click(pages).append("上一页").attr("no", 1).attr("size", pageSize).attr("href", "###").appendTo(pa);
+            } else {
+                $("<a></a>").attr("id", "prePage").click(pages).attr("no", type.prePage).attr("size", pageSize).append("上一页").attr("href", "###").appendTo(pa);
+            }
+            for (var i = 0; i < type.navigatepageNums.length; i++) {
+                if (type.navigatepageNums[i] == type.pageNum) {
+                    $("<a></a>").click(pages).attr("no", type.navigatepageNums[i]).attr("class", "current_page").attr("size", pageSize).append(type.navigatepageNums[i]).appendTo(pa);
+                } else {
+                    $("<a></a>").click(pages).attr("no", type.navigatepageNums[i]).attr("size", pageSize).append(type.navigatepageNums[i]).appendTo(pa);
+                }
+            }
+            if (type.isLastPage) {
+                $("<a></a>").attr("id", "nextPage").click(pages).attr("no", type.lastPage).attr("size", pageSize).append("下一页").attr("href", "###").appendTo(pa);
+            } else {
+                $("<a></a>").attr("id", "nextPage").click(pages).attr("no", type.nextPage).attr("size", pageSize).append("下一页").attr("href", "###").appendTo(pa);
+            }
+            $("<a></a>").click(pages).append("末页").attr("no", type.lastPage).attr("size", pageSize).attr("href", "###").appendTo(pa);
+        }
+
+        // 之后获取信息
+        function pages() {
+            var no = $(this).attr("no");
+            var size = $(this).attr("size");
+            $.ajax({
+                url: "/findaccountpageinfo",
+                data: {
+                    no: no,
+                    size: size
+                },
+                success: function (result) {
+                    $("#tab").children().remove();
+                    for (var i = 0; i < result.data.list.length; i++) {
+                        addNewTr(result.data.list[i], result.data.pageNum);
+                    }
+                    pageInfo(result.data);
+                }
+            })
+        }
+
+
+        function findAccount() {
+            var idCard = $("#search_idCard").val();
+            var name = $("#search_name").val();
+            var loginName = $("#search_loginName").val();
+            var id = $("#search_status").find("option:selected").attr("id");
+            $.ajax({
+                url: "/findaccount",
+                data: {
+                    idcardNo: idCard,
+                    realName: name,
+                    loginName: loginName,
+                    status: id
+                },
+                success: function (result) {
+                    console.log(result);
+                }
+            })
+        }
+
     </script>
 </head>
 <body>
@@ -75,25 +234,24 @@
     <form action="" method="">
         <!--查询-->
         <div class="search_add">
-            <div>身份证：<input type="text" value="不验证" class="text_search"/></div>
-            <div>姓名：<input type="text" class="width70 text_search" value="不验证"/></div>
-            <div>登录名：<input type="text" value="不验证" class="text_search"" /></div>
+            <div>身份证：<input type="text" class="text_search" id="search_idCard"/></div>
+            <div>姓名：<input type="text" class="width70 text_search" id="search_name"/></div>
+            <div>登录名：<input type="text" class="text_search" id="search_loginName"/></div>
             <div>
                 状态：
-                <select class="select_search">
+                <select class="select_search" id="search_status">
                     <option>全部</option>
-                    <option>开通</option>
-                    <option>暂停</option>
-                    <option>删除</option>
+                    <option id="1">开通</option>
+                    <option id="2">暂停</option>
+                    <option id="3">删除</option>
                 </select>
             </div>
-            <div><input type="button" value="搜索" class="btn_search"/></div>
+            <div><input type="button" value="搜索" class="btn_search" onclick="findAccount()"/></div>
             <input type="button" value="增加" class="btn_add" onclick="location.href='account_add.html';"/>
         </div>
         <!--删除等的操作提示-->
         <div id="operate_result_info" class="operate_success">
             <img src="../images/close.png" onclick="this.parentNode.style.display='none';"/>
-            删除成功，且已删除其下属的业务账号！
         </div>
         <!--数据区域：用表格展示数据-->
         <div id="data">
@@ -125,15 +283,15 @@
         </div>
         <!--分页-->
         <div id="pages">
-            <a href="#">首页</a>
-            <a href="#">上一页</a>
-            <a href="#" class="current_page">1</a>
-            <a href="#">2</a>
-            <a href="#">3</a>
-            <a href="#">4</a>
-            <a href="#">5</a>
-            <a href="#">下一页</a>
-            <a href="#">末页</a>
+            <!--<a href="#">首页</a>-->
+            <!--<a href="#">上一页</a>-->
+            <!--<a href="#" class="current_page">1</a>-->
+            <!--<a href="#">2</a>-->
+            <!--<a href="#">3</a>-->
+            <!--<a href="#">4</a>-->
+            <!--<a href="#">5</a>-->
+            <!--<a href="#">下一页</a>-->
+            <!--<a href="#">末页</a>-->
         </div>
     </form>
 </div>

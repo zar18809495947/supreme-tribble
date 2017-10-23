@@ -13,6 +13,12 @@ public interface AccountMapper {
 
     Account selectByPrimaryKey(Integer accountId);
 
+    /**
+     * 修改状态
+     *
+     * @param record 修改的账户
+     * @return 是否修改成功
+     */
     int updateByPrimaryKeySelective(Account record);
 
     int updateByPrimaryKey(Account record);
@@ -23,4 +29,12 @@ public interface AccountMapper {
      * @return 账务账号集合
      */
     List<Account> findAllAccount();
+
+    /**
+     * 模糊查询身份证号，名字，登录名，状态
+     *
+     * @param account 查询内容
+     * @return 账户集合
+     */
+    List<Account> findByFuzzy(Account account);
 }

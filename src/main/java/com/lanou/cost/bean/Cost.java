@@ -42,7 +42,7 @@ public class Cost implements Comparable<Cost> {
     }
 
     public String getBaseDuration() {
-        return baseDuration;
+        return baseDuration == null ? "0" : baseDuration;
     }
 
     public void setBaseDuration(String baseDuration) {
@@ -50,7 +50,7 @@ public class Cost implements Comparable<Cost> {
     }
 
     public String getBaseCost() {
-        return baseCost;
+        return baseCost == null ? "0" : baseCost;
     }
 
     public void setBaseCost(String baseCost) {
@@ -58,7 +58,7 @@ public class Cost implements Comparable<Cost> {
     }
 
     public String getUnitCost() {
-        return unitCost;
+        return unitCost == null ? "0" : unitCost;
     }
 
     public void setUnitCost(String unitCost) {
