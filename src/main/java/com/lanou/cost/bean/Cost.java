@@ -1,9 +1,10 @@
 package com.lanou.cost.bean;
 
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.Date;
 
-public class Cost {
+public class Cost implements Comparable<Cost> {
     private Integer costId;
 
     private String name;
@@ -118,5 +119,17 @@ public class Cost {
                 ", startime=" + startime +
                 ", costType='" + costType + '\'' +
                 '}';
+    }
+
+
+    @Override
+    public int compareTo(Cost o) {
+        if (Integer.valueOf(this.baseCost) > Integer.valueOf(o.getBaseCost())) {
+            return 1;
+        } else if (Integer.valueOf(this.baseCost) < Integer.valueOf(o.getBaseCost())) {
+            return -1;
+        } else {
+            return 0;
+        }
     }
 }

@@ -182,4 +182,58 @@ public class CostController {
         request.getSession().setAttribute("judge_descr", true);
         return new AjaxResult(cost);
     }
+
+    @ResponseBody
+    @RequestMapping(value = "/uplistbybasecost")
+    public AjaxResult upListByBaseCost(@RequestParam("pageNum") Integer pageNum) {
+        PageInfo<Cost> withPageInfo = costService.findWithPageInfo(pageNum, 4);
+        System.out.println(withPageInfo);
+        List<Cost> list = withPageInfo.getList();
+        Collections.sort(list);
+        withPageInfo.setList(list);
+        return new AjaxResult(withPageInfo);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/downlistbybasecost")
+    public AjaxResult downListByBaseCost(@RequestParam("pageNum") Integer pageNum) {
+        PageInfo<Cost> withPageInfo = costService.findWithPageInfo(pageNum, 4);
+        List<Cost> list = withPageInfo.getList();
+        Comparator comparator = Collections.reverseOrder();
+        Collections.sort(list, comparator);
+        withPageInfo.setList(list);
+        return new AjaxResult(withPageInfo);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/uplistbybaseduration")
+    public AjaxResult upListByBaseDuration(@RequestParam("pageNum") Integer pageNum) {
+        PageInfo<Cost> withPageInfo = costService.findWithPageInfo(pageNum, 4);
+        List<Cost> list = withPageInfo.getList();
+        Collections.sort(list, new Comparator<Cost>() {
+                    @Override
+                    public int compare(Cost o1, Cost o2) {
+                        return Integer.valueOf(o1.getBaseDuration()).compareTo(Integer.valueOf(o2.getBaseDuration()));
+                    }
+                }
+        );
+        withPageInfo.setList(list);
+        return new AjaxResult(withPageInfo);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/downlistbybaseduration")
+    public AjaxResult downListByBaseDuration(@RequestParam("pageNum") Integer pageNum) {
+        PageInfo<Cost> withPageInfo = costService.findWithPageInfo(pageNum, 4);
+        List<Cost> list = withPageInfo.getList();
+        Collections.sort(list, new Comparator<Cost>() {
+                    @Override
+                    public int compare(Cost o1, Cost o2) {
+                        return Integer.valueOf(o2.getBaseDuration()).compareTo(Integer.valueOf(o1.getBaseDuration()));
+                    }
+                }
+        );
+        withPageInfo.setList(list);
+        return new AjaxResult(withPageInfo);
+    }
 }
