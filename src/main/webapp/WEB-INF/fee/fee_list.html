@@ -151,11 +151,27 @@
                 })
             }
 
+            // 显示单个信息
+            function findById() {
+                var id = $(this).attr("num");
+                $.ajax({
+                    url: "/savecostid",
+                    data: {
+                        costId: id
+                    },
+                    success: function (result) {
+                        window.location.href = "/todetail";
+                    }
+                })
+            }
+
             // 添加tr
             function addNewTr(msg, pageNum) {
                 var tr = $("<tr></tr>").attr("id", "tr" + msg.costId);
                 var td1 = $("<td></td>").append(msg.costId).appendTo(tr);
-                var td2 = $("<td><a href='fee_detail.html'></td>").append(msg.name).appendTo(tr);
+                var td2 = $("<td></td>");
+                $("<a href='#'></a>").click(findById).attr("num", msg.costId).append(msg.name).appendTo(td2);
+                td2.appendTo(tr);
                 var td3 = $("<td></td>").append(msg.baseDuration).appendTo(tr);
                 var td4 = $("<td></td>").append(msg.baseCost).appendTo(tr);
                 var td5 = $("<td></td>").append(msg.unitCost).appendTo(tr);

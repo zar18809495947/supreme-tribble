@@ -40,6 +40,11 @@ public class CostController {
         return "fee/fee_modi";
     }
 
+    @RequestMapping(value = "/todetail")
+    public String toDetail() {
+        return "fee/fee_detail";
+    }
+
     @ResponseBody
     @RequestMapping(value = "/savecostid")
     public Cost saveCostId(HttpServletRequest request, Cost cost) {
