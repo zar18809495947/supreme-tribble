@@ -60,4 +60,36 @@ public interface CostService {
      * @return 是否合法
      */
     String judgeName(String name) throws AddCostException;
+
+    /**
+     * 判断基本时长的合法性
+     *
+     * @param cost 基本时长
+     * @return 是否合法
+     */
+    String judgeBaseDuration(Cost cost) throws AddCostException;
+
+    /**
+     * 判断基本费用的合法性
+     *
+     * @param cost 基本费用
+     * @return 是否合法
+     */
+    String judgeBaseCost(Cost cost) throws AddCostException;
+
+    /**
+     * 判断单位费用的合法性
+     *
+     * @param cost 单位费用
+     * @return 是否合法
+     */
+    String judgeUnitCost(Cost cost) throws AddCostException;
+
+    /**
+     * 资费说明的合法性
+     *
+     * @param cost 资费说明
+     * @return 是否合法
+     */
+    String judgeDescr(Cost cost) throws AddCostException;
 }

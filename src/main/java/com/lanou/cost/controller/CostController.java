@@ -15,9 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author zar on 2017/10/20.
@@ -28,7 +26,12 @@ public class CostController {
     private CostService costService;
 
     @RequestMapping(value = "/toaddcost")
-    public String toAddCost() {
+    public String toAddCost(HttpServletRequest request) {
+        request.getSession().setAttribute("judge_name", false);
+        request.getSession().setAttribute("judge_baseDuration", false);
+        request.getSession().setAttribute("judge_baseCost", false);
+        request.getSession().setAttribute("judge_unitCost", false);
+        request.getSession().setAttribute("judge_descr", false);
         return "fee/fee_add";
     }
 
@@ -39,8 +42,8 @@ public class CostController {
 
     @ResponseBody
     @RequestMapping(value = "/savecostid")
-    public Cost saveCostId(HttpServletRequest request,Cost cost) {
-        request.getSession().setAttribute("costId",cost.getCostId());
+    public Cost saveCostId(HttpServletRequest request, Cost cost) {
+        request.getSession().setAttribute("costId", cost.getCostId());
         return cost;
     }
 
@@ -57,12 +60,19 @@ public class CostController {
 
     @ResponseBody
     @RequestMapping(value = "/addcost", method = {RequestMethod.POST, RequestMethod.GET})
-    public AjaxResult addCost(Cost cost) {
-        cost.setStatus("0");
-        cost.setCreatime(new Timestamp(System.currentTimeMillis()).toString());
-        System.out.println(cost);
-        costService.addCost(cost);
-        return new AjaxResult(cost);
+    public AjaxResult addCost(Cost cost, HttpServletRequest request) {
+        if ((boolean) request.getSession().getAttribute("judge_name") &&
+                (boolean) request.getSession().getAttribute("judge_baseDuration") &&
+                (boolean) request.getSession().getAttribute("judge_baseCost") &&
+                (boolean) request.getSession().getAttribute("judge_unitCost") &&
+                (boolean) request.getSession().getAttribute("judge_descr")) {
+            cost.setStatus("0");
+            cost.setCreatime(new Timestamp(System.currentTimeMillis()).toString());
+            System.out.println(cost);
+            costService.addCost(cost);
+            return new AjaxResult(cost);
+        }
+        return new AjaxResult("无法提交", 1, cost);
     }
 
 
@@ -99,7 +109,7 @@ public class CostController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/modifycost",method = RequestMethod.POST)
+    @RequestMapping(value = "/modifycost", method = RequestMethod.POST)
     public AjaxResult modifyCost(Cost cost) {
         cost.setCreatime(new Timestamp(System.currentTimeMillis()).toString());
         System.out.println(cost);
@@ -109,13 +119,67 @@ public class CostController {
 
     @ResponseBody
     @RequestMapping(value = "/judgename")
-    public AjaxResult judgeName(@RequestParam("name") String name) {
+    public AjaxResult judgeName(@RequestParam("name") String name, HttpServletRequest request) {
         String s = null;
         try {
             s = costService.judgeName(name);
         } catch (AddCostException e) {
+            request.getSession().setAttribute("judge_name", false);
             return new AjaxResult(e.getMessage(), 1, null);
         }
+        request.getSession().setAttribute("judge_name", true);
         return new AjaxResult(s);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "judgebaseduration")
+    public AjaxResult judgeBaseDuration(Cost cost, HttpServletRequest request) {
+        try {
+            costService.judgeBaseDuration(cost);
+        } catch (AddCostException e) {
+            request.getSession().setAttribute("judge_baseDuration", false);
+            return new AjaxResult(e.getMessage(), 1, null);
+        }
+        request.getSession().setAttribute("judge_baseDuration", true);
+        return new AjaxResult(cost);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "judgebasecost")
+    public AjaxResult judgeBaseCost(Cost cost, HttpServletRequest request) {
+        try {
+            costService.judgeBaseCost(cost);
+        } catch (AddCostException e) {
+            request.getSession().setAttribute("judge_baseCost", false);
+            return new AjaxResult(e.getMessage(), 1, null);
+        }
+        request.getSession().setAttribute("judge_baseCost", true);
+        return new AjaxResult(cost);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "judgeunitcost")
+    public AjaxResult judgeUnitCost(Cost cost, HttpServletRequest request) {
+        try {
+            costService.judgeUnitCost(cost);
+        } catch (AddCostException e) {
+            request.getSession().setAttribute("judge_unitCost", false);
+            return new AjaxResult(e.getMessage(), 1, null);
+        }
+        request.getSession().setAttribute("judge_unitCost", true);
+        return new AjaxResult(cost);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/judgedescr")
+    public AjaxResult judgeDescr(Cost cost, HttpServletRequest request) {
+        try {
+            costService.judgeDescr(cost);
+        } catch (AddCostException e) {
+            request.getSession().setAttribute("judge_descr", false);
+            return new AjaxResult(e.getMessage(), 1, null);
+        }
+        request.getSession().setAttribute("judge_descr", true);
+        return new AjaxResult(cost);
     }
 }

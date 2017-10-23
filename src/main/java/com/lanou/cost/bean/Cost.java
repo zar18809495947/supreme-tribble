@@ -8,11 +8,11 @@ public class Cost {
 
     private String name;
 
-    private Integer baseDuration;
+    private String baseDuration;
 
-    private Integer baseCost;
+    private String baseCost;
 
-    private Integer unitCost;
+    private String unitCost;
 
     private String status;
 
@@ -40,27 +40,27 @@ public class Cost {
         this.name = name == null ? null : name.trim();
     }
 
-    public Integer getBaseDuration() {
+    public String getBaseDuration() {
         return baseDuration;
     }
 
-    public void setBaseDuration(Integer baseDuration) {
+    public void setBaseDuration(String baseDuration) {
         this.baseDuration = baseDuration;
     }
 
-    public Integer getBaseCost() {
+    public String getBaseCost() {
         return baseCost;
     }
 
-    public void setBaseCost(Integer baseCost) {
+    public void setBaseCost(String baseCost) {
         this.baseCost = baseCost;
     }
 
-    public Integer getUnitCost() {
+    public String getUnitCost() {
         return unitCost;
     }
 
-    public void setUnitCost(Integer unitCost) {
+    public void setUnitCost(String unitCost) {
         this.unitCost = unitCost;
     }
 

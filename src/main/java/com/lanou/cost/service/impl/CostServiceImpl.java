@@ -5,10 +5,8 @@ import com.github.pagehelper.PageInfo;
 import com.lanou.cost.bean.Cost;
 import com.lanou.cost.mapper.CostMapper;
 import com.lanou.cost.service.CostService;
-import com.lanou.cost.service.exception.add.AddCostException;
-import com.lanou.cost.service.exception.add.NameFormatErrorException;
-import com.lanou.cost.service.exception.add.NameIsEmptyException;
-import com.lanou.cost.service.exception.add.NameRepeatException;
+import com.lanou.cost.service.exception.add.*;
+import org.junit.Test;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -65,11 +63,93 @@ public class CostServiceImpl implements CostService {
         if (!byName.isEmpty()) {
             throw new NameRepeatException();
         }
-        String reg = "^[a-zA-Z0-9_u4e00-u9fa5]+$";
-        Pattern compile = Pattern.compile(reg);
-        Matcher matcher = compile.matcher(name);
-        if (!matcher.matches()) {
+        if (!judgeRegex("^[a-zA-Z0-9_u4e00-u9fa5]+$", name)) {
             throw new NameFormatErrorException();
+        }
+        return "可以使用";
+    }
+
+    @Override
+    public String judgeBaseDuration(Cost cost) throws AddCostException {
+        if ("1".equals(cost.getCostType())) {
+            if (!cost.getBaseDuration().trim().isEmpty()) {
+                throw new BaseDurationNotMatchException();
+            }
+        } else if ("2".equals(cost.getCostType())) {
+            if (cost.getBaseDuration().trim().isEmpty()) {
+                throw new BaseDurationIsEmptyException();
+            }
+            System.out.println(cost.getBaseDuration());
+            if (!judgeRegex("[0-5][0-9][0-9]|[0-9]{1,2}|[6][0][0]", cost.getBaseDuration())) {
+                throw new BaseDurationFormatErrorException();
+            }
+        } else {
+            if (!cost.getBaseDuration().trim().isEmpty()) {
+                throw new BaseDurationNotMatchException();
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public String judgeBaseCost(Cost cost) throws AddCostException {
+        if ("1".equals(cost.getCostType())) {
+            if (cost.getBaseCost().trim().isEmpty()) {
+                throw new BaseCostIsEmptyException();
+            }
+            System.out.println(cost.getBaseCost());
+            if (!judgeRegex("^[0-9]+(.[0-9]{1,2})?$", cost.getBaseCost())) {
+                throw new BaseCostFormatErrorException();
+            }
+        } else if ("2".equals(cost.getCostType())) {
+            if (cost.getBaseCost().trim().isEmpty()) {
+                throw new BaseCostIsEmptyException();
+            }
+            System.out.println(cost.getBaseCost());
+            if (!judgeRegex("^[0-9]+(.[0-9]{1,2})?$", cost.getBaseCost())) {
+                throw new BaseCostFormatErrorException();
+            }
+        } else {
+            if (!cost.getBaseCost().trim().isEmpty()) {
+                throw new BaseCostNotMatchException();
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public String judgeUnitCost(Cost cost) throws AddCostException {
+        if ("1".equals(cost.getCostType())) {
+            if (!cost.getUnitCost().trim().isEmpty()) {
+                throw new UnitCostNotMatchException();
+            }
+        } else if ("2".equals(cost.getCostType())) {
+            if (cost.getUnitCost().trim().isEmpty()) {
+                throw new UnitCostIsEmptyException();
+            }
+            System.out.println(cost.getUnitCost());
+            if (!judgeRegex("^[0-9]+(.[0-9]{1,2})?$", cost.getUnitCost())) {
+                throw new UnitCostFormatErrorException();
+            }
+        } else {
+            if (cost.getUnitCost().trim().isEmpty()) {
+                throw new UnitCostIsEmptyException();
+            }
+            System.out.println(cost.getUnitCost());
+            if (!judgeRegex("^[0-9]+(.[0-9]{1,2})?$", cost.getUnitCost())) {
+                throw new UnitCostFormatErrorException();
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public String judgeDescr(Cost cost) throws AddCostException {
+        if (cost.getDescr().trim().isEmpty()) {
+            throw new DescrIsEmptyException();
+        }
+        if (!judgeRegex("^[a-zA-Z0-9_u4e00-u9fa5]+$", cost.getDescr())) {
+            throw new DescrFormatErrorException();
         }
         return "可以使用";
     }
@@ -84,4 +164,18 @@ public class CostServiceImpl implements CostService {
 //        System.out.println(pageInfo);
         return pageInfo;
     }
+
+    private boolean judgeRegex(String reg, String target) {
+        Pattern compile = Pattern.compile(reg);
+        Matcher matcher = compile.matcher(target);
+        return matcher.matches();
+    }
+
+//    @Test
+//    public void test() {
+//
+//            boolean b = judgeRegex("^[0-9]+(.[0-9]{1,2})?$", String.valueOf(10.555));
+//            System.out.println(b);
+//
+//    }
 }

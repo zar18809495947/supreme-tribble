@@ -4,9 +4,9 @@
     <resultMap id="BaseResultMap" type="com.lanou.cost.bean.Cost">
         <id column="cost_id" jdbcType="INTEGER" property="costId"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
-        <result column="base_duration" jdbcType="INTEGER" property="baseDuration"/>
-        <result column="base_cost" jdbcType="INTEGER" property="baseCost"/>
-        <result column="unit_cost" jdbcType="INTEGER" property="unitCost"/>
+        <result column="base_duration" jdbcType="VARCHAR" property="baseDuration"/>
+        <result column="base_cost" jdbcType="VARCHAR" property="baseCost"/>
+        <result column="unit_cost" jdbcType="VARCHAR" property="unitCost"/>
         <result column="status" jdbcType="CHAR" property="status"/>
         <result column="descr" jdbcType="VARCHAR" property="descr"/>
         <result column="creatime" jdbcType="VARCHAR" property="creatime"/>
@@ -37,8 +37,8 @@
       base_cost, unit_cost, status, 
       descr, creatime, startime, 
       cost_type)
-    values (#{costId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{baseDuration,jdbcType=INTEGER}, 
-      #{baseCost,jdbcType=INTEGER}, #{unitCost,jdbcType=INTEGER}, #{status,jdbcType=CHAR}, 
+    values (#{costId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{baseDuration,jdbcType=VARCHAR},
+      #{baseCost,jdbcType=VARCHAR}, #{unitCost,jdbcType=VARCHAR}, #{status,jdbcType=CHAR},
       #{descr,jdbcType=VARCHAR}, #{creatime,jdbcType=VARCHAR}, #{startime,jdbcType=VARCHAR},
       #{costType,jdbcType=CHAR})
   </insert>
@@ -84,13 +84,13 @@
                 #{name,jdbcType=VARCHAR},
             </if>
             <if test="baseDuration != null">
-                #{baseDuration,jdbcType=INTEGER},
+                #{baseDuration,jdbcType=VARCHAR},
             </if>
             <if test="baseCost != null">
-                #{baseCost,jdbcType=INTEGER},
+                #{baseCost,jdbcType=VARCHAR},
             </if>
             <if test="unitCost != null">
-                #{unitCost,jdbcType=INTEGER},
+                #{unitCost,jdbcType=VARCHAR},
             </if>
             <if test="status != null">
                 #{status,jdbcType=CHAR},
@@ -116,13 +116,13 @@
                 name = #{name,jdbcType=VARCHAR},
             </if>
             <if test="baseDuration != null">
-                base_duration = #{baseDuration,jdbcType=INTEGER},
+                base_duration = #{baseDuration,jdbcType=VARCHAR},
             </if>
             <if test="baseCost != null">
-                base_cost = #{baseCost,jdbcType=INTEGER},
+                base_cost = #{baseCost,jdbcType=VARCHAR},
             </if>
             <if test="unitCost != null">
-                unit_cost = #{unitCost,jdbcType=INTEGER},
+                unit_cost = #{unitCost,jdbcType=VARCHAR},
             </if>
             <if test="status != null">
                 status = #{status,jdbcType=CHAR},
@@ -145,9 +145,9 @@
     <update id="updateByPrimaryKey" parameterType="com.lanou.cost.bean.Cost">
     update cost
     set name = #{name,jdbcType=VARCHAR},
-      base_duration = #{baseDuration,jdbcType=INTEGER},
-      base_cost = #{baseCost,jdbcType=INTEGER},
-      unit_cost = #{unitCost,jdbcType=INTEGER},
+      base_duration = #{baseDuration,jdbcType=VARCHAR},
+      base_cost = #{baseCost,jdbcType=VARCHAR},
+      unit_cost = #{unitCost,jdbcType=VARCHAR},
       status = #{status,jdbcType=CHAR},
       descr = #{descr,jdbcType=VARCHAR},
       creatime = #{creatime,jdbcType=VARCHAR},
