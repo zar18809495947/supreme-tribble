@@ -43,4 +43,20 @@ public interface AccountMapper {
      * @return 账户集合
      */
     List<Account> findByFuzzy(Account account);
+
+    /**
+     * 通过身份证号查询
+     *
+     * @param idCardNo 身份证号
+     * @return 返回集合
+     */
+    List<Account> findByIdCardNo(String idCardNo);
+
+    /**
+     * 通过登录名查询
+     *
+     * @param loginName 登录名
+     * @return 返回集合
+     */
+    List<Account> findByLoginName(String loginName);
 }

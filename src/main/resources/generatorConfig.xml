@@ -24,24 +24,24 @@
         </javaTypeResolver>
 
         <!-- !!!! Model Configurations !!!! -->
-        <javaModelGenerator targetPackage="com.lanou.account.bean" targetProject="./src/main/java">
+        <javaModelGenerator targetPackage="com.lanou.service.bean" targetProject="./src/main/java">
             <property name="enableSubPackages" value="false"/>
             <property name="trimStrings" value="true"/>
 
         </javaModelGenerator>
 
         <!-- !!!! Mapper XML Configurations !!!! -->
-        <sqlMapGenerator targetPackage="com.lanou.account.mapper" targetProject="./src/main/java">
+        <sqlMapGenerator targetPackage="com.lanou.service.mapper" targetProject="./src/main/java">
             <property name="enableSubPackages" value="false"/>
         </sqlMapGenerator>
 
         <!-- !!!! Mapper Interface Configurations !!!! -->
-        <javaClientGenerator targetPackage="com.lanou.account.mapper" targetProject="./src/main/java" type="XMLMAPPER">
+        <javaClientGenerator targetPackage="com.lanou.service.mapper" targetProject="./src/main/java" type="XMLMAPPER">
             <property name="enableSubPackages" value="false"/>
         </javaClientGenerator>
 
         <!-- !!!! Table Configurations !!!! -->
-        <table tableName="account" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
+        <table tableName="service" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false"
                enableUpdateByExample="false"/>
     </context>
 </generatorConfiguration>

@@ -57,6 +57,211 @@
                 }
             })
         }
+
+        // 添加信息验证
+        // 名字
+        function judgeRealName() {
+            $.ajax({
+                url: "/judgerealname",
+                type: "post",
+                data: {
+                    realName: $("#realName").val()
+                },
+                success: function (result) {
+                    if (result.errorCode != 0) {
+//                        console.log($("#name_msg_text"));
+                        $("#realName_msg_red").html("*");
+                        $("#realName_msg_text").html(result.msg);
+                    } else {
+                        $("#realName_msg_red").html("");
+                        $("#realName_msg_text").html("");
+                    }
+                }
+            });
+        }
+
+        // 身份证
+        function judgeIdCardNo() {
+            $.ajax({
+                url: "/judgeidcardno",
+                type: "post",
+                data: {
+                    idcardNo: $("#idcard").val()
+                },
+                success: function (result) {
+                    if (result.errorCode != 0) {
+//                        console.log($("#name_msg_text"));
+                        $("#idcard_msg_red").html("*");
+                        $("#idcard_msg_text").html(result.msg);
+                        $("#birthday").val("");
+                    } else {
+                        $("#idcard_msg_red").html("");
+                        $("#idcard_msg_text").html("");
+                        $("#birthday").val(result.data);
+                    }
+                }
+            });
+        }
+
+        // 登录名
+        function judgeLoginName() {
+            $.ajax({
+                url: "/judgeloginname",
+                type: "post",
+                data: {
+                    loginName: $("#loginName").val()
+                },
+                success: function (result) {
+                    if (result.errorCode != 0) {
+//                        console.log($("#name_msg_text"));
+                        $("#loginName_msg_red").html("*");
+                        $("#loginName_msg_text").html(result.msg);
+                    } else {
+                        $("#loginName_msg_red").html("");
+                        $("#loginName_msg_text").html("");
+                    }
+                }
+            });
+        }
+
+        // 密码
+        function judgePwd() {
+            $.ajax({
+                url: "/judgepwd",
+                type: "post",
+                data: {
+                    pwd: $("#loginPwd").val()
+                },
+                success: function (result) {
+                    if (result.errorCode != 0) {
+//                        console.log($("#name_msg_text"));
+                        $("#loginPwd_msg_red").html("*");
+                        $("#loginPwd_msg_text").html(result.msg);
+                    } else {
+                        $("#loginPwd_msg_red").html("");
+                        $("#loginPwd_msg_text").html("");
+                    }
+                }
+            });
+        }
+
+        function judgePwd2() {
+            $.ajax({
+                url: "/judgepwd2",
+                type: "post",
+                data: {
+                    pwd: $("#loginPwd").val(),
+                    pwd2: $("#loginPwd2").val()
+                },
+                success: function (result) {
+                    if (result.errorCode != 0) {
+//                        console.log($("#name_msg_text"));
+                        $("#loginPwd2_msg_red").html("*");
+                        $("#loginPwd2_msg_text").html(result.msg);
+                    } else {
+                        $("#loginPwd2_msg_red").html("");
+                        $("#loginPwd2_msg_text").html("");
+                    }
+                }
+            });
+        }
+
+        // 电话
+        function judgeTel() {
+            $.ajax({
+                url: "/judgetel",
+                type: "post",
+                data: {
+                    tel: $("#tel").val()
+                },
+                success: function (result) {
+                    if (result.errorCode != 0) {
+//                        console.log($("#name_msg_text"));
+                        $("#tel_msg_red").html("*");
+                        $("#tel_msg_text").html(result.msg);
+                    } else {
+                        $("#tel_msg_red").html("");
+                        $("#tel_msg_text").html("");
+                    }
+                }
+            });
+        }
+
+        // 邮件
+        function judgeEmail() {
+            $.ajax({
+                url: "/judgeemail",
+                type: "post",
+                data: {
+                    email: $("#email").val()
+                },
+                success: function (result) {
+                    if (result.errorCode != 0) {
+//                        console.log($("#name_msg_text"));
+                        $("#email_msg_text").html(result.msg);
+                    } else {
+                        $("#email_msg_text").html("");
+                    }
+                }
+            });
+        }
+
+        // 地址
+        function judgeAddress() {
+            $.ajax({
+                url: "/judgeaddress",
+                type: "post",
+                data: {
+                    address: $("#address").val()
+                },
+                success: function (result) {
+                    if (result.errorCode != 0) {
+//                        console.log($("#name_msg_text"));
+                        $("#address_msg_text").html(result.msg);
+                    } else {
+                        $("#address_msg_text").html("");
+                    }
+                }
+            });
+        }
+
+        // 邮编
+        function judgeZip() {
+            $.ajax({
+                url: "/judgezip",
+                type: "post",
+                data: {
+                    zip: $("#zipcode").val()
+                },
+                success: function (result) {
+                    if (result.errorCode != 0) {
+//                        console.log($("#name_msg_text"));
+                        $("#zip_msg_text").html(result.msg);
+                    } else {
+                        $("#zip_msg_text").html("");
+                    }
+                }
+            });
+        }
+
+        // qq
+        function judgeQQ() {
+            $.ajax({
+                url: "/judgeqq",
+                type: "post",
+                data: {
+                    qq: $("#qq").val()
+                },
+                success: function (result) {
+                    if (result.errorCode != 0) {
+//                        console.log($("#name_msg_text"));
+                        $("#qq_msg_text").html(result.msg);
+                    } else {
+                        $("#qq_msg_text").html("");
+                    }
+                }
+            });
+        }
     </script>
 </head>
 <body>
@@ -90,39 +295,39 @@
         <!--必填项-->
         <div class="text_info clearfix"><span>姓名：</span></div>
         <div class="input_info">
-            <input type="text" id="realName"/>
-            <span class="required">*</span>
-            <div class="validate_msg_long">20长度以内的汉字、字母和数字的组合</div>
+            <input type="text" id="realName" onblur="judgeRealName()"/>
+            <span class="required" id="realName_msg_red"></span>
+            <div class="validate_msg_long" id="realName_msg_text"></div>
         </div>
         <div class="text_info clearfix"><span>身份证：</span></div>
         <div class="input_info">
-            <input type="text" id="idcard"/>
-            <span class="required">*</span>
-            <div class="validate_msg_long">正确的身份证号码格式</div>
+            <input type="text" id="idcard" onblur="judgeIdCardNo()"/>
+            <span class="required" id="idcard_msg_red"></span>
+            <div class="validate_msg_long" id="idcard_msg_text"></div>
         </div>
         <div class="text_info clearfix"><span>登录账号：</span></div>
         <div class="input_info">
-            <input type="text" id="loginName"/>
-            <span class="required">*</span>
-            <div class="validate_msg_long">30长度以内的字母、数字和下划线的组合</div>
+            <input type="text" id="loginName" onblur="judgeLoginName()"/>
+            <span class="required" id="loginName_msg_red"></span>
+            <div class="validate_msg_long" id="loginName_msg_text"></div>
         </div>
         <div class="text_info clearfix"><span>密码：</span></div>
         <div class="input_info">
-            <input type="password" id="loginPwd"/>
-            <span class="required">*</span>
-            <div class="validate_msg_long">30长度以内的字母、数字和下划线的组合</div>
+            <input type="password" id="loginPwd" onblur="judgePwd()"/>
+            <span class="required" id="loginPwd_msg_red"></span>
+            <div class="validate_msg_long" id="loginPwd_msg_text"></div>
         </div>
         <div class="text_info clearfix"><span>重复密码：</span></div>
         <div class="input_info">
-            <input type="password" id="loginPwd2"/>
-            <span class="required">*</span>
-            <div class="validate_msg_long">两次密码必须相同</div>
+            <input type="password" id="loginPwd2" onblur="judgePwd2()"/>
+            <span class="required" id="loginPwd2_msg_red"></span>
+            <div class="validate_msg_long" id="loginPwd2_msg_text"></div>
         </div>
         <div class="text_info clearfix"><span>电话：</span></div>
         <div class="input_info">
-            <input type="text" class="width200" id="tel"/>
-            <span class="required">*</span>
-            <div class="validate_msg_medium">正确的电话号码格式：手机或固话</div>
+            <input type="text" class="width200" id="tel" onblur="judgeTel()"/>
+            <span class="required" id="tel_msg_red"></span>
+            <div class="validate_msg_medium" id="tel_msg_text"></div>
         </div>
         <!--可选项-->
         <div class="text_info clearfix"><span>可选项：</span></div>
@@ -137,12 +342,12 @@
             </div>
             <div class="text_info clearfix"><span>生日：</span></div>
             <div class="input_info">
-                <input type="text" value="由身份证号计算而来" readonly class="readonly"/>
+                <input type="text" readonly class="readonly" id="birthday"/>
             </div>
             <div class="text_info clearfix"><span>Email：</span></div>
             <div class="input_info">
-                <input type="text" class="width350" id="email"/>
-                <div class="validate_msg_tiny">50长度以内，合法的 Email 格式</div>
+                <input type="text" class="width350" id="email" onblur="judgeEmail()"/>
+                <div class="validate_msg_tiny" id="email_msg_text"></div>
             </div>
             <div class="text_info clearfix"><span>职业：</span></div>
             <div class="input_info">
@@ -162,18 +367,18 @@
             </div>
             <div class="text_info clearfix"><span>通信地址：</span></div>
             <div class="input_info">
-                <input type="text" class="width350" id="address"/>
-                <div class="validate_msg_tiny">50长度以内</div>
+                <input type="text" class="width350" id="address" onblur="judgeAddress()"/>
+                <div class="validate_msg_tiny" id="address_msg_text"></div>
             </div>
             <div class="text_info clearfix"><span>邮编：</span></div>
             <div class="input_info">
-                <input type="text" id="zipcode"/>
-                <div class="validate_msg_long">6位数字</div>
+                <input type="text" id="zipcode" onblur="judgeZip()"/>
+                <div class="validate_msg_long" id="zip_msg_text"></div>
             </div>
             <div class="text_info clearfix"><span>QQ：</span></div>
             <div class="input_info">
-                <input type="text" id="qq"/>
-                <div class="validate_msg_long">5到13位数字</div>
+                <input type="text" id="qq" onblur="judgeQQ()"/>
+                <div class="validate_msg_long" id="qq_msg_text"></div>
             </div>
         </div>
         <!--操作按钮-->

@@ -24,7 +24,7 @@ public class RegexUtils {
     /**
      * 电话号码正则表达式= (^(\d{2,4}[-_－—]?)?\d{3,8}([-_－—]?\d{3,8})?([-_－—]?\d{1,7})?$)|(^0?1[35]\d{9}$)
      */
-    public static final String PHONE = "(^(\\d{2,4}[-_－—]?)?\\d{3,8}([-_－—]?\\d{3,8})?([-_－—]?\\d{1,7})?$)|(^0?1[35]\\d{9}$)" ;
+    public static final String PHONE = "^0?(13\\d|14[5,7]|15[0-3,5-9]|17[0,6-8]|18\\d)\\d{8}$" ;
     /**
      * 手机号码正则表达式=^(13[0-9]|15[0|3|6|7|8|9]|18[8|9])\d{8}$
      */
@@ -70,7 +70,7 @@ public class RegexUtils {
     /**
      * 匹配由数字、26个英文字母或者下划线组成的字符串 ^\w+$
      */
-    public static final String STR_ENG_NUM_="^\\w+$";
+    public static final String STR_ENG_NUM_="^\\w{1,30}";
     /**
      * 匹配由数字和26个英文字母组成的字符串 ^[A-Za-z0-9]+$
      */
@@ -84,6 +84,11 @@ public class RegexUtils {
      */
     public static final String STR_CHINA="^[\u0391-\uFFE5]+$";
     /**
+     * 匹配英文中文数字组成的字符串
+     */
+    public static final String STR_CHINA_ENG_NUM = "^[A-Za-z0-9\u0391-\uFFE5]{1,20}";
+    public static final String STR_CHINA_ENG_NUM2 = "^[A-Za-z0-9\u0391-\uFFE5]{1,30}";
+    /**
      * 过滤特殊字符串正则
      * regEx="[`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]";
      */
@@ -92,6 +97,8 @@ public class RegexUtils {
      *只能输英文 数字 中文 ^[a-zA-Z0-9\u4e00-\u9fa5]+$
      */
     public static final String STR_ENG_CHA_NUM="^[a-zA-Z0-9\u4e00-\u9fa5]+$";
+
+    public static final String STR_QQ = "[1-9]\\\\d{4,14}";
     /**
      *
      */
@@ -340,6 +347,14 @@ public class RegexUtils {
     public static  boolean isDouble(String str) {
         return Regular(str,DOUBLE);
     }
+
+    /**
+     * 判断qq是否合法
+     * @param str
+     * @return
+     */
+    public static boolean isQQ(String str){
+        return Regular(str, STR_QQ);}
     /**
      * 判断字段是否为正浮点数正则表达式 >=0 符合返回ture
      * @param str
@@ -420,6 +435,18 @@ public class RegexUtils {
     public static boolean isChina(String str) {
         return Regular(str,STR_CHINA) ;
     }
+
+    /**
+     * 判断字符串是不是汉字,英文,数字组成的
+     * @param str
+     * @return
+     */
+    public static boolean isChinaEnglishNum(String str){
+        return Regular(str, STR_CHINA_ENG_NUM);
+    }
+    public static boolean isChinaEnglishNum2(String str){
+        return Regular(str, STR_CHINA_ENG_NUM2);
+    }
     /**
      * 判断字符串是不是全部是英文字母
      * @param str
@@ -483,6 +510,7 @@ public class RegexUtils {
     }
     public static void main(String[] args) {
         // TODO Auto-generated method stub
+        System.out.println(isPhone("15824325151"));
     }
 
 }

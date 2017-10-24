@@ -2,6 +2,7 @@ package com.lanou.account.service;
 
 import com.github.pagehelper.PageInfo;
 import com.lanou.account.bean.Account;
+import com.lanou.account.service.exception.add.AddAccountException;
 
 import java.util.List;
 
@@ -48,4 +49,85 @@ public interface AccountService {
      * @return 账务信息
      */
     Account findByAccountId(Integer accountId);
+
+    /**
+     * 实名验证
+     *
+     * @param realName 实名
+     * @return 判断结果
+     */
+    String judgeRealName(String realName) throws AddAccountException;
+
+    /**
+     * 身份证验证
+     *
+     * @param idCardNo 身份证号
+     * @return 判断结果
+     */
+    String judgeIdCardNo(String idCardNo) throws AddAccountException;
+
+    /**
+     * 登录名验证
+     *
+     * @param loginName 登录名
+     * @return 判断结果
+     */
+    String judgeLoginName(String loginName) throws AddAccountException;
+
+    /**
+     * 密码验证
+     *
+     * @param pwd 密码
+     * @return 判断结果
+     */
+    String judgePwd(String pwd) throws AddAccountException;
+
+    /**
+     * 密码重复验证
+     *
+     * @param pwd  密码
+     * @param pwd2 重复密码
+     * @return 判断结果
+     */
+    String judgePwd2(String pwd, String pwd2) throws AddAccountException;
+
+    /**
+     * 电话验证
+     *
+     * @param tel 电话
+     * @return 判断结果
+     */
+    String judgeTel(String tel) throws AddAccountException;
+
+    /**
+     * 邮件验证
+     *
+     * @param email 邮件
+     * @return 判断结果
+     */
+    String judgeEmail(String email) throws AddAccountException;
+
+    /**
+     * 地址验证
+     *
+     * @param address 地址
+     * @return 判断结果
+     */
+    String judgeAddress(String address) throws AddAccountException;
+
+    /**
+     * 邮编验证
+     *
+     * @param zip 邮编
+     * @return 判断结果
+     */
+    String judgeZip(String zip) throws AddAccountException;
+
+    /**
+     * QQ验证
+     *
+     * @param qq qq号
+     * @return 判断结果
+     */
+    String judgeQQ(String qq) throws AddAccountException;
 }

@@ -58,6 +58,16 @@
             </if>
         </where>
     </select>
+    <select id="findByIdCardNo" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM account WHERE idcard_no=#{idCardNo}
+    </select>
+    <select id="findByLoginName" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM account WHERE login_name=#{loginName}
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from account
     where account_id = #{accountId,jdbcType=INTEGER}
