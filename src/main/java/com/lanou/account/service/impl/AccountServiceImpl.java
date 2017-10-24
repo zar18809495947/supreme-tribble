@@ -26,18 +26,14 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public PageInfo<Account> findAccountPageInfo(Integer pageNum, Integer size) {
-        return queryCostByPage(pageNum, size);
-    }
-
-    @Override
     public void stopAccount(Account account) {
         accountMapper.updateByPrimaryKeySelective(account);
     }
 
     @Override
-    public List<Account> findByFuzzy(Account account) {
-        return accountMapper.findByFuzzy(account);
+    public PageInfo<Account> findByFuzzy(Account account, Integer pageNum, Integer pageSize) {
+        PageInfo<Account> pageInfo = queryAccountByPageFuzzy(account, pageNum, pageSize);
+        return pageInfo;
     }
 
     private PageInfo<Account> queryCostByPage(Integer pageNum, Integer pageSize) {
@@ -45,9 +41,16 @@ public class AccountServiceImpl implements AccountService {
         pageSize = pageSize == null ? 5 : pageSize;
         PageHelper.startPage(pageNum, pageSize);
         List<Account> accountList = accountMapper.findAllAccount();
-//        System.out.println(costList);
         PageInfo<Account> pageInfo = new PageInfo<Account>(accountList);
-//        System.out.println(pageInfo);
+        return pageInfo;
+    }
+
+    private PageInfo<Account> queryAccountByPageFuzzy(Account account, Integer pageNum, Integer pageSize) {
+        pageNum = pageNum == null ? 1 : pageNum;
+        pageSize = pageSize == null ? 5 : pageSize;
+        PageHelper.startPage(pageNum, pageSize);
+        List<Account> byFuzzy = accountMapper.findByFuzzy(account);
+        PageInfo<Account> pageInfo = new PageInfo<>(byFuzzy);
         return pageInfo;
     }
 }

@@ -202,4 +202,30 @@ public class Account {
     public void setLastLoginIp(String lastLoginIp) {
         this.lastLoginIp = lastLoginIp == null ? null : lastLoginIp.trim();
     }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "accountId=" + accountId +
+                ", recommenderId=" + recommenderId +
+                ", loginName='" + loginName + '\'' +
+                ", loginPasswd='" + loginPasswd + '\'' +
+                ", status='" + status + '\'' +
+                ", createDate='" + createDate + '\'' +
+                ", pauseDate='" + pauseDate + '\'' +
+                ", closeDate='" + closeDate + '\'' +
+                ", realName='" + realName + '\'' +
+                ", idcardNo='" + idcardNo + '\'' +
+                ", birthdate='" + birthdate + '\'' +
+                ", gender='" + gender + '\'' +
+                ", occupation='" + occupation + '\'' +
+                ", telephone='" + telephone + '\'' +
+                ", email='" + email + '\'' +
+                ", mailaddress='" + mailaddress + '\'' +
+                ", zipcode='" + zipcode + '\'' +
+                ", qq='" + qq + '\'' +
+                ", lastLoginTime='" + lastLoginTime + '\'' +
+                ", lastLoginIp='" + lastLoginIp + '\'' +
+                '}';
+    }
 }

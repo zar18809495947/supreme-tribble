@@ -1,5 +1,6 @@
 package com.lanou.account.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.lanou.account.bean.Account;
 import com.lanou.account.service.AccountService;
 import com.lanou.utils.AjaxResult;
@@ -21,10 +22,9 @@ public class AccountController {
     @Resource
     private AccountService accountService;
 
-    @ResponseBody
-    @RequestMapping(value = "/findaccountpageinfo")
-    public AjaxResult findAccountPageInfo(@RequestParam("no") Integer no, @RequestParam("size") Integer size) {
-        return new AjaxResult(accountService.findAccountPageInfo(no, size));
+    @RequestMapping(value = "/toaddaccount")
+    public String toAddAccount() {
+        return "account/account_add";
     }
 
     @ResponseBody
@@ -45,8 +45,20 @@ public class AccountController {
 
     @ResponseBody
     @RequestMapping(value = "/findaccount")
-    public AjaxResult findAccount(Account account) {
-        List<Account> byFuzzy = accountService.findByFuzzy(account);
-        return new AjaxResult(byFuzzy);
+    public AjaxResult findAccount(Account account, @RequestParam("no") Integer no, @RequestParam("size") Integer size) {
+        if (account.getStatus() == null || account.getLoginName().trim().isEmpty()) {
+            account.setLoginName(null);
+        }
+        if (account.getStatus() == null || account.getRealName().trim().isEmpty()) {
+            account.setRealName(null);
+        }
+        if (account.getStatus() == null || account.getIdcardNo().trim().isEmpty()) {
+            account.setRealName(null);
+        }
+        if (account.getStatus() == null || account.getStatus().trim().isEmpty()) {
+            account.setStatus(null);
+        }
+        PageInfo<Account> fuzzy = accountService.findByFuzzy(account, no, size);
+        return new AjaxResult(fuzzy);
     }
 }

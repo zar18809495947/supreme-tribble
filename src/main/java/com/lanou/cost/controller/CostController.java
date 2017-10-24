@@ -72,7 +72,6 @@ public class CostController {
                 (boolean) request.getSession().getAttribute("judge_descr")) {
             cost.setStatus("0");
             cost.setCreatime(new Timestamp(System.currentTimeMillis()).toString());
-            System.out.println(cost);
             costService.addCost(cost);
             return new AjaxResult(cost);
         }
@@ -83,7 +82,6 @@ public class CostController {
     @ResponseBody
     @RequestMapping(value = "/delcost")
     public AjaxResult delCost(Cost cost) {
-        System.out.println(cost);
         costService.delCost(cost);
         return new AjaxResult(cost);
     }
@@ -116,7 +114,6 @@ public class CostController {
     @RequestMapping(value = "/modifycost", method = RequestMethod.POST)
     public AjaxResult modifyCost(Cost cost) {
         cost.setCreatime(new Timestamp(System.currentTimeMillis()).toString());
-        System.out.println(cost);
         costService.updateCost(cost);
         return new AjaxResult(cost);
     }
@@ -191,7 +188,6 @@ public class CostController {
     @RequestMapping(value = "/uplistbybasecost")
     public AjaxResult upListByBaseCost(@RequestParam("pageNum") Integer pageNum) {
         PageInfo<Cost> withPageInfo = costService.findWithPageInfo(pageNum, 4);
-        System.out.println(withPageInfo);
         List<Cost> list = withPageInfo.getList();
         Collections.sort(list);
         withPageInfo.setList(list);

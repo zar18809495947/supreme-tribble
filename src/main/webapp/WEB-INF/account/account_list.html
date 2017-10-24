@@ -9,6 +9,10 @@
     <script type="text/javascript" src="/js/jquery-3.2.1.js"></script>
     <script language="javascript" type="text/javascript">
         var pageSize = 5;
+        var fuzzy_idCard = null;
+        var fuzzy_name = null;
+        var fuzzy_loginName = null;
+        var fuzzy_id = null;
 
         //删除
         function deleteAccount() {
@@ -84,10 +88,15 @@
             }
         }
 
+        // 初始化信息
         function findAllAccount(no, size) {
             $.ajax({
-                url: "/findaccountpageinfo",
+                url: "/findaccount",
                 data: {
+                    idcardNo: fuzzy_idCard,
+                    realName: fuzzy_name,
+                    loginName: fuzzy_loginName,
+                    status: fuzzy_id,
                     no: no,
                     size: size
                 },
@@ -103,6 +112,7 @@
 
         findAllAccount(1, pageSize);
 
+        // 添加tr
         function addNewTr(msg, pageNum) {
             var tab = $("#tab");
             var tr = $("<tr></tr>");
@@ -169,8 +179,12 @@
             var no = $(this).attr("no");
             var size = $(this).attr("size");
             $.ajax({
-                url: "/findaccountpageinfo",
+                url: "/findaccount",
                 data: {
+                    idcardNo: fuzzy_idCard,
+                    realName: fuzzy_name,
+                    loginName: fuzzy_loginName,
+                    status: fuzzy_id,
                     no: no,
                     size: size
                 },
@@ -184,22 +198,28 @@
             })
         }
 
-
+        // 查找
         function findAccount() {
-            var idCard = $("#search_idCard").val();
-            var name = $("#search_name").val();
-            var loginName = $("#search_loginName").val();
-            var id = $("#search_status").find("option:selected").attr("id");
+            fuzzy_idCard = $("#search_idCard").val();
+            fuzzy_name = $("#search_name").val();
+            fuzzy_loginName = $("#search_loginName").val();
+            fuzzy_id = $("#search_status").find("option:selected").attr("id");
             $.ajax({
                 url: "/findaccount",
                 data: {
-                    idcardNo: idCard,
-                    realName: name,
-                    loginName: loginName,
-                    status: id
+                    idcardNo: fuzzy_idCard,
+                    realName: fuzzy_name,
+                    loginName: fuzzy_loginName,
+                    status: fuzzy_id,
+                    no: 1,
+                    size: 5
                 },
                 success: function (result) {
-                    console.log(result);
+                    $("#tab").children().remove();
+                    for (var i = 0; i < result.data.list.length; i++) {
+                        addNewTr(result.data.list[i], result.data.pageNum);
+                    }
+                    pageInfo(result.data);
                 }
             })
         }
@@ -247,7 +267,7 @@
                 </select>
             </div>
             <div><input type="button" value="搜索" class="btn_search" onclick="findAccount()"/></div>
-            <input type="button" value="增加" class="btn_add" onclick="location.href='account_add.html';"/>
+            <input type="button" value="增加" class="btn_add" onclick="location.href='/toaddaccount';"/>
         </div>
         <!--删除等的操作提示-->
         <div id="operate_result_info" class="operate_success">

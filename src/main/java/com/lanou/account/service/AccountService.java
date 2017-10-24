@@ -18,13 +18,6 @@ public interface AccountService {
     List<Account> findAllAccount();
 
     /**
-     * 查找页面信息
-     *
-     * @return 本页信息
-     */
-    PageInfo<Account> findAccountPageInfo(Integer pageNum, Integer size);
-
-    /**
      * 暂停账户
      *
      * @param account 账户id
@@ -32,10 +25,12 @@ public interface AccountService {
     void stopAccount(Account account);
 
     /**
-     * 模糊查询 名字，登录名，身份证，状态
+     * 模糊查询 名字，登录名，身份证，状态,并进行分页
      *
      * @param account 查询内容
-     * @return 账户集合
+     * @param pageNum 第几页
+     * @param pageSize 一页数据多少
+     * @return 分页信息
      */
-    List<Account> findByFuzzy(Account account);
+    PageInfo<Account> findByFuzzy(Account account, Integer pageNum, Integer pageSize);
 }
