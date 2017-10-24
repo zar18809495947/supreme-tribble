@@ -60,7 +60,7 @@
     <column id="42" parent="30" name="account_id">
       <mandatory>1</mandatory>
       <data-type>int(9)|0</data-type>
-      <default-expression>&apos;0&apos;</default-expression>
+      <sequence-identity>1</sequence-identity>
     </column>
     <column id="43" parent="30" name="recommender_id">
       <data-type>int(9)|0</data-type>
@@ -97,7 +97,7 @@
       <data-type>datetime|0</data-type>
     </column>
     <column id="53" parent="30" name="gender">
-      <data-type>char(1)|0</data-type>
+      <data-type>char(10)|0</data-type>
     </column>
     <column id="54" parent="30" name="occupation">
       <data-type>varchar(50)|0</data-type>

@@ -9,6 +9,12 @@ public interface AccountMapper {
 
     int insert(Account record);
 
+    /**
+     * 添加账务信息
+     *
+     * @param record 账务资料
+     * @return 是否添加成功, 自动赋值id
+     */
     int insertSelective(Account record);
 
     Account selectByPrimaryKey(Integer accountId);

@@ -27,10 +27,25 @@ public interface AccountService {
     /**
      * 模糊查询 名字，登录名，身份证，状态,并进行分页
      *
-     * @param account 查询内容
-     * @param pageNum 第几页
+     * @param account  查询内容
+     * @param pageNum  第几页
      * @param pageSize 一页数据多少
      * @return 分页信息
      */
     PageInfo<Account> findByFuzzy(Account account, Integer pageNum, Integer pageSize);
+
+    /**
+     * 添加账户信息
+     *
+     * @param account 账务信息
+     */
+    void addAccount(Account account);
+
+    /**
+     * 通过id查找账务信息
+     *
+     * @param accountId 账务id
+     * @return 账务信息
+     */
+    Account findByAccountId(Integer accountId);
 }

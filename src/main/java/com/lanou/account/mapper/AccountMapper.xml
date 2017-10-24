@@ -78,7 +78,7 @@
       #{mailaddress,jdbcType=VARCHAR}, #{zipcode,jdbcType=CHAR}, #{qq,jdbcType=VARCHAR}, 
       #{lastLoginTime,jdbcType=VARCHAR}, #{lastLoginIp,jdbcType=VARCHAR})
   </insert>
-    <insert id="insertSelective" parameterType="com.lanou.account.bean.Account">
+    <insert id="insertSelective" parameterType="com.lanou.account.bean.Account" useGeneratedKeys="true" keyProperty="accountId">
         insert into account
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="accountId != null">

@@ -36,6 +36,16 @@ public class AccountServiceImpl implements AccountService {
         return pageInfo;
     }
 
+    @Override
+    public void addAccount(Account account) {
+        accountMapper.insertSelective(account);
+    }
+
+    @Override
+    public Account findByAccountId(Integer accountId) {
+        return accountMapper.selectByPrimaryKey(accountId);
+    }
+
     private PageInfo<Account> queryCostByPage(Integer pageNum, Integer pageSize) {
         pageNum = pageNum == null ? 1 : pageNum;
         pageSize = pageSize == null ? 5 : pageSize;

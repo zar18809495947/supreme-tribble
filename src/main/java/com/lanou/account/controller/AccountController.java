@@ -6,10 +6,12 @@ import com.lanou.account.service.AccountService;
 import com.lanou.utils.AjaxResult;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +27,18 @@ public class AccountController {
     @RequestMapping(value = "/toaddaccount")
     public String toAddAccount() {
         return "account/account_add";
+    }
+
+    @RequestMapping(value = "/tomodiaccount")
+    public String toModiAccount() {
+        return "account/account_modi";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/saveaccount")
+    public String saveAccount(HttpServletRequest request, @RequestParam("accountId") Integer accountId) {
+        request.getSession().setAttribute("accountId", accountId);
+        return null;
     }
 
     @ResponseBody
@@ -60,5 +74,23 @@ public class AccountController {
         }
         PageInfo<Account> fuzzy = accountService.findByFuzzy(account, no, size);
         return new AjaxResult(fuzzy);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/addaccount", method = RequestMethod.POST)
+    public AjaxResult addAccount(Account account) {
+        System.out.println(account);
+        account.setStatus("1");
+        account.setCreateDate(new Timestamp(System.currentTimeMillis()).toString());
+        accountService.addAccount(account);
+        return new AjaxResult(account);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/modiaccount")
+    public AjaxResult modiAccount(HttpServletRequest request) {
+        Integer accountId = (Integer) request.getSession().getAttribute("accountId");
+        Account account = accountService.findByAccountId(accountId);
+        return new AjaxResult(account);
     }
 }

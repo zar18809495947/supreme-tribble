@@ -126,7 +126,7 @@
                 $("<td></td>").append(msg.lastLoginTime).appendTo(tr);
                 var td = $("<td></td>");
                 $("<input type='button' value='暂停' class='btn_pause'>").click(setState).attr("pageNum", pageNum).attr("status", 1).attr("id", msg.accountId).appendTo(td);
-                $("<input type='button' value='修改' class='btn_modify' onclick='setState()'>").appendTo(td);
+                $("<input type='button' value='修改' class='btn_modify'>").click(editAccount).attr("num",msg.accountId).appendTo(td);
                 $("<input type='button' value='删除' class='btn_delete'>").click(deleteAccount).attr("pageNum", pageNum).attr("id", msg.accountId).appendTo(td);
                 td.appendTo(tr);
             } else if (msg.status == 2) {
@@ -135,7 +135,7 @@
                 $("<td></td>").append(msg.lastLoginTime).appendTo(tr);
                 var td = $("<td></td>");
                 $("<input type='button' value='开通' class='btn_start'>").click(setState).attr("pageNum", pageNum).attr("status", 2).attr("id", msg.accountId).appendTo(td);
-                $("<input type='button' value='修改' class='btn_modify' onclick='setState()'>").appendTo(td);
+                $("<input type='button' value='修改' class='btn_modify'>").click(editAccount).attr("num",msg.accountId).appendTo(td);
                 $("<input type='button' value='删除' class='btn_delete'>").click(deleteAccount).attr("pageNum", pageNum).attr("id", msg.accountId).appendTo(td);
                 td.appendTo(tr);
             } else {
@@ -222,6 +222,19 @@
                     pageInfo(result.data);
                 }
             })
+        }
+
+        // 修改
+        function editAccount() {
+            $.ajax({
+                url: "/saveaccount",
+                data: {
+                    accountId: $(this).attr("num")
+                },
+                success: function (result) {
+                    window.location.href = "/tomodiaccount";
+                }
+            });
         }
 
     </script>
