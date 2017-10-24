@@ -22,4 +22,9 @@ public class BaseController {
     public String accountListPage() {
         return "account/account_list";
     }
+
+    @RequestMapping(value = "/servicepage")
+    public String servicePage() {
+        return "service/service_list";
+    }
 }

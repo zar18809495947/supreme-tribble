@@ -1,11 +1,15 @@
 package com.lanou.service.bean;
 
+import com.lanou.account.bean.Account;
+import com.lanou.cost.bean.Cost;
+
 import java.util.Date;
 
 public class Service {
     private Integer serviceId;
 
-    private Integer accountId;
+    //    private Integer accountId;
+    private Account account;// accountId
 
     private String unixHost;
 
@@ -15,13 +19,14 @@ public class Service {
 
     private String status;
 
-    private Date createDate;
+    private String createDate;
 
-    private Date pauseDate;
+    private String pauseDate;
 
-    private Date closeDate;
+    private String closeDate;
 
-    private Integer costId;
+    //    private Integer costId;
+    private Cost cost; // costId
 
     public Integer getServiceId() {
         return serviceId;
@@ -31,13 +36,6 @@ public class Service {
         this.serviceId = serviceId;
     }
 
-    public Integer getAccountId() {
-        return accountId;
-    }
-
-    public void setAccountId(Integer accountId) {
-        this.accountId = accountId;
-    }
 
     public String getUnixHost() {
         return unixHost;
@@ -71,35 +69,59 @@ public class Service {
         this.status = status == null ? null : status.trim();
     }
 
-    public Date getCreateDate() {
+    public String getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(Date createDate) {
+    public void setCreateDate(String createDate) {
         this.createDate = createDate;
     }
 
-    public Date getPauseDate() {
+    public String getPauseDate() {
         return pauseDate;
     }
 
-    public void setPauseDate(Date pauseDate) {
+    public void setPauseDate(String pauseDate) {
         this.pauseDate = pauseDate;
     }
 
-    public Date getCloseDate() {
+    public String getCloseDate() {
         return closeDate;
     }
 
-    public void setCloseDate(Date closeDate) {
+    public void setCloseDate(String closeDate) {
         this.closeDate = closeDate;
     }
 
-    public Integer getCostId() {
-        return costId;
+    public Account getAccount() {
+        return account;
     }
 
-    public void setCostId(Integer costId) {
-        this.costId = costId;
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
+    public Cost getCost() {
+        return cost;
+    }
+
+    public void setCost(Cost cost) {
+        this.cost = cost;
+    }
+
+    @Override
+    public String toString() {
+        return "Service{" +
+                "serviceId=" + serviceId +
+                ", account=" + account +
+                ", unixHost='" + unixHost + '\'' +
+                ", osUsername='" + osUsername + '\'' +
+                ", loginPasswd='" + loginPasswd + '\'' +
+                ", status='" + status + '\'' +
+                ", createDate=" + createDate +
+                ", pauseDate=" + pauseDate +
+                ", closeDate=" + closeDate +
+                ", cost=" + cost +
+                '}';
     }
 }
