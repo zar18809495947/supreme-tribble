@@ -10,6 +10,12 @@ public interface ServiceMapper {
 
     int insert(Servicezz record);
 
+    /**
+     * 添加Service
+     *
+     * @param record 添加的内容
+     * @return 是否添加成功
+     */
     int insertSelective(Servicezz record);
 
     Servicezz selectByPrimaryKey(Integer serviceId);

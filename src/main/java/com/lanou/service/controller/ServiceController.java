@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
@@ -23,6 +24,18 @@ public class ServiceController {
     public AjaxResult findAllService() {
         List<Servicezz> serviceAll = serviceService.findAll();
         return new AjaxResult(serviceAll);
+    }
+
+    @RequestMapping(value = "/toaddservice")
+    public String toAddService() {
+        return "service/service_add";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/saveserviceid")
+    public String saveServiceId(HttpServletRequest request, Servicezz servicezz) {
+        request.getSession().setAttribute("serviceId", servicezz.getServiceId());
+        return null;
     }
 
     @ResponseBody
@@ -57,6 +70,13 @@ public class ServiceController {
         } catch (StartServiceException e) {
             return new AjaxResult(e.getMessage(), 1, null);
         }
+        return new AjaxResult(servicezz);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/addservice")
+    public AjaxResult addService(Servicezz servicezz) {
+        serviceService.addService(servicezz);
         return new AjaxResult(servicezz);
     }
 }

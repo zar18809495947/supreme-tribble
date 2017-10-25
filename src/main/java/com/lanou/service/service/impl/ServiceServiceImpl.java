@@ -47,6 +47,11 @@ public class ServiceServiceImpl implements ServiceService {
         serviceMapper.updateByPrimaryKeySelective(servicezz);
     }
 
+    @Override
+    public void addService(Servicezz servicezz) {
+        serviceMapper.insertSelective(servicezz);
+    }
+
     public PageInfo<Servicezz> fuzzyFindServicePageInfo(String osUsername, String unixHost, String idcardNo, String status, Integer no, Integer size) {
         no = no == null ? 1 : no;
         size = size == null ? 5 : size;

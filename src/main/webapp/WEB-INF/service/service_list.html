@@ -147,7 +147,7 @@
                 $("<td></td>").append($("<a class='summary' onmouseover='showDetail(true,this);' onmouseout='showDetail(false,this);'></a>").append(msg.cost.name)).append($("<div class='detail_info'></div>").append(msg.cost.descr)).appendTo(tr);
                 var td = $("<td class='td_modi'></td>");
                 $("<input type='button' value='暂停' class='btn_pause'/>").click(setState).attr("num", msg.serviceId).attr("pageNum", pageNum).attr("status", msg.status).appendTo(td);
-                $("<input type='button' value='修改' class='btn_modify'/>").appendTo(td);
+                $("<input type='button' value='修改' class='btn_modify'/>").click(saveService).attr("serviceId", msg.serviceId).appendTo(td);
                 $("<input type='button' value='删除' class='btn_delete'/>").click(deleteAccount).attr("num", msg.serviceId).attr("pageNum", pageNum).appendTo(td);
                 td.appendTo(tr);
             } else if (msg.status == 2) {
@@ -156,7 +156,7 @@
                 $("<td></td>").append($("<a class='summary' onmouseover='showDetail(true,this);' onmouseout='showDetail(false,this);'></a>").append(msg.cost.name)).append($("<div class='detail_info'></div>").append(msg.cost.descr)).appendTo(tr);
                 var td = $("<td class='td_modi'></td>");
                 $("<input type='button' value='开通' class='btn_start'/>").click(setState).attr("num", msg.serviceId).attr("pageNum", pageNum).attr("status", msg.status).appendTo(td);
-                $("<input type='button' value='修改' class='btn_modify'/>").appendTo(td);
+                $("<input type='button' value='修改' class='btn_modify'/>").click(saveService).attr("serviceId", msg.serviceId).appendTo(td);
                 $("<input type='button' value='删除' class='btn_delete'/>").click(deleteAccount).attr("num", msg.serviceId).attr("pageNum", pageNum).appendTo(td);
                 td.appendTo(tr);
             } else {
@@ -244,6 +244,20 @@
                 }
             })
         }
+
+        function saveService() {
+            $.ajax({
+                rul: "/saveserviceid",
+                data: {
+                    serviceId: $(this).attr("serviceId")
+                },
+                success: function (result) {
+                    if (result.errorCode == 0) {
+                        window.location.href = "/toaddservice";
+                    }
+                }
+            });
+        }
     </script>
 </head>
 <body>
@@ -286,7 +300,7 @@
                 </select>
             </div>
             <div><input type="button" value="搜索" class="btn_search" onclick="findService()"/></div>
-            <input type="button" value="增加" class="btn_add" onclick="location.href='service_add.html';"/>
+            <input type="button" value="增加" class="btn_add" onclick="location.href='/toaddservice';"/>
         </div>
         <!--删除的操作提示-->
         <div id="operate_result_info" class="operate_success">

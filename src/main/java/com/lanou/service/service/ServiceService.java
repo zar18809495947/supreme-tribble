@@ -28,4 +28,11 @@ public interface ServiceService {
      * @param servicezz 更新信息
      */
     void updateService(Servicezz servicezz) throws StartServiceException;
+
+    /**
+     * 添加Service
+     *
+     * @param servicezz 添加的信息
+     */
+    void addService(Servicezz servicezz);
 }

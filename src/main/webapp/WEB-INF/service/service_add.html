@@ -5,6 +5,7 @@
         <title></title>
         <link type="text/css" rel="stylesheet" media="all" href="../styles/global.css" />
         <link type="text/css" rel="stylesheet" media="all" href="../styles/global_color.css" />
+        <script type="text/javascript" src="/js/jquery-3.2.1.js"></script>
         <script language="javascript" type="text/javascript">
             //保存成功的提示信息
             function showResult() {
@@ -23,6 +24,28 @@
             function searchAccounts(txtObj) {
                 //document.getElementById("a1").innerHTML = txtObj.value;
             }
+
+            function add() {
+                $.ajax({
+                    url: "/addservice",
+                    data: {
+                        accountId
+                        unixHost
+                        osUsername
+                        loginPasswd
+                        status
+                        createDate
+                        pauseDate
+                        closeDate
+                        costId
+                        cost
+                    },
+                    success:function (result) {
+                        console.log(result);
+                    }
+                });
+            }
+            add();
         </script>
     </head>
     <body>

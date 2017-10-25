@@ -62,7 +62,7 @@
       #{createDate,jdbcType=VARCHAR}, #{pauseDate,jdbcType=VARCHAR}, #{closeDate,jdbcType=VARCHAR},
       #{costId,jdbcType=INTEGER})
   </insert>
-    <insert id="insertSelective" parameterType="com.lanou.service.bean.Servicezz">
+    <insert id="insertSelective" parameterType="com.lanou.service.bean.Servicezz" useGeneratedKeys="true" keyProperty="serviceId">
         insert into service
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="serviceId != null">

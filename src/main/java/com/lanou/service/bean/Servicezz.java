@@ -8,8 +8,9 @@ import java.util.Date;
 public class Servicezz {
     private Integer serviceId;
 
-    //    private Integer accountId;
-    private Account account;// accountId
+    private Integer accountId;
+
+    private Account account;
 
     private String unixHost;
 
@@ -25,8 +26,9 @@ public class Servicezz {
 
     private String closeDate;
 
-    //    private Integer costId;
-    private Cost cost; // costId
+    private Integer costId;
+
+    private Cost cost;
 
     public Integer getServiceId() {
         return serviceId;
@@ -123,5 +125,21 @@ public class Servicezz {
                 ", closeDate=" + closeDate +
                 ", cost=" + cost +
                 '}';
+    }
+
+    public Integer getCostId() {
+        return costId;
+    }
+
+    public void setCostId(Integer costId) {
+        this.costId = costId;
+    }
+
+    public Integer getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(Integer accountId) {
+        this.accountId = accountId;
     }
 }
