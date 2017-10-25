@@ -40,20 +40,19 @@
         FROM account
     </select>
     <select id="findByFuzzy" resultMap="BaseResultMap">
-        SELECT
-        <include refid="Base_Column_List"/>
+        SELECT <include refid="Base_Column_List"/>
         FROM account
         <where>
-            <if test="idcardNo!=null">
+            <if test="idcardNo != null">
                 and idcard_no LIKE CONCAT('%',#{idcardNo},'%')
             </if>
-            <if test="realName!=null">
+            <if test="realName != null">
                 and real_name LIKE CONCAT('%',#{realName},'%')
             </if>
-            <if test="loginName!=null">
+            <if test="loginName != null">
                 and login_name LIKE CONCAT('%',#{loginName},'%')
             </if>
-            <if test="status!=null">
+            <if test="status != null">
                 and status=#{status}
             </if>
         </where>

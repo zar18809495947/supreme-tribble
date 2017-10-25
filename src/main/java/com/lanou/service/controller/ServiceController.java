@@ -32,7 +32,19 @@ public class ServiceController {
                                           @RequestParam("status") String status,
                                           @RequestParam("no") Integer no,
                                           @RequestParam("size") Integer size) {
-        PageInfo<Service> services = serviceService.findServicePageInfo(osUsername, unixHost, idcardNo,status, no, size);
+        if (osUsername == null || osUsername.trim().isEmpty()) {
+            osUsername = null;
+        }
+        if (unixHost == null || unixHost.trim().isEmpty()) {
+            unixHost = null;
+        }
+        if (idcardNo == null || idcardNo.trim().isEmpty()) {
+            idcardNo = null;
+        }
+        if ("0".equals(status)) {
+            status = null;
+        }
+        PageInfo<Service> services = serviceService.findServicePageInfo(osUsername, unixHost, idcardNo, status, no, size);
         return new AjaxResult(services);
     }
 }

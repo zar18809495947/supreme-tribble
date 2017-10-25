@@ -9,6 +9,10 @@
     <script type="text/javascript" src="/js/jquery-3.2.1.js"></script>
     <script language="javascript" type="text/javascript">
         var pageSize = 5;
+        var fuzzy_osUsername = null;
+        var fuzzy_unixHost = null;
+        var fuzzy_idcardNo = null;
+        var fuzzy_status = "0";
 
         //显示角色详细信息
         function showDetail(flag, a) {
@@ -32,16 +36,16 @@
             document.getElementById("operate_result_info").style.display = "block";
         }
 
-        function findAll() {
+        function findAll(no, size) {
             $.ajax({
                 url: "/findpageinfo",
                 data: {
-                    osUsername: null,
-                    unixHost: null,
-                    idcardNo: "0",
-                    status: "0",
-                    no: 1,
-                    size: 5
+                    osUsername: fuzzy_osUsername,
+                    unixHost: fuzzy_unixHost,
+                    idcardNo: fuzzy_idcardNo,
+                    status: fuzzy_status,
+                    no: no,
+                    size: size
                 },
                 success: function (result) {
                     console.log(result);
@@ -54,19 +58,47 @@
             })
         }
 
-        findAll();
+        findAll(1, pageSize);
 
         function addNewTr(msg) {
             var tr = $("<tr></tr>");
-            $("<td></td>").append($("<a href='###' title='查看明细'>")).append(msg.serviceId).appendTo(tr);
+            $("<td></td>").append($("<a href='###' title='查看明细'></a>").append(msg.serviceId)).appendTo(tr);
             $("<td></td>").append(msg.account.accountId).appendTo(tr);
             $("<td></td>").append(msg.account.idcardNo).appendTo(tr);
             $("<td></td>").append(msg.account.realName).appendTo(tr);
             $("<td></td>").append(msg.osUsername).appendTo(tr);
-            $("<td></td>").append(msg.status).appendTo(tr);
-            $("<td></td>").append(msg.unixHost).appendTo(tr);
-            $("<td></td>").appendTo(tr);
-            $("<td></td>").appendTo(tr);
+            if (msg.status == 1) {
+                $("<td></td>").append("开通").appendTo(tr);
+                $("<td></td>").append(msg.unixHost).appendTo(tr);
+                $("<td></td>").append($("<a class='summary' onmouseover='showDetail(true,this);' onmouseout='showDetail(false,this);'></a>").append(msg.cost.name)).append($("<div class='detail_info'></div>").append(msg.cost.descr)).appendTo(tr);
+                var td = $("<td class='td_modi'></td>");
+                $("<input type='button' value='暂停' class='btn_pause' onclick='setState();'/>").appendTo(td);
+                $("<input type='button' value='修改' class='btn_modify'/>").appendTo(td);
+                $("<input type='button' value='删除' class='btn_delete' onclick='deleteAccount();'/>").appendTo(td);
+                td.appendTo(tr);
+            } else if (msg.status == 2) {
+                $("<td></td>").append("暂停").appendTo(tr);
+                $("<td></td>").append(msg.unixHost).appendTo(tr);
+                $("<td></td>").append($("<a class='summary' onmouseover='showDetail(true,this);' onmouseout='showDetail(false,this);'></a>").append(msg.cost.name)).append($("<div class='detail_info'></div>").append(msg.cost.descr)).appendTo(tr);
+                var td = $("<td class='td_modi'></td>");
+                $("<input type='button' value='暂停' class='btn_pause' onclick='setState();'/>").appendTo(td);
+                $("<input type='button' value='修改' class='btn_modify'/>").appendTo(td);
+                $("<input type='button' value='删除' class='btn_delete' onclick='deleteAccount();'/>").appendTo(td);
+                td.appendTo(tr);
+                /*
+                 <td class="td_modi">
+                 <input type="button" value="暂停" class="btn_pause" onclick="setState();"/>
+                 <input type="button" value="修改" class="btn_modify"
+                 onclick="location.href='service_modi.html';"/>
+                 <input type="button" value="删除" class="btn_delete" onclick="deleteAccount();"/>
+                 </td>
+                 */
+            } else {
+                $("<td></td>").append("删除").appendTo(tr);
+                $("<td></td>").append(msg.unixHost).appendTo(tr);
+                $("<td></td>").append($("<a class='summary' onmouseover='showDetail(true,this);' onmouseout='showDetail(false,this);'></a>").append(msg.cost.name)).append($("<div class='detail_info'></div>").append(msg.cost.descr)).appendTo(tr);
+                $("<td></td>").appendTo(tr);
+            }
             $("#tab").append(tr);
         }
 
@@ -101,16 +133,15 @@
         // 之后获取信息
         function pages() {
             var no = $(this).attr("no");
-            var size = $(this).attr("size");
             $.ajax({
                 url: "/findpageinfo",
                 data: {
-                    osUsername: null,
-                    unixHost: null,
-                    idcardNo: "0",
-                    status: "0",
+                    osUsername: fuzzy_osUsername,
+                    unixHost: fuzzy_unixHost,
+                    idcardNo: fuzzy_idcardNo,
+                    status: fuzzy_status,
                     no: no,
-                    size: size
+                    size: pageSize
                 },
                 success: function (result) {
                     $("#tab").children().remove();
@@ -122,30 +153,55 @@
             })
         }
 
+        // 查找
+        function findService() {
+            fuzzy_osUsername = $("#search_osUsername").val();
+            fuzzy_unixHost = $("#search_unixHost").val();
+            fuzzy_idcardNo = $("#search_idcardNo").val();
+            fuzzy_status = $("#search_status").find("option:selected").attr("id");
+            $.ajax({
+                url: "/findpageinfo",
+                data: {
+                    osUsername: fuzzy_osUsername,
+                    unixHost: fuzzy_unixHost,
+                    idcardNo: fuzzy_idcardNo,
+                    status: fuzzy_status,
+                    no: 1,
+                    size: pageSize
+                },
+                success: function (result) {
+                    $("#tab").children().remove();
+                    for (var i = 0; i < result.data.list.length; i++) {
+                        addNewTr(result.data.list[i], result.data.pageNum);
+                    }
+                    pageInfo(result.data);
+                }
+            })
+        }
         /*
-        <tr>
-                      <td><a href="service_detail.html" title="查看明细">1</a></td>
-                      <td>101</td>
-                      <td>230102197902137862</td>
-                      <td>张三</td>
-                      <td>openlab1</td>
-                      <td>开通</td>
-                      <td>192.168.0.23</td>
-                      <td>
-                          <a class="summary" onmouseover="showDetail(true,this);" onmouseout="showDetail(false,this);">包
-                              20 小时</a>
-                          <!--浮动的详细信息-->
-                          <div class="detail_info">
-                              20小时，24.5 元，超出部分 0.03元/分钟
-                                </div>
-                            </td>
-                            <td class="td_modi">
-                                <input type="button" value="暂停" class="btn_pause" onclick="setState();"/>
-                                <input type="button" value="修改" class="btn_modify"
-                                       onclick="location.href='service_modi.html';"/>
-                                <input type="button" value="删除" class="btn_delete" onclick="deleteAccount();"/>
-                            </td>
-                        </tr>
+         <tr>
+         <td><a href="service_detail.html" title="查看明细">1</a></td>
+         <td>101</td>
+         <td>230102197902137862</td>
+         <td>张三</td>
+         <td>openlab1</td>
+         <td>开通</td>
+         <td>192.168.0.23</td>
+         <td>
+         <a class="summary" onmouseover="showDetail(true,this);" onmouseout="showDetail(false,this);">包
+         20 小时</a>
+         <!--浮动的详细信息-->
+         <div class="detail_info">
+         20小时，24.5 元，超出部分 0.03元/分钟
+         </div>
+         </td>
+         <td class="td_modi">
+         <input type="button" value="暂停" class="btn_pause" onclick="setState();"/>
+         <input type="button" value="修改" class="btn_modify"
+         onclick="location.href='service_modi.html';"/>
+         <input type="button" value="删除" class="btn_delete" onclick="deleteAccount();"/>
+         </td>
+         </tr>
          */
 
     </script>
@@ -178,18 +234,18 @@
     <form action="" method="">
         <!--查询-->
         <div class="search_add">
-            <div>OS 账号：<input type="text" value="" class="width100 text_search"/></div>
-            <div>服务器 IP：<input type="text" value="" class="width100 text_search"/></div>
-            <div>身份证：<input type="text" value="" class="text_search"/></div>
+            <div>OS 账号：<input type="text" class="width100 text_search" id="search_osUsername"/></div>
+            <div>服务器 IP：<input type="text" class="width100 text_search" id="search_unixHost"/></div>
+            <div>身份证：<input type="text" class="text_search" id="search_idcardNo"/></div>
             <div>状态：
-                <select class="select_search">
-                    <option>全部</option>
-                    <option>开通</option>
-                    <option>暂停</option>
-                    <option>删除</option>
+                <select class="select_search" id="search_status">
+                    <option id="0">全部</option>
+                    <option id="1">开通</option>
+                    <option id="2">暂停</option>
+                    <option id="3">删除</option>
                 </select>
             </div>
-            <div><input type="button" value="搜索" class="btn_search"/></div>
+            <div><input type="button" value="搜索" class="btn_search" onclick="findService()"/></div>
             <input type="button" value="增加" class="btn_add" onclick="location.href='service_add.html';"/>
         </div>
         <!--删除的操作提示-->

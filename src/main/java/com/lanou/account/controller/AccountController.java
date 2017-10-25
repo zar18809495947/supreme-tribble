@@ -66,11 +66,11 @@ public class AccountController {
         if (account.getStatus() == null || account.getLoginName().trim().isEmpty()) {
             account.setLoginName(null);
         }
-        if (account.getStatus() == null || account.getRealName().trim().isEmpty()) {
+        if (account.getRealName() == null || account.getRealName().trim().isEmpty()) {
             account.setRealName(null);
         }
-        if (account.getStatus() == null || account.getIdcardNo().trim().isEmpty()) {
-            account.setRealName(null);
+        if (account.getIdcardNo() == null || account.getIdcardNo().trim().isEmpty()) {
+            account.setIdcardNo(null);
         }
         if (account.getStatus() == null || account.getStatus().trim().isEmpty()) {
             account.setStatus(null);
