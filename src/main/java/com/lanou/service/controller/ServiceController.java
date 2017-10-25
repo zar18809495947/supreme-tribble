@@ -1,8 +1,9 @@
 package com.lanou.service.controller;
 
 import com.github.pagehelper.PageInfo;
-import com.lanou.service.bean.Service;
+import com.lanou.service.bean.Servicezz;
 import com.lanou.service.service.ServiceService;
+import com.lanou.service.service.exception.start.StartServiceException;
 import com.lanou.utils.AjaxResult;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +21,7 @@ public class ServiceController {
     @ResponseBody
     @RequestMapping(value = "/findallservice")
     public AjaxResult findAllService() {
-        List<Service> serviceAll = serviceService.findAll();
+        List<Servicezz> serviceAll = serviceService.findAll();
         return new AjaxResult(serviceAll);
     }
 
@@ -44,7 +45,18 @@ public class ServiceController {
         if ("0".equals(status)) {
             status = null;
         }
-        PageInfo<Service> services = serviceService.findServicePageInfo(osUsername, unixHost, idcardNo, status, no, size);
+        PageInfo<Servicezz> services = serviceService.findServicePageInfo(osUsername, unixHost, idcardNo, status, no, size);
         return new AjaxResult(services);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/delservice")
+    public AjaxResult delService(Servicezz servicezz) {
+        try {
+            serviceService.updateService(servicezz);
+        } catch (StartServiceException e) {
+            return new AjaxResult(e.getMessage(), 1, null);
+        }
+        return new AjaxResult(servicezz);
     }
 }

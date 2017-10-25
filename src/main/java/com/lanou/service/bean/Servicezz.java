@@ -5,7 +5,7 @@ import com.lanou.cost.bean.Cost;
 
 import java.util.Date;
 
-public class Service {
+public class Servicezz {
     private Integer serviceId;
 
     //    private Integer accountId;
@@ -111,7 +111,7 @@ public class Service {
 
     @Override
     public String toString() {
-        return "Service{" +
+        return "Servicezz{" +
                 "serviceId=" + serviceId +
                 ", account=" + account +
                 ", unixHost='" + unixHost + '\'' +

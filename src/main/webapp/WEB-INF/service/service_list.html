@@ -26,14 +26,89 @@
 
         //删除
         function deleteAccount() {
+            var pageNum = $(this).attr("pageNum");
             var r = window.confirm("确定要删除此业务账号吗？删除后将不能恢复。");
-            document.getElementById("operate_result_info").style.display = "block";
+            if (r) {
+                $.ajax({
+                    url: "/delservice",
+                    data: {
+                        serviceId: $(this).attr("num"),
+                        status: "3"
+                    },
+                    success: function (result) {
+                        if (result.errorCode == 0) {
+                            findAll(pageNum, pageSize);
+                        }
+                    }
+                });
+                document.getElementById("operate_result_info").style.display = "block";
+                document.getElementById("operate_result_info").innerText = "删除成功！";
+                window.setTimeout(function () {
+                    document.getElementById("operate_result_info").style.display = "none";
+                }, 1500);
+            }
         }
 
         //开通或暂停
         function setState() {
-            var r = window.confirm("确定要开通此业务账号吗？");
-            document.getElementById("operate_result_info").style.display = "block";
+            var pageNum = $(this).attr("pageNum");
+            var status = $(this).attr("status");
+            if (status == 1) {
+                var r = window.confirm("确定要暂停此业务账号吗?");
+                if (r) {
+                    $.ajax({
+                        url: "/delservice",
+                        data: {
+                            serviceId: $(this).attr("num"),
+                            status: "2"
+                        },
+                        success: function (result) {
+                            if (result.errorCode == 0) {
+                                findAll(pageNum, pageSize);
+                                document.getElementById("operate_result_info").style.display = "block";
+                                document.getElementById("operate_result_info").innerText = "暂停成功！";
+                                window.setTimeout(function () {
+                                    document.getElementById("operate_result_info").style.display = "none";
+                                }, 1500);
+                            } else {
+                                document.getElementById("operate_result_info").style.display = "block";
+                                document.getElementById("operate_result_info").innerText = result.msg;
+                                window.setTimeout(function () {
+                                    document.getElementById("operate_result_info").style.display = "none";
+                                }, 1500);
+                            }
+                        }
+                    })
+                }
+            } else {
+                var r = window.confirm("确定要开通此业务账号吗？");
+                if (r) {
+                    $.ajax({
+                        url: "/delservice",
+                        data: {
+                            serviceId: $(this).attr("num"),
+                            status: "1"
+                        },
+                        success: function (result) {
+                            if (result.errorCode == 0) {
+                                findAll(pageNum, pageSize);
+                                document.getElementById("operate_result_info").style.display = "block";
+                                document.getElementById("operate_result_info").innerText = "开通成功！";
+                                window.setTimeout(function () {
+                                    document.getElementById("operate_result_info").style.display = "none";
+                                }, 1500);
+                            } else {
+                                document.getElementById("operate_result_info").style.display = "block";
+                                document.getElementById("operate_result_info").innerText = result.msg;
+                                window.setTimeout(function () {
+                                    document.getElementById("operate_result_info").style.display = "none";
+                                }, 1500);
+                            }
+                        }
+                    })
+                }
+            }
+//            document.getElementById("operate_result_info").style.display = "block";
         }
 
         function findAll(no, size) {
@@ -48,7 +123,6 @@
                     size: size
                 },
                 success: function (result) {
-                    console.log(result);
                     $("#tab").children().remove();
                     for (var i = 0; i < result.data.list.length; i++) {
                         addNewTr(result.data.list[i], result.data.pageNum);
@@ -60,7 +134,7 @@
 
         findAll(1, pageSize);
 
-        function addNewTr(msg) {
+        function addNewTr(msg, pageNum) {
             var tr = $("<tr></tr>");
             $("<td></td>").append($("<a href='###' title='查看明细'></a>").append(msg.serviceId)).appendTo(tr);
             $("<td></td>").append(msg.account.accountId).appendTo(tr);
@@ -72,27 +146,19 @@
                 $("<td></td>").append(msg.unixHost).appendTo(tr);
                 $("<td></td>").append($("<a class='summary' onmouseover='showDetail(true,this);' onmouseout='showDetail(false,this);'></a>").append(msg.cost.name)).append($("<div class='detail_info'></div>").append(msg.cost.descr)).appendTo(tr);
                 var td = $("<td class='td_modi'></td>");
-                $("<input type='button' value='暂停' class='btn_pause' onclick='setState();'/>").appendTo(td);
+                $("<input type='button' value='暂停' class='btn_pause'/>").click(setState).attr("num", msg.serviceId).attr("pageNum", pageNum).attr("status", msg.status).appendTo(td);
                 $("<input type='button' value='修改' class='btn_modify'/>").appendTo(td);
-                $("<input type='button' value='删除' class='btn_delete' onclick='deleteAccount();'/>").appendTo(td);
+                $("<input type='button' value='删除' class='btn_delete'/>").click(deleteAccount).attr("num", msg.serviceId).attr("pageNum", pageNum).appendTo(td);
                 td.appendTo(tr);
             } else if (msg.status == 2) {
                 $("<td></td>").append("暂停").appendTo(tr);
                 $("<td></td>").append(msg.unixHost).appendTo(tr);
                 $("<td></td>").append($("<a class='summary' onmouseover='showDetail(true,this);' onmouseout='showDetail(false,this);'></a>").append(msg.cost.name)).append($("<div class='detail_info'></div>").append(msg.cost.descr)).appendTo(tr);
                 var td = $("<td class='td_modi'></td>");
-                $("<input type='button' value='暂停' class='btn_pause' onclick='setState();'/>").appendTo(td);
+                $("<input type='button' value='开通' class='btn_start'/>").click(setState).attr("num", msg.serviceId).attr("pageNum", pageNum).attr("status", msg.status).appendTo(td);
                 $("<input type='button' value='修改' class='btn_modify'/>").appendTo(td);
-                $("<input type='button' value='删除' class='btn_delete' onclick='deleteAccount();'/>").appendTo(td);
+                $("<input type='button' value='删除' class='btn_delete'/>").click(deleteAccount).attr("num", msg.serviceId).attr("pageNum", pageNum).appendTo(td);
                 td.appendTo(tr);
-                /*
-                 <td class="td_modi">
-                 <input type="button" value="暂停" class="btn_pause" onclick="setState();"/>
-                 <input type="button" value="修改" class="btn_modify"
-                 onclick="location.href='service_modi.html';"/>
-                 <input type="button" value="删除" class="btn_delete" onclick="deleteAccount();"/>
-                 </td>
-                 */
             } else {
                 $("<td></td>").append("删除").appendTo(tr);
                 $("<td></td>").append(msg.unixHost).appendTo(tr);
@@ -178,32 +244,6 @@
                 }
             })
         }
-        /*
-         <tr>
-         <td><a href="service_detail.html" title="查看明细">1</a></td>
-         <td>101</td>
-         <td>230102197902137862</td>
-         <td>张三</td>
-         <td>openlab1</td>
-         <td>开通</td>
-         <td>192.168.0.23</td>
-         <td>
-         <a class="summary" onmouseover="showDetail(true,this);" onmouseout="showDetail(false,this);">包
-         20 小时</a>
-         <!--浮动的详细信息-->
-         <div class="detail_info">
-         20小时，24.5 元，超出部分 0.03元/分钟
-         </div>
-         </td>
-         <td class="td_modi">
-         <input type="button" value="暂停" class="btn_pause" onclick="setState();"/>
-         <input type="button" value="修改" class="btn_modify"
-         onclick="location.href='service_modi.html';"/>
-         <input type="button" value="删除" class="btn_delete" onclick="deleteAccount();"/>
-         </td>
-         </tr>
-         */
-
     </script>
 </head>
 <body>
@@ -216,16 +256,16 @@
 <!--导航区域开始-->
 <div id="navi">
     <ul id="menu">
-        <li><a href="../index.html" class="index_off"></a></li>
-        <li><a href="../role/role_list.html" class="role_off"></a></li>
-        <li><a href="../admin/admin_list.html" class="admin_off"></a></li>
-        <li><a href="../fee/fee_list.html" class="fee_off"></a></li>
-        <li><a href="../account/account_list.html" class="account_off"></a></li>
-        <li><a href="../service/service_list.html" class="service_on"></a></li>
-        <li><a href="../bill/bill_list.html" class="bill_off"></a></li>
-        <li><a href="../report/report_list.html" class="report_off"></a></li>
-        <li><a href="../user/user_info.html" class="information_off"></a></li>
-        <li><a href="../user/user_modi_pwd.html" class="password_off"></a></li>
+        <li><a href="/" class="index_off"></a></li>
+        <li><a href="role/role_list.html" class="role_off"></a></li>
+        <li><a href="admin/admin_list.html" class="admin_off"></a></li>
+        <li><a href="/feelistpage" class="fee_off"></a></li>
+        <li><a href="/accountlistpage" class="account_off"></a></li>
+        <li><a href="/servicepage" class="service_on"></a></li>
+        <li><a href="bill/bill_list.html" class="bill_off"></a></li>
+        <li><a href="report/report_list.html" class="report_off"></a></li>
+        <li><a href="user/user_info.html" class="information_off"></a></li>
+        <li><a href="user/user_modi_pwd.html" class="password_off"></a></li>
     </ul>
 </div>
 <!--导航区域结束-->

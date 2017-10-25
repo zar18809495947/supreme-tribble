@@ -1,12 +1,13 @@
 package com.lanou.service.service;
 
 import com.github.pagehelper.PageInfo;
-import com.lanou.service.bean.Service;
+import com.lanou.service.bean.Servicezz;
+import com.lanou.service.service.exception.start.StartServiceException;
 
 import java.util.List;
 
 public interface ServiceService {
-    List<Service> findAll();
+    List<Servicezz> findAll();
 
     /**
      * 模糊查找service信息并分页
@@ -19,5 +20,12 @@ public interface ServiceService {
      * @param size       每页几条
      * @return 页面信息
      */
-    PageInfo<Service> findServicePageInfo(String osUsername, String unixHost, String idcardNo, String status, Integer no, Integer size);
+    PageInfo<Servicezz> findServicePageInfo(String osUsername, String unixHost, String idcardNo, String status, Integer no, Integer size);
+
+    /**
+     * 更新Service
+     *
+     * @param servicezz 更新信息
+     */
+    void updateService(Servicezz servicezz) throws StartServiceException;
 }

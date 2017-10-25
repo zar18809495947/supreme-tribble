@@ -1,25 +1,30 @@
 package com.lanou.service.mapper;
 
-import com.lanou.service.bean.Service;
+import com.lanou.service.bean.Servicezz;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
 public interface ServiceMapper {
     int deleteByPrimaryKey(Integer serviceId);
 
-    int insert(Service record);
+    int insert(Servicezz record);
 
-    int insertSelective(Service record);
+    int insertSelective(Servicezz record);
 
-    Service selectByPrimaryKey(Integer serviceId);
+    Servicezz selectByPrimaryKey(Integer serviceId);
 
-    int updateByPrimaryKeySelective(Service record);
+    /**
+     * 根据条件更新Service
+     *
+     * @param record 更新内容
+     * @return 是否成功
+     */
+    int updateByPrimaryKeySelective(Servicezz record);
 
-    int updateByPrimaryKey(Service record);
+    int updateByPrimaryKey(Servicezz record);
 
-    List<Service> findAll();
+    List<Servicezz> findAll();
 
     /**
      * 模糊查询 os用户名，ip，身份证号
@@ -29,8 +34,8 @@ public interface ServiceMapper {
      * @param idcardNo   身份证号
      * @return 查询集合
      */
-    List<Service> selectServiceFuzzy(@Param("osUsername") String osUsername,
-                                     @Param("unixHost") String unixHost,
-                                     @Param("idcardNo") String idcardNo,
-                                     @Param("status") String status);
+    List<Servicezz> selectServiceFuzzy(@Param("osUsername") String osUsername,
+                                       @Param("unixHost") String unixHost,
+                                       @Param("idcardNo") String idcardNo,
+                                       @Param("status") String status);
 }
