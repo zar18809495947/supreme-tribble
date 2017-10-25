@@ -42,6 +42,11 @@
         <include refid="Base_Column_List"/>
         FROM service
     </select>
+    <select id="findByOSUsername" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM service WHERE os_username=#{osUsername}
+    </select>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
@@ -62,7 +67,8 @@
       #{createDate,jdbcType=VARCHAR}, #{pauseDate,jdbcType=VARCHAR}, #{closeDate,jdbcType=VARCHAR},
       #{costId,jdbcType=INTEGER})
   </insert>
-    <insert id="insertSelective" parameterType="com.lanou.service.bean.Servicezz" useGeneratedKeys="true" keyProperty="serviceId">
+    <insert id="insertSelective" parameterType="com.lanou.service.bean.Servicezz" useGeneratedKeys="true"
+            keyProperty="serviceId">
         insert into service
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="serviceId != null">

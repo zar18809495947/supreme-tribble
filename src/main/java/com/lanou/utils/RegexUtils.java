@@ -487,7 +487,7 @@ public class RegexUtils {
      * @param pattern 匹配模式
      * @return boolean
      */
-    private static  boolean Regular(String str,String pattern){
+    public static  boolean Regular(String str,String pattern){
         //        System.out.println("pattern="+pattern);
         if(null == str || str.trim().length()<=0)
             return false;
@@ -510,7 +510,7 @@ public class RegexUtils {
     }
     public static void main(String[] args) {
         // TODO Auto-generated method stub
-        System.out.println(isPhone("15824325151"));
+        System.out.println(isIpaddress("12.012.200"));
     }
 
 }

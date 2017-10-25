@@ -40,7 +40,8 @@
         FROM account
     </select>
     <select id="findByFuzzy" resultMap="BaseResultMap">
-        SELECT <include refid="Base_Column_List"/>
+        SELECT
+        <include refid="Base_Column_List"/>
         FROM account
         <where>
             <if test="idcardNo != null">
@@ -56,6 +57,11 @@
                 and status=#{status}
             </if>
         </where>
+    </select>
+    <select id="findByAccountId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM account WHERE account_id=#{accountId} and status!='3'
     </select>
     <select id="findByIdCardNo" resultMap="BaseResultMap">
         SELECT
@@ -87,7 +93,8 @@
       #{mailaddress,jdbcType=VARCHAR}, #{zipcode,jdbcType=CHAR}, #{qq,jdbcType=VARCHAR}, 
       #{lastLoginTime,jdbcType=VARCHAR}, #{lastLoginIp,jdbcType=VARCHAR})
   </insert>
-    <insert id="insertSelective" parameterType="com.lanou.account.bean.Account" useGeneratedKeys="true" keyProperty="accountId">
+    <insert id="insertSelective" parameterType="com.lanou.account.bean.Account" useGeneratedKeys="true"
+            keyProperty="accountId">
         insert into account
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="accountId != null">

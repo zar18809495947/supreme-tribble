@@ -1,6 +1,7 @@
 package com.lanou.account.mapper;
 
 import com.lanou.account.bean.Account;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -59,4 +60,12 @@ public interface AccountMapper {
      * @return 返回集合
      */
     List<Account> findByLoginName(String loginName);
+
+    /**
+     * 通过id查找账务账号，并且未删除
+     *
+     * @param accountId 账务账号id
+     * @return 账务账号
+     */
+    Account findByAccountId(@Param("accountId") Integer accountId);
 }

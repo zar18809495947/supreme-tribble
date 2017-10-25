@@ -112,8 +112,9 @@ public class IdCardUtils {
      */
     public static String getBirthday(String idCardNo18) throws ParseException {
         String date = idCardNo18.substring(6, 10) + "-" +
-                idCardNo18.substring(11, 12) + "-" +
-                idCardNo18.substring(13, 14);
+                idCardNo18.substring(10, 12) + "-" +
+                idCardNo18.substring(12, 14);
+        System.out.println(date);
         SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
         return f.format(f.parse(date));
     }
@@ -195,6 +196,6 @@ public class IdCardUtils {
     }
 
     public static void main(String[] args) throws ParseException {
-        System.out.println(isIdCardNo("210603199404146519"));
+        System.out.println(getBirthday("210603199404146519"));
     }
 }

@@ -1,5 +1,6 @@
 package com.lanou.service.mapper;
 
+import com.lanou.account.bean.Account;
 import com.lanou.service.bean.Servicezz;
 import org.apache.ibatis.annotations.Param;
 
@@ -44,4 +45,12 @@ public interface ServiceMapper {
                                        @Param("unixHost") String unixHost,
                                        @Param("idcardNo") String idcardNo,
                                        @Param("status") String status);
+
+    /**
+     * 通过os用户名查找
+     *
+     * @param osUsername os用户名
+     * @return 查找结果
+     */
+    Servicezz findByOSUsername(String osUsername);
 }
