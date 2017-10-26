@@ -94,4 +94,12 @@ public interface ServiceService {
      * @return 判断结果
      */
     String judgePwd2(String pwd, String pwd2) throws AddServiceException;
+
+    /**
+     * 通过serviceId查找
+     *
+     * @param serviceId id
+     * @return servicezz
+     */
+    Servicezz findByServiceId(Integer serviceId);
 }

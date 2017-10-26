@@ -136,7 +136,7 @@
 
         function addNewTr(msg, pageNum) {
             var tr = $("<tr></tr>");
-            $("<td></td>").append($("<a href='###' title='查看明细'></a>").append(msg.serviceId)).appendTo(tr);
+            $("<td></td>").append($("<a href='###' title='查看明细'></a>").click(toDetail).attr("serviceId",msg.serviceId).append(msg.serviceId)).appendTo(tr);
             $("<td></td>").append(msg.account.accountId).appendTo(tr);
             $("<td></td>").append(msg.account.idcardNo).appendTo(tr);
             $("<td></td>").append(msg.account.realName).appendTo(tr);
@@ -147,7 +147,7 @@
                 $("<td></td>").append($("<a class='summary' onmouseover='showDetail(true,this);' onmouseout='showDetail(false,this);'></a>").append(msg.cost.name)).append($("<div class='detail_info'></div>").append(msg.cost.descr)).appendTo(tr);
                 var td = $("<td class='td_modi'></td>");
                 $("<input type='button' value='暂停' class='btn_pause'/>").click(setState).attr("num", msg.serviceId).attr("pageNum", pageNum).attr("status", msg.status).appendTo(td);
-                $("<input type='button' value='修改' class='btn_modify'/>").click(saveService).attr("serviceId", msg.serviceId).appendTo(td);
+                $("<input type='button' value='修改' class='btn_modify'/>").click(saveServiceId).attr("serviceId", msg.serviceId).appendTo(td);
                 $("<input type='button' value='删除' class='btn_delete'/>").click(deleteAccount).attr("num", msg.serviceId).attr("pageNum", pageNum).appendTo(td);
                 td.appendTo(tr);
             } else if (msg.status == 2) {
@@ -156,7 +156,7 @@
                 $("<td></td>").append($("<a class='summary' onmouseover='showDetail(true,this);' onmouseout='showDetail(false,this);'></a>").append(msg.cost.name)).append($("<div class='detail_info'></div>").append(msg.cost.descr)).appendTo(tr);
                 var td = $("<td class='td_modi'></td>");
                 $("<input type='button' value='开通' class='btn_start'/>").click(setState).attr("num", msg.serviceId).attr("pageNum", pageNum).attr("status", msg.status).appendTo(td);
-                $("<input type='button' value='修改' class='btn_modify'/>").click(saveService).attr("serviceId", msg.serviceId).appendTo(td);
+                $("<input type='button' value='修改' class='btn_modify'/>").click(saveServiceId).attr("serviceId", msg.serviceId).appendTo(td);
                 $("<input type='button' value='删除' class='btn_delete'/>").click(deleteAccount).attr("num", msg.serviceId).attr("pageNum", pageNum).appendTo(td);
                 td.appendTo(tr);
             } else {
@@ -245,16 +245,28 @@
             })
         }
 
-        function saveService() {
+        // 保存serviceid
+        function saveServiceId() {
             $.ajax({
-                rul: "/saveserviceid",
+                url: "/saveserviceid",
                 data: {
                     serviceId: $(this).attr("serviceId")
                 },
                 success: function (result) {
-                    if (result.errorCode == 0) {
-                        window.location.href = "/toaddservice";
-                    }
+                    window.location.href = "/tomodiservice";
+                }
+            })
+        }
+
+        // 显示界面
+        function toDetail() {
+            $.ajax({
+                url: "/saveserviceid",
+                data: {
+                    serviceId: $(this).attr("serviceId")
+                },
+                success: function (result) {
+                    window.location.href = "/todetailservice";
                 }
             });
         }

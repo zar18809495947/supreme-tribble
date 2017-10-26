@@ -137,6 +137,11 @@ public class ServiceServiceImpl implements ServiceService {
         return null;
     }
 
+    @Override
+    public Servicezz findByServiceId(Integer serviceId) {
+        return serviceMapper.selectByPrimaryKey(serviceId);
+    }
+
     private PageInfo<Servicezz> fuzzyFindServicePageInfo(String osUsername, String unixHost, String idcardNo, String status, Integer no, Integer size) {
         no = no == null ? 1 : no;
         size = size == null ? 5 : size;

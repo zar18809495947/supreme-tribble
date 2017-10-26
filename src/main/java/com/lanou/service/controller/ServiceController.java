@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.sql.Timestamp;
 import java.util.List;
 
 @Controller
@@ -40,9 +41,20 @@ public class ServiceController {
         return "service/service_add";
     }
 
+    @RequestMapping(value = "/tomodiservice")
+    public String toModiService() {
+        return "service/service_modi";
+    }
+
+    @RequestMapping(value = "/todetailservice")
+    public String toDetail() {
+        return "service/service_detail";
+    }
+
     @ResponseBody
     @RequestMapping(value = "/saveserviceid")
     public String saveServiceId(HttpServletRequest request, Servicezz servicezz) {
+        System.out.println(servicezz);
         request.getSession().setAttribute("serviceId", servicezz.getServiceId());
         return null;
     }
@@ -90,6 +102,8 @@ public class ServiceController {
                 (Boolean) request.getSession().getAttribute("judge_osUsername") &&
                 (Boolean) request.getSession().getAttribute("judge_loginPasswd") &&
                 (Boolean) request.getSession().getAttribute("judge_loginPasswd2")) {
+            servicezz.setStatus("1");
+            servicezz.setCreateDate(new Timestamp(System.currentTimeMillis()).toString());
             serviceService.addService(servicezz);
             return new AjaxResult(servicezz);
         }
@@ -178,5 +192,13 @@ public class ServiceController {
         }
         request.getSession().setAttribute("judge_loginPasswd2", true);
         return new AjaxResult(null);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/findservice")
+    public AjaxResult findService(HttpServletRequest request) {
+        Integer serviceId = (Integer) request.getSession().getAttribute("serviceId");
+        Servicezz servicezz = serviceService.findByServiceId(serviceId);
+        return new AjaxResult(servicezz);
     }
 }
