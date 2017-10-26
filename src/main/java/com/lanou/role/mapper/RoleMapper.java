@@ -1,6 +1,7 @@
 package com.lanou.role.mapper;
 
 import com.lanou.role.bean.Role;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -30,4 +31,12 @@ public interface RoleMapper {
      * @return role类
      */
     Role findByRoleId(Integer roleId);
+
+    /**
+     * 通过角色名查找
+     *
+     * @param roleName 角色名
+     * @return 查找结果
+     */
+    List<Role> findByRoleName(@Param("roleName") String roleName);
 }

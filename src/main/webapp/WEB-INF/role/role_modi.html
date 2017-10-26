@@ -8,11 +8,32 @@
     <link type="text/css" rel="stylesheet" media="all" href="../styles/global_color.css"/>
     <script type="text/javascript" src="/js/jquery-3.2.1.js"></script>
     <script language="javascript" type="text/javascript">
+
+
+        function findAllModule() {
+            $.ajax({
+                url: "/findallmodule",
+                success: function (result) {
+                    for (var i = 0; i < result.data.length; i++) {
+                        addNewLi(result.data[i]);
+                    }
+                }
+            })
+        }
+
+        findAllModule();
+
+        function addNewLi(msg) {
+            var li = $("<li></li>").append($("<input type='checkbox'>").attr("num", msg.moduleId)).append(msg.moduleName);
+            $("#xbox").append(li);
+        }
+
         //保存成功的提示消息
         function showResult() {
             showResultDiv(true);
             window.setTimeout("showResultDiv(false);", 3000);
         }
+
         function showResultDiv(flag) {
             var divResult = document.getElementById("save_result_info");
             if (flag)
@@ -21,25 +42,35 @@
                 divResult.style.display = "none";
         }
 
-        function findRole() {
-            $.ajax({
-                url: "/findrole",
-                success: function (result) {
-                    console.log(result);
-                }
-            })
-        }
-        findRole();
+        $(document).ready(function () {
+            function findRole() {
+                $.ajax({
+                    url: "/findrole",
+                    success: function (result) {
+                        $("#roleName").val(result.data.roleName);
+                        for (var i = 0; i < result.data.moduleList.length; i++) {
+                            $("[num = '" + result.data.moduleList[i].moduleId + "']:checkbox").attr("checked", true);
+                        }
+                    }
+                })
+            }
 
-        function findAllModule() {
+            findRole();
+        });
+
+        function judgeRoleName() {
             $.ajax({
-                url: "/findallmodule",
+                url: "/judgeRoleName",
+                type: "post",
+                data: {
+                    roleName: $("#roleName").val()
+                },
                 success: function (result) {
                     console.log(result);
                 }
-            })
+            });
         }
-        findAllModule();
+
     </script>
 </head>
 <body>
@@ -72,21 +103,15 @@
     <form action="" method="" class="main_form">
         <div class="text_info clearfix"><span>角色名称：</span></div>
         <div class="input_info">
-            <input type="text" class="width200" value="超级管理员"/>
+            <input type="text" class="width200" id="roleName" onblur="judgeRoleName()"/>
             <span class="required">*</span>
             <div class="validate_msg_medium error_msg">不能为空，且为20长度的字母、数字和汉字的组合</div>
         </div>
         <div class="text_info clearfix"><span>设置权限：</span></div>
         <div class="input_info_high">
             <div class="input_info_scroll">
-                <ul>
-                    <li><input type="checkbox" checked/>管理员管理</li>
-                    <li><input type="checkbox" checked/>角色管理</li>
-                    <li><input type="checkbox" checked/>资费管理</li>
-                    <li><input type="checkbox" checked/>账务账号</li>
-                    <li><input type="checkbox" checked/>业务账号</li>
-                    <li><input type="checkbox" checked/>账单</li>
-                    <li><input type="checkbox" checked/>报表</li>
+                <ul id="xbox">
+
                 </ul>
             </div>
             <span class="required">*</span>

@@ -2,6 +2,7 @@ package com.lanou.role.service;
 
 import com.github.pagehelper.PageInfo;
 import com.lanou.role.bean.Role;
+import com.lanou.role.service.exception.modi.ModiRoleException;
 
 import java.util.List;
 
@@ -25,4 +26,12 @@ public interface RoleService {
      * @return 返回role类
      */
     Role findRoleByRoleId(Integer roleId);
+
+    /**
+     * 判断roleName合法
+     *
+     * @param roleName 名字
+     * @return 判断结果
+     */
+    String judgeRoleName(String roleName) throws ModiRoleException;
 }

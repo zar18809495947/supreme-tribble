@@ -32,4 +32,9 @@
         <include refid="BaseSql"/>
         FROM role_info WHERE role_id=#{roleId}
     </select>
+    <select id="findByRoleName" resultMap="ClearMap">
+        SELECT
+        <include refid="BaseSql"/>
+        FROM role_info WHERE name=#{roleName}
+    </select>
 </mapper>
