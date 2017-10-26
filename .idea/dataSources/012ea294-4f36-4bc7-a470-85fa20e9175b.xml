@@ -205,7 +205,7 @@
     <column id="84" parent="34" name="module_id">
       <mandatory>1</mandatory>
       <data-type>int(4)|0</data-type>
-      <default-expression>&apos;0&apos;</default-expression>
+      <sequence-identity>1</sequence-identity>
     </column>
     <column id="85" parent="34" name="name">
       <mandatory>1</mandatory>
@@ -218,7 +218,7 @@
     <column id="87" parent="35" name="role_id">
       <mandatory>1</mandatory>
       <data-type>int(4)|0</data-type>
-      <default-expression>&apos;0&apos;</default-expression>
+      <sequence-identity>1</sequence-identity>
     </column>
     <column id="88" parent="35" name="name">
       <mandatory>1</mandatory>

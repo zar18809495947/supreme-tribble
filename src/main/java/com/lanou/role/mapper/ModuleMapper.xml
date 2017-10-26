@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lanou.role.mapper.ModuleMapper">
+    <resultMap id="BaseMap" type="com.lanou.role.bean.Module">
+        <id column="module_id" property="moduleId"/>
+        <result column="name" property="moduleName"/>
+        <collection property="roleList" column="module_id" select="com.lanou.role.mapper.RoleMapper.findByModuleId"/>
+    </resultMap>
+    <resultMap id="ClearMap" type="com.lanou.role.bean.Module">
+        <id column="module_id" property="moduleId"/>
+        <result column="name" property="moduleName"/>
+    </resultMap>
+    <sql id="BaseSql">
+        module_id,name
+    </sql>
+    <select id="findAllModule" resultMap="BaseMap">
+        SELECT
+        <include refid="BaseSql"/>
+        FROM module_info
+    </select>
+    <select id="findByRoleId" resultMap="ClearMap">
+        SELECT
+        <include refid="BaseSql"/>
+        FROM module_info a,role_module b WHERE a.module_id=b.module_id AND b.role_id=#{roleId}
+    </select>
+</mapper>

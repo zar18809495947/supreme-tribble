@@ -54,7 +54,6 @@ public class ServiceController {
     @ResponseBody
     @RequestMapping(value = "/saveserviceid")
     public String saveServiceId(HttpServletRequest request, Servicezz servicezz) {
-        System.out.println(servicezz);
         request.getSession().setAttribute("serviceId", servicezz.getServiceId());
         return null;
     }
