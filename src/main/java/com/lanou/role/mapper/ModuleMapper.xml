@@ -13,9 +13,12 @@
     <sql id="BaseSql">
         a.module_id,name
     </sql>
+    <sql id="FindSql">
+        module_id,name
+    </sql>
     <select id="findAllModule" resultMap="BaseMap">
         SELECT
-        <include refid="BaseSql"/>
+        <include refid="FindSql"/>
         FROM module_info
     </select>
     <select id="findByRoleId" resultMap="ClearMap">

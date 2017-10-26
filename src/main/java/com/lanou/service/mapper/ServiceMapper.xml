@@ -30,7 +30,7 @@
                 and unix_host LIKE CONCAT('%',#{unixHost},'%')
             </if>
             <if test="idcardNo!=null">
-                and account_id in (SELECT account_id FROM account WHERE idcard_no LIKE CONCAT('%',#{idcardNo},'%'))
+                and account_id in (SELECT account_id FROM account WHERE idcard_no=#{idcardNo})
             </if>
             <if test="status!=null">
                 and status=#{status}

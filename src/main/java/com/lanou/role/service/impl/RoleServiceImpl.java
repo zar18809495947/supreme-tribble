@@ -25,6 +25,11 @@ public class RoleServiceImpl implements RoleService {
         return pageInfo;
     }
 
+    @Override
+    public Role findRoleByRoleId(Integer roleId) {
+        return roleMapper.findByRoleId(roleId);
+    }
+
     private PageInfo<Role> getPageInfo(Integer no, Integer size) {
         no = no == null ? 1 : no;
         size = size == null ? 5 : size;

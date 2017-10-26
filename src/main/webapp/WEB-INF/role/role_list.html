@@ -8,6 +8,8 @@
     <link type="text/css" rel="stylesheet" media="all" href="../styles/global_color.css"/>
     <script type="text/javascript" src="/js/jquery-3.2.1.js"></script>
     <script language="javascript" type="text/javascript">
+        var pageSize = 5;
+
         function deleteRole() {
             var r = window.confirm("确定要删除此角色吗？");
             document.getElementById("operate_result_info").style.display = "block";
@@ -25,7 +27,7 @@
                     for (var i = 0; i < result.data.list.length; i++) {
                         addNewTr(result.data.list[i], result.data.pageNum);
                     }
-//                    pageInfo(result.data);
+                    pageInfo(result.data);
                 }
             })
         }
@@ -38,25 +40,77 @@
             var td = $("<td></td>");
             for (var i = 0; i < msg.moduleList.length; i++) {
                 td.append(msg.moduleList[i].moduleName);
-                if(i<msg.moduleList.length-1) {
+                if (i < msg.moduleList.length - 1) {
                     td.append(", ");
                 }
             }
             td.appendTo(tr);
-            $("<td></td>").appendTo(tr);
+            var controller = $("<td></td>");
+            $("<input type='button' value='修改' class='btn_modify'/>").click(saveRoleId).attr("roleId", msg.roleId).appendTo(controller);
+            $("<input type='button' value='删除' class='btn_delete'>").appendTo(controller);
+            controller.appendTo(tr);
             $("#tab").append(tr);
         }
-        /*
-         <tr>
-         <td>1</td>
-         <td>贾强</td>
-         <td>超级管理员、账单管理员</td>
-         <td>
-         <input type="button" value="修改" class="btn_modify"/>
-         <input type="button" value="删除" class="btn_delete"/>
-         </td>
-         </tr>
-         */
+
+        // 添加页码
+        function pageInfo(type) {
+            $("#baseCost").attr("num", type.pageNum);
+            $("#baseDuration").attr("num", type.pageNum);
+            $("#pages").children().remove();
+            var pa = $("#pages");
+            $("<a></a>").click(pages).append("首页").attr("no", 1).attr("size", pageSize).attr("href", "###").appendTo(pa);
+            if (type.isFirstPage) {
+                $("<a></a>").attr("id", "prePage").click(pages).append("上一页").attr("no", 1).attr("size", pageSize).attr("href", "###").appendTo(pa);
+            } else {
+                $("<a></a>").attr("id", "prePage").click(pages).attr("no", type.prePage).attr("size", pageSize).append("上一页").attr("href", "###").appendTo(pa);
+            }
+            for (var i = 0; i < type.navigatepageNums.length; i++) {
+                if (type.navigatepageNums[i] == type.pageNum) {
+                    $("<a></a>").click(pages).attr("no", type.navigatepageNums[i]).attr("class", "current_page").attr("size", pageSize).append(type.navigatepageNums[i]).appendTo(pa);
+                } else {
+                    $("<a></a>").click(pages).attr("no", type.navigatepageNums[i]).attr("size", pageSize).append(type.navigatepageNums[i]).appendTo(pa);
+                }
+            }
+            if (type.isLastPage) {
+                $("<a></a>").attr("id", "nextPage").click(pages).attr("no", type.lastPage).attr("size", pageSize).append("下一页").attr("href", "###").appendTo(pa);
+            } else {
+                $("<a></a>").attr("id", "nextPage").click(pages).attr("no", type.nextPage).attr("size", pageSize).append("下一页").attr("href", "###").appendTo(pa);
+            }
+            $("<a></a>").click(pages).append("末页").attr("no", type.lastPage).attr("size", pageSize).attr("href", "###").appendTo(pa);
+        }
+
+        // 之后获取信息
+        function pages() {
+            var no = $(this).attr("no");
+            var size = $(this).attr("size");
+            $.ajax({
+                url: "/findallrole",
+                data: {
+                    no: no,
+                    size: size
+                },
+                success: function (result) {
+                    $("#tab").children().remove();
+                    for (var i = 0; i < result.data.list.length; i++) {
+                        addNewTr(result.data.list[i], result.data.pageNum);
+                    }
+                    pageInfo(result.data);
+                }
+            })
+        }
+
+        // 保存roleid
+        function saveRoleId() {
+            $.ajax({
+                url: "/saveroleid",
+                data: {
+                    roleId: $(this).attr("roleId")
+                },
+                success: function (result) {
+                    window.location.href = "/torolemodi";
+                }
+            });
+        }
     </script>
 </head>
 <body>

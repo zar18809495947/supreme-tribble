@@ -22,4 +22,12 @@ public interface RoleMapper {
      * @return role集合
      */
     List<Role> findByModuleId(Integer moduleId);
+
+    /**
+     * 通过id查找
+     *
+     * @param roleId id
+     * @return role类
+     */
+    Role findByRoleId(Integer roleId);
 }

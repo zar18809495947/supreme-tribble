@@ -17,4 +17,12 @@ public interface RoleService {
      * @return 分页信息
      */
     PageInfo<Role> findRolePageInfo(Integer no, Integer size);
+
+    /**
+     * 通过id查找
+     *
+     * @param roleId id
+     * @return 返回role类
+     */
+    Role findRoleByRoleId(Integer roleId);
 }
