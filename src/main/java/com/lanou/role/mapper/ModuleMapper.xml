@@ -11,7 +11,7 @@
         <result column="name" property="moduleName"/>
     </resultMap>
     <sql id="BaseSql">
-        module_id,name
+        a.module_id,name
     </sql>
     <select id="findAllModule" resultMap="BaseMap">
         SELECT

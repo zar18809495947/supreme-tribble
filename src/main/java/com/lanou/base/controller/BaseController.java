@@ -27,4 +27,9 @@ public class BaseController {
     public String servicePage() {
         return "service/service_list";
     }
+
+    @RequestMapping(value = "rolepage")
+    public String rolePage() {
+        return "role/role_list";
+    }
 }
