@@ -34,4 +34,18 @@ public interface RoleService {
      * @return 判断结果
      */
     String judgeRoleName(String roleName) throws ModiRoleException;
+
+    /**
+     * 更新role
+     *
+     * @param role role对象
+     */
+    void updateRole(Role role);
+
+    /**
+     * 添加role
+     *
+     * @param role role类
+     */
+    void addRole(Role role);
 }

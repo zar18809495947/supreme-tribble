@@ -39,4 +39,33 @@ public interface RoleMapper {
      * @return 查找结果
      */
     List<Role> findByRoleName(@Param("roleName") String roleName);
+
+    /**
+     * 通过角色名更新
+     *
+     * @param roleName 角色名
+     */
+    void updateRole(@Param("roleName") String roleName, @Param("roleId") Integer roleId);
+
+    /**
+     * 通过id删除
+     *
+     * @param roleId id
+     */
+    void deleteByRoleId(@Param("roleId") Integer roleId);
+
+    /**
+     * 添加新对应
+     *
+     * @param roleId   id
+     * @param moduleId id
+     */
+    void updateRoleModule(@Param("roleId") Integer roleId, @Param("moduleId") Integer moduleId);
+
+    /**
+     * 添加role
+     *
+     * @param role role类
+     */
+    void insertRole(Role role);
 }

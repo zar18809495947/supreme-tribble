@@ -37,4 +37,16 @@
         <include refid="BaseSql"/>
         FROM role_info WHERE name=#{roleName}
     </select>
+    <update id="updateRole" parameterType="com.lanou.role.bean.Role">
+        UPDATE role_info SET name=#{roleName} where role_id=#{roleId}
+    </update>
+    <delete id="deleteByRoleId">
+        DELETE FROM role_module WHERE role_id=#{roleId}
+    </delete>
+    <insert id="updateRoleModule">
+        INSERT INTO role_module VALUES (#{roleId},#{moduleId})
+    </insert>
+    <insert id="insertRole" parameterType="com.lanou.role.bean.Role" useGeneratedKeys="true" keyProperty="roleId">
+        INSERT INTO role_info VALUES (null,#{roleName})
+    </insert>
 </mapper>
