@@ -15,12 +15,12 @@
             document.getElementById("operate_result_info").style.display = "block";
         }
 
-        function findAllRole() {
+        function findAllRole(no, size) {
             $.ajax({
                 url: "/findallrole",
                 data: {
-                    no: 1,
-                    size: 5
+                    no: no,
+                    size: size
                 },
                 success: function (result) {
                     $("#tab").children().remove();
@@ -31,10 +31,10 @@
                 }
             })
         }
-        findAllRole();
+        findAllRole(1, 5);
 
         function addNewTr(msg, pageNum) {
-            var tr = $("<tr></tr>");
+            var tr = $("<tr></tr>").attr("id", "tr" + msg.roleId);
             $("<td></td>").append(msg.roleId).appendTo(tr);
             $("<td></td>").append(msg.roleName).appendTo(tr);
             var td = $("<td></td>");
@@ -47,7 +47,7 @@
             td.appendTo(tr);
             var controller = $("<td></td>");
             $("<input type='button' value='修改' class='btn_modify'/>").click(saveRoleId).attr("roleId", msg.roleId).appendTo(controller);
-            $("<input type='button' value='删除' class='btn_delete'>").appendTo(controller);
+            $("<input type='button' value='删除' class='btn_delete'/>").click(deleteRole).attr("pageNum", pageNum).attr("num", msg.roleId).appendTo(controller);
             controller.appendTo(tr);
             $("#tab").append(tr);
         }
@@ -110,6 +110,35 @@
                     window.location.href = "/torolemodi";
                 }
             });
+        }
+
+        // 删除role
+        function deleteRole() {
+            var r = window.confirm("确定要删除此角色吗？");
+            if (r) {
+                var pageNum = $(this).attr("pageNum");
+                $.ajax({
+                    url: "/deleterole",
+                    data: {
+                        roleId: $(this).attr("num")
+                    },
+                    success: function (result) {
+                        $("#tr" + result.data.roleId).remove();
+                        if ($("#tab").children().length == 0) {
+                            $("#prePage").click();
+                        } else {
+                            findAllRole(pageNum, 5);
+                        }
+                    }
+                });
+                document.getElementById("operate_result_info").innerText = "删除成功！";
+                document.getElementById("operate_result_info").style.display = "block";
+                window.setTimeout(function () {
+                    document.getElementById("operate_result_info").style.display = "none";
+                }, 1500);
+            } else {
+
+            }
         }
     </script>
 </head>

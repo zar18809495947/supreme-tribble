@@ -48,4 +48,11 @@ public interface RoleService {
      * @param role role类
      */
     void addRole(Role role);
+
+    /**
+     * 删除role
+     *
+     * @param role role类
+     */
+    void deleteRole(Role role);
 }

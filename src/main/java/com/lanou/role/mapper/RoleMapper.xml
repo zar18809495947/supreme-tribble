@@ -49,4 +49,7 @@
     <insert id="insertRole" parameterType="com.lanou.role.bean.Role" useGeneratedKeys="true" keyProperty="roleId">
         INSERT INTO role_info VALUES (null,#{roleName})
     </insert>
+    <delete id="deleteRole">
+        DELETE FROM role_info WHERE role_id=#{roleId}
+    </delete>
 </mapper>

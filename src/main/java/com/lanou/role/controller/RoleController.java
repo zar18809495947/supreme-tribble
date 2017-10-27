@@ -106,4 +106,11 @@ public class RoleController {
         roleService.addRole(role);
         return new AjaxResult(role);
     }
+
+    @ResponseBody
+    @RequestMapping(value = "/deleterole")
+    public AjaxResult deleteRole(Role role) {
+        roleService.deleteRole(role);
+        return new AjaxResult(role);
+    }
 }

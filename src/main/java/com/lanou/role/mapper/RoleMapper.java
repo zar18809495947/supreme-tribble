@@ -68,4 +68,11 @@ public interface RoleMapper {
      * @param role role类
      */
     void insertRole(Role role);
+
+    /**
+     * 删除role
+     *
+     * @param roleId roleID
+     */
+    void deleteRole(@Param("roleId") Integer roleId);
 }
