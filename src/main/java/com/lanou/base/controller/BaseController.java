@@ -28,8 +28,13 @@ public class BaseController {
         return "service/service_list";
     }
 
-    @RequestMapping(value = "rolepage")
+    @RequestMapping(value = "/rolepage")
     public String rolePage() {
         return "role/role_list";
+    }
+
+    @RequestMapping(value = "/adminpage")
+    public String adminPage() {
+        return "admin/admin_list";
     }
 }

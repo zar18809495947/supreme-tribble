@@ -75,4 +75,12 @@ public interface RoleMapper {
      * @param roleId roleID
      */
     void deleteRole(@Param("roleId") Integer roleId);
+
+    /**
+     * 通过adminId查找角色集合
+     *
+     * @param adminId 管理员id
+     * @return 角色集合
+     */
+    List<Role> findAllRoleByAdminId(Integer adminId);
 }

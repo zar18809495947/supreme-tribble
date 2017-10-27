@@ -52,4 +52,9 @@
     <delete id="deleteRole">
         DELETE FROM role_info WHERE role_id=#{roleId}
     </delete>
+    <select id="findAllRoleByAdminId" resultMap="BaseMap">
+        SELECT
+        <include refid="FindSql"/>
+        FROM role_info a,admin_role b WHERE a.role_id=b.role_id and b.admin_id=#{adminId}
+    </select>
 </mapper>

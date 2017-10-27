@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lanou.admin.mapper.AdminMapper">
+    <resultMap id="BaseMap" type="com.lanou.admin.bean.Admin">
+        <id property="adminId" column="admin_id"/>
+        <result property="adminCode" column="admin_code"/>
+        <result property="password" column="password"/>
+        <result property="name" column="name"/>
+        <result property="tel" column="telephone"/>
+        <result property="email" column="email"/>
+        <result property="enrollDate" column="enrolldate"/>
+        <collection property="roleList" column="admin_id" select="com.lanou.role.mapper.RoleMapper.findAllRoleByAdminId"/>
+    </resultMap>
+    <sql id="BaseSql">
+        admin_id,admin_code,password,name,telephone,email,enrolldate
+    </sql>
+    <select id="findAllAdmin" resultMap="BaseMap">
+        SELECT
+        <include refid="BaseSql"/>
+        FROM admin_info
+    </select>
+    <select id="fuzzyFindAdmin" resultMap="BaseMap">
+        SELECT
+        <include refid="BaseSql"/>
+        FROM admin_info
+        <where>
+            <if test="moduleId!=null">
+                AND admin_id in (SELECT admin_id FROM admin_role WHERE role_id in (SELECT role_id FROM role_module WHERE module_id=#{moduleId}))
+            </if>
+            <if test="roleName!=null">
+                AND admin_id in  (select admin_id from admin_role where role_id in (select role_id from role_info where name=#{roleName}))
+            </if>
+        </where>
+    </select>
+</mapper>
