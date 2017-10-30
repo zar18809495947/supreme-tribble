@@ -9,7 +9,8 @@
         <result property="tel" column="telephone"/>
         <result property="email" column="email"/>
         <result property="enrollDate" column="enrolldate"/>
-        <collection property="roleList" column="admin_id" select="com.lanou.role.mapper.RoleMapper.findAllRoleByAdminId"/>
+        <collection property="roleList" column="admin_id"
+                    select="com.lanou.role.mapper.RoleMapper.findAllRoleByAdminId"/>
     </resultMap>
     <sql id="BaseSql">
         admin_id,admin_code,password,name,telephone,email,enrolldate
@@ -25,11 +26,48 @@
         FROM admin_info
         <where>
             <if test="moduleId!=null">
-                AND admin_id in (SELECT admin_id FROM admin_role WHERE role_id in (SELECT role_id FROM role_module WHERE module_id=#{moduleId}))
+                AND admin_id in (SELECT admin_id FROM admin_role WHERE role_id in (SELECT role_id FROM role_module WHERE
+                module_id=#{moduleId}))
             </if>
             <if test="roleName!=null">
-                AND admin_id in  (select admin_id from admin_role where role_id in (select role_id from role_info where name=#{roleName}))
+                AND admin_id in (select admin_id from admin_role where role_id in (select role_id from role_info where
+                name=#{roleName}))
             </if>
         </where>
     </select>
+    <insert id="addAdmin" parameterType="com.lanou.admin.bean.Admin" useGeneratedKeys="true" keyProperty="adminId">
+        INSERT INTO admin_info (admin_id,admin_code,email,name,password,telephone) VALUES (null,#{adminCode},#{email},#{name},#{password},#{tel})
+    </insert>
+    <insert id="addAdminRole">
+        INSERT INTO admin_role VALUES (#{adminId},#{roleId})
+    </insert>
+    <delete id="deleteAdmin">
+        DELETE FROM admin_info WHERE admin_id=#{adminId}
+    </delete>
+    <delete id="deleteAdminRole">
+        DELETE FROM admin_role WHERE admin_id=#{adminId}
+    </delete>
+    <update id="setPassword" parameterType="com.lanou.admin.bean.Admin">
+        UPDATE admin_info SET password='111111' WHERE admin_id=#{adminId}
+    </update>
+    <select id="findByAdminId" resultMap="BaseMap">
+        SELECT
+        <include refid="BaseSql"/>
+        FROM admin_info WHERE admin_id=#{adminId}
+    </select>
+    <update id="updateByPrimaryKeySelective" parameterType="com.lanou.admin.bean.Admin">
+        update admin_info
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="tel != null">
+                telephone = #{tel},
+            </if>
+            <if test="email != null">
+                email = #{email},
+            </if>
+        </set>
+        where admin_id = #{adminId}
+    </update>
 </mapper>

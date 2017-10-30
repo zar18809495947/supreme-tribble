@@ -21,16 +21,14 @@
             else
                 detailDiv.style.display = "none";
         }
+
         //重置密码
         function resetPwd() {
             alert("请至少选择一条数据！");
             //document.getElementById("operate_result_info").style.display = "block";
         }
-        //删除
-        function deleteAdmin() {
-            var r = window.confirm("确定要删除此管理员吗？");
-            document.getElementById("operate_result_info").style.display = "block";
-        }
+
+
         //全选
         function selectAdmins(inputObj) {
             var inputArray = document.getElementById("datalist").getElementsByTagName("input");
@@ -52,6 +50,7 @@
                 }
             })
         }
+
         findAllModule();
 
         // 添加模块选择
@@ -61,15 +60,44 @@
         }
 
         $(document).ready(function () {
-            function findAllAdmin() {
+            //删除
+            function deleteAdmin() {
+                var r = window.confirm("确定要删除此管理员吗？");
+                if (r) {
+                    var attr = $(this).attr("pageNum");
+                    $.ajax({
+                        url: "/deleteadmin",
+                        type: "post",
+                        data: {
+                            adminId: $(this).attr("num")
+                        },
+                        success: function (result) {
+                            $("#tr" + result.data.adminId).remove();
+                            if ($("#tab").children().length == 0) {
+                                $("#prePage").click();
+                            } else {
+                                page(pageNum, 5);
+                            }
+                        }
+
+                    });
+                    document.getElementById("operate_result_info").innerText = "删除成功！";
+                    document.getElementById("operate_result_info").style.display = "block";
+                    window.setTimeout(function () {
+                        document.getElementById("operate_result_info").style.display = "none";
+                    }, 1500);
+                }
+            }
+
+            function findAllAdmin(no, size) {
                 $.ajax({
                     url: "/findalladmin",
                     type: "post",
                     data: {
                         moduleId: moduleId,
                         roleName: roleName,
-                        no: 1,
-                        size: 5
+                        no: no,
+                        size: size
                     },
                     success: function (result) {
                         console.log(result);
@@ -82,10 +110,10 @@
                 })
             }
 
-            findAllAdmin();
+            findAllAdmin(1, 5);
 
-            function addNewTr(msg) {
-                var tr = $("<tr></tr>");
+            function addNewTr(msg, pageNum) {
+                var tr = $("<tr></tr>").attr("id", "tr" + msg.adminId);
                 $("<td></td>").append($("<input type='checkbox'/>").attr("num", msg.adminId)).appendTo(tr);
                 $("<td></td>").append(msg.adminId).appendTo(tr);
                 $("<td></td>").append(msg.adminCode).appendTo(tr);
@@ -107,7 +135,7 @@
                     div.appendTo(td);
                 }
                 td.appendTo(tr);
-                $("<td></td>").append("<input type='button' value='修改' class='btn_modify' onclick='location.href='admin_modi.html';'/>").append("<input type='button' value='删除' class='btn_delete' onclick='deleteAdmin();'/>").appendTo(tr);
+                $("<td></td>").append($("<input type='button' value='修改' class='btn_modify'/>").click(modiAdmin).attr("num", msg.adminId)).append($("<input type='button' value='删除' class='btn_delete'/>").click(deleteAdmin).attr("num", msg.adminId).attr("pageNum", pageNum)).appendTo(tr);
                 $("#tab").append(tr);
             }
 
@@ -184,7 +212,44 @@
                     }
                 })
             });
-        })
+
+            function modiAdmin() {
+                var attr = $(this).attr("num");
+                $.ajax({
+                    url: "/saveadminid",
+                    data: {
+                        adminId: attr
+                    },
+                    success: function (result) {
+                        window.location.href = '/tosaveadmin';
+                    }
+                })
+            }
+        });
+
+        function modiPassword() {
+            var str = '';
+            $("input:checkbox:checked").each(function () {
+                if ($(this).attr("num") == undefined) {
+
+                } else {
+                    str = str + $(this).attr("num") + ",";
+                }
+            });
+            $.ajax({
+                url: "/modipassword",
+                data: {
+                    str: str
+                },
+                success: function (result) {
+                    document.getElementById("operate_result_info").innerText = "重置密码成功！";
+                    document.getElementById("operate_result_info").style.display = "block";
+                    window.setTimeout(function () {
+                        document.getElementById("operate_result_info").style.display = "none";
+                    }, 1500);
+                }
+            });
+        }
     </script>
 </head>
 <body>
@@ -223,8 +288,8 @@
             </div>
             <div>角色：<input type="text" class="text_search width200" id="roleName"/></div>
             <div><input type="button" value="搜索" class="btn_search" id="search"/></div>
-            <input type="button" value="密码重置" class="btn_add" onclick="resetPwd();"/>
-            <input type="button" value="增加" class="btn_add" onclick="location.href='admin_add.html';"/>
+            <input type="button" value="密码重置" class="btn_add" onclick="modiPassword();"/>
+            <input type="button" value="增加" class="btn_add" onclick="location.href='/toaddadmin'"/>
         </div>
         <!--删除和密码重置的操作提示-->
         <div id="operate_result_info" class="operate_fail">
@@ -257,13 +322,7 @@
         </div>
         <!--分页-->
         <div id="pages">
-            <a href="#">上一页</a>
-            <a href="#" class="current_page">1</a>
-            <a href="#">2</a>
-            <a href="#">3</a>
-            <a href="#">4</a>
-            <a href="#">5</a>
-            <a href="#">下一页</a>
+
         </div>
     </form>
 </div>

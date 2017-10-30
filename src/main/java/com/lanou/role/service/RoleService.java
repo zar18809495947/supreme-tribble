@@ -55,4 +55,11 @@ public interface RoleService {
      * @param role role类
      */
     void deleteRole(Role role);
+
+    /**
+     * 取得所有role
+     *
+     * @return role集合
+     */
+    List<Role> getAllRole();
 }

@@ -35,6 +35,13 @@ public class RoleController {
     }
 
     @ResponseBody
+    @RequestMapping(value = "/getallrole")
+    public AjaxResult getAllRole() {
+        List<Role> allRole = roleService.getAllRole();
+        return new AjaxResult(allRole);
+    }
+
+    @ResponseBody
     @RequestMapping(value = "/saveroleid")
     public AjaxResult saveRoleId(HttpServletRequest request, Role role) {
         request.getSession().setAttribute("roleId", role.getRoleId());

@@ -51,6 +51,13 @@ public interface AccountService {
     Account findByAccountId(Integer accountId);
 
     /**
+     * 保存修改的账务信息
+     *
+     * @param account 账务信息
+     */
+    void saveModiAccount(Account account);
+
+    /**
      * 实名验证
      *
      * @param realName 实名

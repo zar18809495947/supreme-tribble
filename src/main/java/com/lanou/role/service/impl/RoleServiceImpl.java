@@ -68,6 +68,11 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    public List<Role> getAllRole() {
+        return roleMapper.findAllRole();
+    }
+
+    @Override
     public Role findRoleByRoleId(Integer roleId) {
         return roleMapper.findByRoleId(roleId);
     }

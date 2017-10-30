@@ -13,6 +13,7 @@
             showResultDiv(true);
             window.setTimeout("showResultDiv(false);", 3000);
         }
+
         function showResultDiv(flag) {
             var divResult = document.getElementById("save_result_info");
             if (flag)
@@ -46,10 +47,11 @@
                     $("#telephone").val(result.data.telephone);
                     $("#zipcode").val(result.data.zipcode);
                     $("input:radio[value='" + result.data.gender + "']").attr('checked', true);
-                    $("#occupation").find("option[value='"+result.data.occupation+"']").attr("selected",true);
+                    $("#occupation").find("option[value='" + result.data.occupation + "']").attr("selected", true);
                 }
             })
         }
+
         getAccount();
 
 
@@ -59,7 +61,7 @@
                 url: "/judgetel",
                 type: "post",
                 data: {
-                    tel: $("#tel").val()
+                    tel: $("#telephone").val()
                 },
                 success: function (result) {
                     if (result.errorCode != 0) {
@@ -99,7 +101,7 @@
                 url: "/judgeaddress",
                 type: "post",
                 data: {
-                    address: $("#address").val()
+                    address: $("#mailaddress").val()
                 },
                 success: function (result) {
                     if (result.errorCode != 0) {
@@ -150,27 +152,48 @@
             });
         }
 
-
-        // 登录名
-        function judgeLoginName() {
+        // 名字
+        function judgeRealName() {
             $.ajax({
-                url: "/judgeloginname",
+                url: "/judgerealname",
                 type: "post",
                 data: {
-                    loginName: $("#loginName").val()
+                    realName: $("#realName").val()
                 },
                 success: function (result) {
                     if (result.errorCode != 0) {
 //                        console.log($("#name_msg_text"));
-                        $("#loginName_msg_red").html("*");
-                        $("#loginName_msg_text").html(result.msg);
+                        $("#realName_msg_red").html("*");
+                        $("#realName_msg_text").html(result.msg);
                     } else {
-                        $("#loginName_msg_red").html("");
-                        $("#loginName_msg_text").html("");
+                        $("#realName_msg_red").html("");
+                        $("#realName_msg_text").html("");
                     }
                 }
             });
         }
+
+        function saveModiAccount() {
+            $.ajax({
+                url: "/savemodiacount",
+                type: "post",
+                data: {
+                    realName: $("#realName").val(),
+                    telephone: $("#telephone").val(),
+                    recommenderId: $("#recommenderId").val(),
+                    email: $("#email").val(),
+                    occupation: $("#occupation").val(),
+                    gender: $("#gender").val(),
+                    mailaddress: $("#mailaddress").val(),
+                    zipcode: $("#zipcode").val(),
+                    qq: $("#qq").val()
+                },
+                success: function (result) {
+                    window.location.href = "/accountlistpage";
+                }
+            })
+        }
+
     </script>
 </head>
 <body>
@@ -208,9 +231,9 @@
         </div>
         <div class="text_info clearfix"><span>姓名：</span></div>
         <div class="input_info">
-            <input type="text" id="realName"/>
-            <span class="required">*</span>
-            <div class="validate_msg_long error_msg">20长度以内的汉字、字母和数字的组合</div>
+            <input type="text" id="realName" onblur="judgeRealName()"/>
+            <span class="required" id="realName_msg_red"></span>
+            <div class="validate_msg_long" id="realName_msg_text"></div>
         </div>
         <div class="text_info clearfix"><span>身份证：</span></div>
         <div class="input_info">
@@ -251,14 +274,14 @@
         -->
         <div class="text_info clearfix"><span>电话：</span></div>
         <div class="input_info">
-            <input type="text" class="width200" id="telephone"/>
-            <span class="required">*</span>
-            <div class="validate_msg_medium error_msg">正确的电话号码格式：手机或固话</div>
+            <input type="text" class="width200" id="telephone" onblur="judgeTel()"/>
+            <span class="required" id="tel_msg_red"></span>
+            <div class="validate_msg_medium" id="tel_msg_text"></div>
         </div>
         <div class="text_info clearfix"><span>推荐人ID：</span></div>
         <div class="input_info">
             <input type="text" id="recommenderId"/>
-            <div class="validate_msg_long error_msgs">正确的身份证号码格式</div>
+            <div class="validate_msg_long"></div>
         </div>
         <div class="text_info clearfix"><span>生日：</span></div>
         <div class="input_info">
@@ -266,8 +289,8 @@
         </div>
         <div class="text_info clearfix"><span>Email：</span></div>
         <div class="input_info">
-            <input type="text" class="width200" id="email"/>
-            <div class="validate_msg_medium">50长度以内，合法的 Email 格式</div>
+            <input type="text" class="width200" id="email" onblur="judgeEmail()"/>
+            <div class="validate_msg_medium" id="email_msg_text"></div>
         </div>
         <div class="text_info clearfix"><span>职业：</span></div>
         <div class="input_info">
@@ -287,23 +310,23 @@
         </div>
         <div class="text_info clearfix"><span>通信地址：</span></div>
         <div class="input_info">
-            <input type="text" class="width350" id="mailaddress"/>
-            <div class="validate_msg_tiny">50长度以内</div>
+            <input type="text" class="width350" id="mailaddress" onblur="judgeAddress()"/>
+            <div class="validate_msg_tiny" id="address_msg_text"></div>
         </div>
         <div class="text_info clearfix"><span>邮编：</span></div>
         <div class="input_info">
-            <input type="text" id="zipcode"/>
-            <div class="validate_msg_long">6位数字</div>
+            <input type="text" id="zipcode" onblur="judgeZip()"/>
+            <div class="validate_msg_long" id="zip_msg_text"></div>
         </div>
         <div class="text_info clearfix"><span>QQ：</span></div>
         <div class="input_info">
-            <input type="text" id="qq"/>
-            <div class="validate_msg_long">5到13位数字</div>
+            <input type="text" id="qq" onblur="judgeQQ()"/>
+            <div class="validate_msg_long" id="qq_msg_text"></div>
         </div>
         <!--操作按钮-->
         <div class="button_info clearfix">
-            <input type="button" value="保存" class="btn_save" onclick="showResult();"/>
-            <input type="button" value="取消" class="btn_save"/>
+            <input type="button" value="保存" class="btn_save" onclick="saveModiAccount()"/>
+            <input type="button" value="取消" class="btn_save" onclick="location.href='/accountlistpage'"/>
         </div>
     </form>
 </div>

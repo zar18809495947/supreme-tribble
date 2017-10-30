@@ -103,6 +103,16 @@ public class AccountController {
     }
 
     @ResponseBody
+    @RequestMapping(value = "/savemodiacount", method = RequestMethod.POST)
+    public AjaxResult saveModiAccount(HttpServletRequest request, Account account) {
+        Integer accountId = (Integer) request.getSession().getAttribute("accountId");
+        account.setAccountId(accountId);
+        System.out.println(account);
+        accountService.saveModiAccount(account);
+        return new AjaxResult(null);
+    }
+
+    @ResponseBody
     @RequestMapping(value = "/modiaccount")
     public AjaxResult modiAccount(HttpServletRequest request) {
         Integer accountId = (Integer) request.getSession().getAttribute("accountId");

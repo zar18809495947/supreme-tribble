@@ -1,99 +1,234 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title></title>
-        <link type="text/css" rel="stylesheet" media="all" href="../styles/global.css" />
-        <link type="text/css" rel="stylesheet" media="all" href="../styles/global_color.css" />
-        <script language="javascript" type="text/javascript">
-            //保存成功的提示消息
-            function showResult() {
-                showResultDiv(true);
-                window.setTimeout("showResultDiv(false);", 3000);
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link type="text/css" rel="stylesheet" media="all" href="../styles/global.css"/>
+    <link type="text/css" rel="stylesheet" media="all" href="../styles/global_color.css"/>
+    <script type="text/javascript" src="/js/jquery-3.2.1.js"></script>
+    <script language="javascript" type="text/javascript">
+        //保存成功的提示消息
+        function showResult() {
+            showResultDiv(true);
+            window.setTimeout("showResultDiv(false);", 3000);
+        }
+
+        function showResultDiv(flag) {
+            var divResult = document.getElementById("save_result_info");
+            if (flag)
+                divResult.style.display = "block";
+            else
+                divResult.style.display = "none";
+        }
+
+        $(document).ready(function () {
+            function getAdmin() {
+                $.ajax({
+                    url: "/getadmin",
+                    success: function (result) {
+                        console.log(result);
+                        $("#name").val(result.data.name);
+                        $("#adminCode").val(result.data.adminCode);
+                        $("#tel").val(result.data.tel);
+                        $("#email").val(result.data.email);
+                        for (var i = 0; i < result.data.roleList.length; i++) {
+                            $("[num = '" + result.data.roleList[i].roleId + "']:checkbox").attr("checked", true);
+                        }
+                    }
+                })
             }
-            function showResultDiv(flag) {
-                var divResult = document.getElementById("save_result_info");
-                if (flag)
-                    divResult.style.display = "block";
-                else
-                    divResult.style.display = "none";
+
+            getAdmin();
+        });
+
+        function findAllRole() {
+            $.ajax({
+                url: "/getallrole",
+                success: function (result) {
+                    for (var i = 0; i < result.data.length; i++) {
+                        allNewRole(result.data[i]);
+                    }
+                }
+            })
+        }
+
+        findAllRole();
+
+        function allNewRole(msg) {
+            var role = $("#allRole");
+            $("<li></li>").append($("<input/>").attr("num", msg.roleId).attr("type", "checkbox")).append(msg.roleName).appendTo(role);
+        }
+
+        function modiAdmin() {
+            var str = '';
+            $("input:checkbox:checked").each(function () {
+                str = str + $(this).attr("num") + ",";
+            });
+            $.ajax({
+                url: "/modiadminname",
+                type: "post",
+                data: {
+                    name: $("#name").val(),
+                    tel: $("#tel").val(),
+                    email: $("#email").val(),
+                    roleName: str
+                },
+                success: function (result) {
+                    window.location.href = '/adminpage';
+                }
+            })
+        }
+
+        // 身份选择判断
+        function judgeModule() {
+            var num = 0;
+            for (var i = 0; i < $("input:checkbox").length; i++) {
+                if ($("input:checkbox")[i].checked) {
+                    num += 1;
+                }
             }
-        </script>
-    </head>
-    <body>
-        <!--Logo区域开始-->
-        <div id="header">
-            <img src="../images/logo.png" alt="logo" class="left"/>
-            <a href="#">[退出]</a>            
+            if (num != 0) {
+                type = true;
+                $("#module_msg_red").html("");
+                $("#module_msg_text").html("");
+            } else {
+                type = false;
+                $("#module_msg_red").html("*");
+                $("#module_msg_text").html("至少选择一个权限");
+            }
+        }
+
+        // 电话
+        function judgeTel() {
+            $.ajax({
+                url: "/fjudgetel",
+                type: "post",
+                data: {
+                    tel: $("#tel").val()
+                },
+                success: function (result) {
+                    if (result.errorCode != 0) {
+//                        console.log($("#name_msg_text"));
+                        $("#tel_msg_red").html("*");
+                        $("#tel_msg_text").html(result.msg);
+                    } else {
+                        $("#tel_msg_red").html("");
+                        $("#tel_msg_text").html("");
+                    }
+                }
+            });
+        }
+
+        // 邮件
+        function judgeEmail() {
+            $.ajax({
+                url: "/fjudgeemail",
+                type: "post",
+                data: {
+                    email: $("#email").val()
+                },
+                success: function (result) {
+                    if (result.errorCode != 0) {
+//                        console.log($("#name_msg_text"));
+                        $("#email_msg_text").html(result.msg);
+                    } else {
+                        $("#email_msg_text").html("");
+                    }
+                }
+            });
+        }
+
+        // 名字
+        function judgeRealName() {
+            $.ajax({
+                url: "/fjudgerealname",
+                type: "post",
+                data: {
+                    name: $("#name").val()
+                },
+                success: function (result) {
+                    if (result.errorCode != 0) {
+//                        console.log($("#name_msg_text"));
+                        $("#realName_msg_red").html("*");
+                        $("#realName_msg_text").html(result.msg);
+                    } else {
+                        $("#realName_msg_red").html("");
+                        $("#realName_msg_text").html("");
+                    }
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+<!--Logo区域开始-->
+<div id="header">
+    <img src="../images/logo.png" alt="logo" class="left"/>
+    <a href="#">[退出]</a>
+</div>
+<!--Logo区域结束-->
+<!--导航区域开始-->
+<div id="navi">
+    <ul id="menu">
+        <li><a href="/" class="index_off"></a></li>
+        <li><a href="/rolepage" class="role_off"></a></li>
+        <li><a href="/adminpage" class="admin_on"></a></li>
+        <li><a href="/feelistpage" class="fee_off"></a></li>
+        <li><a href="/accountlistpage" class="account_off"></a></li>
+        <li><a href="/servicepage" class="service_off"></a></li>
+        <li><a href="bill/bill_list.html" class="bill_off"></a></li>
+        <li><a href="report/report_list.html" class="report_off"></a></li>
+        <li><a href="user/user_info.html" class="information_off"></a></li>
+        <li><a href="user/user_modi_pwd.html" class="password_off"></a></li>
+    </ul>
+</div>
+<!--导航区域结束-->
+<!--主要区域开始-->
+<div id="main">
+    <div id="save_result_info" class="save_success">保存成功！</div>
+    <form action="" method="" class="main_form">
+        <div class="text_info clearfix"><span>姓名：</span></div>
+        <div class="input_info">
+            <input type="text" id="name" onblur="judgeRealName()"/>
+            <span class="required" id="realName_msg_red"></span>
+            <div class="validate_msg_long" id="realName_msg_text"></div>
         </div>
-        <!--Logo区域结束-->
-        <!--导航区域开始-->
-        <div id="navi">
-            <ul id="menu">
-                <li><a href="/" class="index_off"></a></li>
-                <li><a href="/rolepage" class="role_off"></a></li>
-                <li><a href="/adminpage" class="admin_on"></a></li>
-                <li><a href="/feelistpage" class="fee_off"></a></li>
-                <li><a href="/accountlistpage" class="account_off"></a></li>
-                <li><a href="/servicepage" class="service_off"></a></li>
-                <li><a href="bill/bill_list.html" class="bill_off"></a></li>
-                <li><a href="report/report_list.html" class="report_off"></a></li>
-                <li><a href="user/user_info.html" class="information_off"></a></li>
-                <li><a href="user/user_modi_pwd.html" class="password_off"></a></li>
-            </ul>
+        <div class="text_info clearfix"><span>管理员账号：</span></div>
+        <div class="input_info"><input type="text" readonly="readonly" class="readonly" id="adminCode"/></div>
+        <div class="text_info clearfix"><span>电话：</span></div>
+        <div class="input_info">
+            <input type="text" id="tel" onblur="judgeTel()"/>
+            <span class="required" id="tel_msg_red"></span>
+            <div class="validate_msg_long" id="tel_msg_text"></div>
         </div>
-        <!--导航区域结束-->
-        <!--主要区域开始-->
-        <div id="main">            
-            <div id="save_result_info" class="save_success">保存成功！</div>
-            <form action="" method="" class="main_form">
-                    <div class="text_info clearfix"><span>姓名：</span></div>
-                    <div class="input_info">
-                        <input type="text" value="张三" />
-                        <span class="required">*</span>
-                        <div class="validate_msg_long error_msg">20长度以内的汉字、字母、数字的组合</div>
-                    </div>
-                    <div class="text_info clearfix"><span>管理员账号：</span></div>
-                    <div class="input_info"><input type="text" readonly="readonly" class="readonly" value="admin1"  /></div>
-                    <div class="text_info clearfix"><span>电话：</span></div>
-                    <div class="input_info">
-                        <input type="text" value="13111111111"  />
-                        <span class="required">*</span>
-                        <div class="validate_msg_long error_msg">正确的电话号码格式：手机或固话</div>
-                    </div>
-                    <div class="text_info clearfix"><span>Email：</span></div>
-                    <div class="input_info">
-                        <input type="text" class="width200" value="aa@aa.com"/>
-                        <span class="required">*</span>
-                        <div class="validate_msg_medium error_msg">50长度以内，正确的 email 格式</div>
-                    </div>
-                    <div class="text_info clearfix"><span>角色：</span></div>
-                    <div class="input_info_high">
-                        <div class="input_info_scroll">
-                            <ul>
-                                <li><input type="checkbox" />超级管理员</li>
-                                <li><input type="checkbox" />账务账号管理员</li>
-                                <li><input type="checkbox" />业务账号管理员</li>
-                                <li><input type="checkbox" />账务账号管理员</li>
-                                <li><input type="checkbox" />业务账号管理员</li>
-                                <li><input type="checkbox" />账务账号管理员</li>
-                                <li><input type="checkbox" />业务账号管理员</li>
-                            </ul>
-                        </div>
-                        <span class="required">*</span>
-                        <div class="validate_msg_tiny error_msg">至少选择一个</div>
-                    </div>
-                    <div class="button_info clearfix">
-                        <input type="button" value="保存" class="btn_save" onclick="showResult();" />
-                        <input type="button" value="取消" class="btn_save" />
-                    </div>
-                </form>  
+        <div class="text_info clearfix"><span>Email：</span></div>
+        <div class="input_info">
+            <input type="text" class="width200" id="email" onblur="judgeEmail()"/>
+            <span class="required"></span>
+            <div class="validate_msg_medium" id="email_msg_text"></div>
         </div>
-        <!--主要区域结束-->
-        <div id="footer">
-            <span>[源自北美的技术，最优秀的师资，最真实的企业环境，最适用的实战项目]</span>
-            <br />
-            <span>版权所有(C)云科技有限公司 </span>
+        <div class="text_info clearfix"><span>角色：</span></div>
+        <div class="input_info_high">
+            <div class="input_info_scroll" onmouseover="judgeModule()">
+                <ul id="allRole">
+
+                </ul>
+            </div>
+            <span class="required" id="module_msg_red"></span>
+            <div class="validate_msg_tiny" id="module_msg_text"></div>
         </div>
-    </body>
+        <div class="button_info clearfix">
+            <input type="button" value="保存" class="btn_save" onclick="modiAdmin();"/>
+            <input type="button" value="取消" class="btn_save" onclick="location.href='/adminpage'"/>
+        </div>
+    </form>
+</div>
+<!--主要区域结束-->
+<div id="footer">
+    <span>[源自北美的技术，最优秀的师资，最真实的企业环境，最适用的实战项目]</span>
+    <br/>
+    <span>版权所有(C)云科技有限公司 </span>
+</div>
+</body>
 </html>

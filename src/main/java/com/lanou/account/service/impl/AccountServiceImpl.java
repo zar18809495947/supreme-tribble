@@ -50,6 +50,11 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public void saveModiAccount(Account account) {
+        accountMapper.updateByPrimaryKeySelective(account);
+    }
+
+    @Override
     public String judgeRealName(String realName) throws AddAccountException {
         if (realName == null || realName.trim().isEmpty()) {
             throw new RealNameIsEmptyException();
