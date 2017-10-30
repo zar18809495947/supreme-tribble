@@ -61,6 +61,15 @@ public interface CostService {
      */
     String judgeName(String name) throws AddCostException;
 
+
+    /**
+     * 判断名字的合法性
+     *
+     * @param name 名字
+     * @return 是否合法
+     */
+    String judgeModiName(String name) throws AddCostException;
+
     /**
      * 判断基本时长的合法性
      *

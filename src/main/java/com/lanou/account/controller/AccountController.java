@@ -37,6 +37,19 @@ public class AccountController {
         return "account/account_modi";
     }
 
+    @RequestMapping(value = "/todatailaccount")
+    public String toDatailAccount() {
+        return "account/account_detail";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/getaccount")
+    public AjaxResult getAccount(HttpServletRequest request) {
+        Integer accountId = (Integer) request.getSession().getAttribute("accountId");
+        Account byAccountId = accountService.findByAccountId(accountId);
+        return new AjaxResult(byAccountId);
+    }
+
     @ResponseBody
     @RequestMapping(value = "/saveaccount")
     public String saveAccount(HttpServletRequest request, @RequestParam("accountId") Integer accountId) {
@@ -61,7 +74,7 @@ public class AccountController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/findaccount")
+    @RequestMapping(value = "/findaccount", method = RequestMethod.POST)
     public AjaxResult findAccount(Account account, @RequestParam("no") Integer no, @RequestParam("size") Integer size) {
         if (account.getStatus() == null || account.getLoginName().trim().isEmpty()) {
             account.setLoginName(null);

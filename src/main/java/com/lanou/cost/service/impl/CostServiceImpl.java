@@ -63,7 +63,18 @@ public class CostServiceImpl implements CostService {
         if (!byName.isEmpty()) {
             throw new NameRepeatException();
         }
-        if (!judgeRegex("^[a-zA-Z0-9_u4e00-u9fa5]+$", name)) {
+        if (!judgeRegex("^[.A-Za-z0-9\u0391-\uFFE5]{1,50}", name)) {
+            throw new NameFormatErrorException();
+        }
+        return "可以使用";
+    }
+
+    @Override
+    public String judgeModiName(String name) throws AddCostException {
+        if (!(name != null && !name.trim().isEmpty())) {
+            throw new NameIsEmptyException();
+        }
+        if (!judgeRegex("^[.A-Za-z0-9\u0391-\uFFE5]{1,50}", name)) {
             throw new NameFormatErrorException();
         }
         return "可以使用";
@@ -148,7 +159,7 @@ public class CostServiceImpl implements CostService {
         if (cost.getDescr().trim().isEmpty()) {
             throw new DescrIsEmptyException();
         }
-        if (!judgeRegex("^[a-zA-Z0-9_u4e00-u9fa5]+$", cost.getDescr())) {
+        if (!judgeRegex("^[./,A-Za-z0-9\u0391-\uFFE5]{1,100}", cost.getDescr())) {
             throw new DescrFormatErrorException();
         }
         return "可以使用";

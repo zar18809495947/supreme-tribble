@@ -45,10 +45,132 @@
                     $("#recommenderId").val(result.data.recommenderId);
                     $("#telephone").val(result.data.telephone);
                     $("#zipcode").val(result.data.zipcode);
+                    $("input:radio[value='" + result.data.gender + "']").attr('checked', true);
+                    $("#occupation").find("option[value='"+result.data.occupation+"']").attr("selected",true);
                 }
             })
         }
         getAccount();
+
+
+        // 电话
+        function judgeTel() {
+            $.ajax({
+                url: "/judgetel",
+                type: "post",
+                data: {
+                    tel: $("#tel").val()
+                },
+                success: function (result) {
+                    if (result.errorCode != 0) {
+//                        console.log($("#name_msg_text"));
+                        $("#tel_msg_red").html("*");
+                        $("#tel_msg_text").html(result.msg);
+                    } else {
+                        $("#tel_msg_red").html("");
+                        $("#tel_msg_text").html("");
+                    }
+                }
+            });
+        }
+
+        // 邮件
+        function judgeEmail() {
+            $.ajax({
+                url: "/judgeemail",
+                type: "post",
+                data: {
+                    email: $("#email").val()
+                },
+                success: function (result) {
+                    if (result.errorCode != 0) {
+//                        console.log($("#name_msg_text"));
+                        $("#email_msg_text").html(result.msg);
+                    } else {
+                        $("#email_msg_text").html("");
+                    }
+                }
+            });
+        }
+
+        // 地址
+        function judgeAddress() {
+            $.ajax({
+                url: "/judgeaddress",
+                type: "post",
+                data: {
+                    address: $("#address").val()
+                },
+                success: function (result) {
+                    if (result.errorCode != 0) {
+//                        console.log($("#name_msg_text"));
+                        $("#address_msg_text").html(result.msg);
+                    } else {
+                        $("#address_msg_text").html("");
+                    }
+                }
+            });
+        }
+
+        // 邮编
+        function judgeZip() {
+            $.ajax({
+                url: "/judgezip",
+                type: "post",
+                data: {
+                    zip: $("#zipcode").val()
+                },
+                success: function (result) {
+                    if (result.errorCode != 0) {
+//                        console.log($("#name_msg_text"));
+                        $("#zip_msg_text").html(result.msg);
+                    } else {
+                        $("#zip_msg_text").html("");
+                    }
+                }
+            });
+        }
+
+        // qq
+        function judgeQQ() {
+            $.ajax({
+                url: "/judgeqq",
+                type: "post",
+                data: {
+                    qq: $("#qq").val()
+                },
+                success: function (result) {
+                    if (result.errorCode != 0) {
+//                        console.log($("#name_msg_text"));
+                        $("#qq_msg_text").html(result.msg);
+                    } else {
+                        $("#qq_msg_text").html("");
+                    }
+                }
+            });
+        }
+
+
+        // 登录名
+        function judgeLoginName() {
+            $.ajax({
+                url: "/judgeloginname",
+                type: "post",
+                data: {
+                    loginName: $("#loginName").val()
+                },
+                success: function (result) {
+                    if (result.errorCode != 0) {
+//                        console.log($("#name_msg_text"));
+                        $("#loginName_msg_red").html("*");
+                        $("#loginName_msg_text").html(result.msg);
+                    } else {
+                        $("#loginName_msg_red").html("");
+                        $("#loginName_msg_text").html("");
+                    }
+                }
+            });
+        }
     </script>
 </head>
 <body>
@@ -62,8 +184,8 @@
 <div id="navi">
     <ul id="menu">
         <li><a href="/" class="index_off"></a></li>
-        <li><a href="role/role_list.html" class="role_off"></a></li>
-        <li><a href="admin/admin_list.html" class="admin_off"></a></li>
+        <li><a href="/rolepage" class="role_off"></a></li>
+        <li><a href="/adminpage" class="admin_off"></a></li>
         <li><a href="/feelistpage" class="fee_off"></a></li>
         <li><a href="/accountlistpage" class="account_on"></a></li>
         <li><a href="/servicepage" class="service_off"></a></li>
@@ -150,17 +272,17 @@
         <div class="text_info clearfix"><span>职业：</span></div>
         <div class="input_info">
             <select id="occupation">
-                <option>干部</option>
-                <option>学生</option>
-                <option>技术人员</option>
-                <option>其他</option>
+                <option value="学生">学生</option>
+                <option value="干部">干部</option>
+                <option value="技术人员">技术人员</option>
+                <option value="其他">其他</option>
             </select>
         </div>
         <div class="text_info clearfix"><span>性别：</span></div>
         <div class="input_info fee_type">
-            <input type="radio" name="radSex" checked="checked" id="female" onclick="feeTypeChange(1);"/>
+            <input type="radio" name="radSex" checked="checked" id="female" value="女"/>
             <label for="female">女</label>
-            <input type="radio" name="radSex" id="male" onclick="feeTypeChange(2);"/>
+            <input type="radio" name="radSex" id="male" value="男"/>
             <label for="male">男</label>
         </div>
         <div class="text_info clearfix"><span>通信地址：</span></div>

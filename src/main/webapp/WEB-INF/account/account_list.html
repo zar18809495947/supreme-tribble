@@ -8,7 +8,7 @@
     <link type="text/css" rel="stylesheet" media="all" href="../styles/global_color.css"/>
     <script type="text/javascript" src="/js/jquery-3.2.1.js"></script>
     <script language="javascript" type="text/javascript">
-        var pageSize = 5;
+        var pageSize = 3;
         var fuzzy_idCard = null;
         var fuzzy_name = null;
         var fuzzy_loginName = null;
@@ -92,6 +92,7 @@
         function findAllAccount(no, size) {
             $.ajax({
                 url: "/findaccount",
+                type: "post",
                 data: {
                     idcardNo: fuzzy_idCard,
                     realName: fuzzy_name,
@@ -107,7 +108,7 @@
                     }
                     pageInfo(result.data);
                 }
-            })
+            });
         }
 
         findAllAccount(1, pageSize);
@@ -117,7 +118,7 @@
             var tab = $("#tab");
             var tr = $("<tr></tr>");
             $("<td></td>").append(msg.accountId).appendTo(tr);
-            $("<td></td>").append(msg.realName).appendTo(tr);
+            $("<td></td>").append($("<a href='#'/>").click(showAccount).attr("num", msg.accountId).append(msg.realName)).appendTo(tr);
             $("<td></td>").append(msg.idcardNo).appendTo(tr);
             $("<td></td>").append(msg.loginName).appendTo(tr);
             if (msg.status == 1) {
@@ -126,7 +127,7 @@
                 $("<td></td>").append(msg.lastLoginTime).appendTo(tr);
                 var td = $("<td></td>");
                 $("<input type='button' value='暂停' class='btn_pause'>").click(setState).attr("pageNum", pageNum).attr("status", 1).attr("id", msg.accountId).appendTo(td);
-                $("<input type='button' value='修改' class='btn_modify'>").click(editAccount).attr("num",msg.accountId).appendTo(td);
+                $("<input type='button' value='修改' class='btn_modify'>").click(editAccount).attr("num", msg.accountId).appendTo(td);
                 $("<input type='button' value='删除' class='btn_delete'>").click(deleteAccount).attr("pageNum", pageNum).attr("id", msg.accountId).appendTo(td);
                 td.appendTo(tr);
             } else if (msg.status == 2) {
@@ -135,7 +136,7 @@
                 $("<td></td>").append(msg.lastLoginTime).appendTo(tr);
                 var td = $("<td></td>");
                 $("<input type='button' value='开通' class='btn_start'>").click(setState).attr("pageNum", pageNum).attr("status", 2).attr("id", msg.accountId).appendTo(td);
-                $("<input type='button' value='修改' class='btn_modify'>").click(editAccount).attr("num",msg.accountId).appendTo(td);
+                $("<input type='button' value='修改' class='btn_modify'>").click(editAccount).attr("num", msg.accountId).appendTo(td);
                 $("<input type='button' value='删除' class='btn_delete'>").click(deleteAccount).attr("pageNum", pageNum).attr("id", msg.accountId).appendTo(td);
                 td.appendTo(tr);
             } else {
@@ -180,6 +181,7 @@
             var size = $(this).attr("size");
             $.ajax({
                 url: "/findaccount",
+                type: "post",
                 data: {
                     idcardNo: fuzzy_idCard,
                     realName: fuzzy_name,
@@ -206,13 +208,14 @@
             fuzzy_id = $("#search_status").find("option:selected").attr("id");
             $.ajax({
                 url: "/findaccount",
+                type: "post",
                 data: {
                     idcardNo: fuzzy_idCard,
                     realName: fuzzy_name,
                     loginName: fuzzy_loginName,
                     status: fuzzy_id,
                     no: 1,
-                    size: 5
+                    size: pageSize
                 },
                 success: function (result) {
                     $("#tab").children().remove();
@@ -237,6 +240,23 @@
             });
         }
 
+        function modiPageSize() {
+            pageSize = $("#pageSize").val();
+            findAllAccount(1, pageSize);
+        }
+
+        // 显示全部信息
+        function showAccount() {
+            $.ajax({
+                url: "/saveaccount",
+                data: {
+                    accountId: $(this).attr("num")
+                },
+                success: function (result) {
+                    window.location.href = "/todatailaccount";
+                }
+            });
+        }
     </script>
 </head>
 <body>
@@ -250,8 +270,8 @@
 <div id="navi">
     <ul id="menu">
         <li><a href="/" class="index_off"></a></li>
-        <li><a href="role/role_list.html" class="role_off"></a></li>
-        <li><a href="admin/admin_list.html" class="admin_off"></a></li>
+        <li><a href="/rolepage" class="role_off"></a></li>
+        <li><a href="/adminpage" class="admin_off"></a></li>
         <li><a href="/feelistpage" class="fee_off"></a></li>
         <li><a href="/accountlistpage" class="account_on"></a></li>
         <li><a href="/servicepage" class="service_off"></a></li>
@@ -332,6 +352,8 @@
 <div id="footer">
     <p>[源自北美的技术，最优秀的师资，最真实的企业环境，最适用的实战项目]</p>
     <p>版权所有(C)云科技有限公司 </p>
+    每页条数:<input type="number" id="pageSize"/>
+    <input type="button" onclick="modiPageSize()" value="确定"/>
 </div>
 </body>
 </html>

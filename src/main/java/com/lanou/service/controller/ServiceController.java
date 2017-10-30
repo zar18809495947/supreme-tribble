@@ -59,6 +59,19 @@ public class ServiceController {
     }
 
     @ResponseBody
+    @RequestMapping(value = "/findbyserviceid")
+    public AjaxResult findByServiceId(HttpServletRequest request) {
+        Integer serviceId = (Integer) request.getSession().getAttribute("serviceId");
+        Account byAccountId = null;
+        try {
+            byAccountId = serviceService.findByAccountId(serviceId);
+        } catch (AddServiceException e) {
+            e.printStackTrace();
+        }
+        return new AjaxResult(byAccountId);
+    }
+
+    @ResponseBody
     @RequestMapping(value = "/findpageinfo")
     public AjaxResult findServicePageInfo(@RequestParam("osUsername") String osUsername,
                                           @RequestParam("unixHost") String unixHost,

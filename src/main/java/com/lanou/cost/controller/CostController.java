@@ -119,9 +119,10 @@ public class CostController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/judgename")
+    @RequestMapping(value = "/judgename", method = RequestMethod.POST)
     public AjaxResult judgeName(@RequestParam("name") String name, HttpServletRequest request) {
         String s = null;
+        System.out.println(name);
         try {
             s = costService.judgeName(name);
         } catch (AddCostException e) {
@@ -133,7 +134,22 @@ public class CostController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "judgebaseduration")
+    @RequestMapping(value = "/judgemodiname", method = RequestMethod.POST)
+    public AjaxResult judgeModiName(@RequestParam("name") String name, HttpServletRequest request) {
+        String s = null;
+        System.out.println(name);
+        try {
+            s = costService.judgeModiName(name);
+        } catch (AddCostException e) {
+            request.getSession().setAttribute("judge_name", false);
+            return new AjaxResult(e.getMessage(), 1, null);
+        }
+        request.getSession().setAttribute("judge_name", true);
+        return new AjaxResult(s);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/judgebaseduration")
     public AjaxResult judgeBaseDuration(Cost cost, HttpServletRequest request) {
         try {
             costService.judgeBaseDuration(cost);
@@ -146,7 +162,7 @@ public class CostController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "judgebasecost")
+    @RequestMapping(value = "/judgebasecost")
     public AjaxResult judgeBaseCost(Cost cost, HttpServletRequest request) {
         try {
             costService.judgeBaseCost(cost);
@@ -159,7 +175,7 @@ public class CostController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "judgeunitcost")
+    @RequestMapping(value = "/judgeunitcost")
     public AjaxResult judgeUnitCost(Cost cost, HttpServletRequest request) {
         try {
             costService.judgeUnitCost(cost);
@@ -172,7 +188,7 @@ public class CostController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/judgedescr")
+    @RequestMapping(value = "/judgedescr", method = RequestMethod.POST)
     public AjaxResult judgeDescr(Cost cost, HttpServletRequest request) {
         try {
             costService.judgeDescr(cost);
@@ -186,8 +202,9 @@ public class CostController {
 
     @ResponseBody
     @RequestMapping(value = "/uplistbybasecost")
-    public AjaxResult upListByBaseCost(@RequestParam("pageNum") Integer pageNum) {
-        PageInfo<Cost> withPageInfo = costService.findWithPageInfo(pageNum, 4);
+    public AjaxResult upListByBaseCost(@RequestParam("pageNum") Integer pageNum,
+                                       @RequestParam("pageSize") Integer pageSize) {
+        PageInfo<Cost> withPageInfo = costService.findWithPageInfo(pageNum, pageSize);
         List<Cost> list = withPageInfo.getList();
         Collections.sort(list);
         withPageInfo.setList(list);
@@ -196,8 +213,10 @@ public class CostController {
 
     @ResponseBody
     @RequestMapping(value = "/downlistbybasecost")
-    public AjaxResult downListByBaseCost(@RequestParam("pageNum") Integer pageNum) {
-        PageInfo<Cost> withPageInfo = costService.findWithPageInfo(pageNum, 4);
+    public AjaxResult downListByBaseCost(@RequestParam("pageNum") Integer pageNum,
+                                         @RequestParam("pageSize") Integer pageSize) {
+        System.out.println(pageSize);
+        PageInfo<Cost> withPageInfo = costService.findWithPageInfo(pageNum, pageSize);
         List<Cost> list = withPageInfo.getList();
         Comparator comparator = Collections.reverseOrder();
         Collections.sort(list, comparator);
@@ -207,8 +226,9 @@ public class CostController {
 
     @ResponseBody
     @RequestMapping(value = "/uplistbybaseduration")
-    public AjaxResult upListByBaseDuration(@RequestParam("pageNum") Integer pageNum) {
-        PageInfo<Cost> withPageInfo = costService.findWithPageInfo(pageNum, 4);
+    public AjaxResult upListByBaseDuration(@RequestParam("pageNum") Integer pageNum,
+                                           @RequestParam("pageSize") Integer pageSize) {
+        PageInfo<Cost> withPageInfo = costService.findWithPageInfo(pageNum, pageSize);
         List<Cost> list = withPageInfo.getList();
         Collections.sort(list, new Comparator<Cost>() {
                     @Override
@@ -223,8 +243,9 @@ public class CostController {
 
     @ResponseBody
     @RequestMapping(value = "/downlistbybaseduration")
-    public AjaxResult downListByBaseDuration(@RequestParam("pageNum") Integer pageNum) {
-        PageInfo<Cost> withPageInfo = costService.findWithPageInfo(pageNum, 4);
+    public AjaxResult downListByBaseDuration(@RequestParam("pageNum") Integer pageNum,
+                                             @RequestParam("pageSize") Integer pageSize) {
+        PageInfo<Cost> withPageInfo = costService.findWithPageInfo(pageNum, pageSize);
         List<Cost> list = withPageInfo.getList();
         Collections.sort(list, new Comparator<Cost>() {
                     @Override
