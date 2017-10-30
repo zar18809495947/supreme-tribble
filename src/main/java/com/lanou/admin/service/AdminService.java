@@ -31,5 +31,5 @@ public interface AdminService {
      * @param roleName 角色
      * @return 管理员集合
      */
-    PageInfo<Admin> findAdminByPageInfo(Integer moduleId, String roleName, Integer no, Integer size);
+    PageInfo<Admin> findAdminByPageInfo(String moduleId, String roleName, Integer no, Integer size);
 }

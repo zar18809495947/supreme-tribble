@@ -8,6 +8,8 @@
     <link type="text/css" rel="stylesheet" media="all" href="../styles/global_color.css"/>
     <script type="text/javascript" src="/js/jquery-3.2.1.js"></script>
     <script language="javascript" type="text/javascript">
+        var moduleId = null;
+        var roleName = null;
         var pageSize = 5;
 
         //显示角色详细信息
@@ -64,8 +66,8 @@
                     url: "/findalladmin",
                     type: "post",
                     data: {
-                        moduleId: null,
-                        roleName: null,
+                        moduleId: moduleId,
+                        roleName: roleName,
                         no: 1,
                         size: 5
                     },
@@ -105,23 +107,8 @@
                     div.appendTo(td);
                 }
                 td.appendTo(tr);
-                $("<td></td>").appendTo(tr);
+                $("<td></td>").append("<input type='button' value='修改' class='btn_modify' onclick='location.href='admin_modi.html';'/>").append("<input type='button' value='删除' class='btn_delete' onclick='deleteAdmin();'/>").appendTo(tr);
                 $("#tab").append(tr);
-                /*
-
-                 <td>
-                 <a class="summary" onmouseover="showDetail(true,this);" onmouseout="showDetail(false,this);">超级管理员...</a>
-                 <!--浮动的详细信息-->
-                 <div class="detail_info">
-                 超级管理员，角色管理员，账单管理员，报表管理员，业务账号管理员，账务账号管理员，aa，bb
-                 </div>
-                 </td>
-                 <td class="td_modi">
-                 <input type="button" value="修改" class="btn_modify" onclick="location.href='admin_modi.html';"/>
-                 <input type="button" value="删除" class="btn_delete" onclick="deleteAdmin();"/>
-                 </td>
-                 </tr>
-                 */
             }
 
             // 添加页码
@@ -159,8 +146,8 @@
                     url: "/findalladmin",
                     type: "post",
                     data: {
-                        moduleId: null,
-                        roleName: null,
+                        moduleId: moduleId,
+                        roleName: roleName,
                         no: no,
                         size: size
                     },
@@ -173,6 +160,30 @@
                     }
                 })
             }
+
+            $("#search").click(function () {
+                moduleId = $("#selModules").find("option:selected").attr("num");
+                roleName = $("#roleName").val();
+                console.log(1);
+                $.ajax({
+                    url: "/findalladmin",
+                    type: "post",
+                    data: {
+                        moduleId: moduleId,
+                        roleName: roleName,
+                        no: 1,
+                        size: 5
+                    },
+                    success: function (result) {
+                        console.log(result);
+                        $("#tab").children().remove();
+                        for (var i = 0; i < result.data.list.length; i++) {
+                            addNewTr(result.data.list[i], result.data.pageNum);
+                        }
+                        pageInfo(result.data);
+                    }
+                })
+            });
         })
     </script>
 </head>
@@ -207,11 +218,11 @@
             <div>
                 模块：
                 <select id="selModules" class="select_search">
-                    <option>全部</option>
+                    <option num="0">全部</option>
                 </select>
             </div>
-            <div>角色：<input type="text" value="" class="text_search width200"/></div>
-            <div><input type="button" value="搜索" class="btn_search"/></div>
+            <div>角色：<input type="text" class="text_search width200" id="roleName"/></div>
+            <div><input type="button" value="搜索" class="btn_search" id="search"/></div>
             <input type="button" value="密码重置" class="btn_add" onclick="resetPwd();"/>
             <input type="button" value="增加" class="btn_add" onclick="location.href='admin_add.html';"/>
         </div>

@@ -23,5 +23,5 @@ public interface AdminMapper {
      * @param roleName 角色
      * @return 管理员集合
      */
-    List<Admin> fuzzyFindAdmin(@Param("moduleId") Integer moduleId, @Param("roleName") String roleName);
+    List<Admin> fuzzyFindAdmin(@Param("moduleId") String moduleId, @Param("roleName") String roleName);
 }

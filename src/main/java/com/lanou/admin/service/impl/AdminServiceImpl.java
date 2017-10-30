@@ -35,12 +35,12 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public PageInfo<Admin> findAdminByPageInfo(Integer moduleId, String roleName, Integer no, Integer size) {
+    public PageInfo<Admin> findAdminByPageInfo(String moduleId, String roleName, Integer no, Integer size) {
         return getPageInfo(moduleId, roleName, no, size);
     }
 
 
-    private PageInfo<Admin> getPageInfo(Integer moduleId, String roleName, Integer no, Integer size) {
+    private PageInfo<Admin> getPageInfo(String moduleId, String roleName, Integer no, Integer size) {
         no = no == null ? 1 : no;
         size = size == null ? 5 : size;
         PageHelper.startPage(no, size);

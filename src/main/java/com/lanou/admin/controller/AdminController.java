@@ -24,12 +24,15 @@ public class AdminController {
 
     @ResponseBody
     @RequestMapping(value = "/findalladmin", method = RequestMethod.POST)
-    public AjaxResult findAllAdmin(@RequestParam("moduleId") Integer moduleId,
+    public AjaxResult findAllAdmin(@RequestParam("moduleId") String moduleId,
                                    @RequestParam("roleName") String roleName,
                                    @RequestParam("no") Integer no,
                                    @RequestParam("size") Integer size) {
         if (roleName == null || roleName.trim().isEmpty()) {
             roleName = null;
+        }
+        if (moduleId == null || moduleId.trim().isEmpty() || moduleId.equals("0")) {
+            moduleId = null;
         }
         PageInfo<Admin> adminByPageInfo = adminService.findAdminByPageInfo(moduleId, roleName, no, size);
         return new AjaxResult(adminByPageInfo);
