@@ -49,7 +49,39 @@
                         $("#baseCost").attr("class", "sort_desc");
                     }
                 } else {
-
+                    if ($("#baseCost").attr("class") == "sort_desc") {
+                        $.ajax({
+                            url: "/upsortbybasecost",
+                            data: {
+                                pageNum: $("#baseCost").attr("num"),
+                                pageSize: pageSize
+                            },
+                            success: function (result) {
+                                $("#tab").children().remove();
+                                for (var i = 0; i < result.data.list.length; i++) {
+                                    addNewTr(result.data.list[i], result.data.pageNum);
+                                }
+                                pageInfo(result.data);
+                            }
+                        });
+                        $("#baseCost").attr("class", "sort_asc");
+                    } else {
+                        $.ajax({
+                            url: "/downsortbybasecost",
+                            data: {
+                                pageNum: $("#baseCost").attr("num"),
+                                pageSize: pageSize
+                            },
+                            success: function (result) {
+                                $("#tab").children().remove();
+                                for (var i = 0; i < result.data.list.length; i++) {
+                                    addNewTr(result.data.list[i], result.data.pageNum);
+                                }
+                                pageInfo(result.data);
+                            }
+                        });
+                        $("#baseCost").attr("class", "sort_desc");
+                    }
                 }
             });
 
@@ -89,7 +121,39 @@
                         $("#baseDuration").attr("class", "sort_desc");
                     }
                 } else {
-
+                    if ($("#baseDuration").attr("class") == "sort_desc") {
+                        $.ajax({
+                            url: "/upsortbybaseduration",
+                            data: {
+                                pageNum: $("#baseDuration").attr("num"),
+                                pageSize: pageSize
+                            },
+                            success: function (result) {
+                                $("#tab").children().remove();
+                                for (var i = 0; i < result.data.list.length; i++) {
+                                    addNewTr(result.data.list[i], result.data.pageNum);
+                                }
+                                pageInfo(result.data);
+                            }
+                        });
+                        $("#baseDuration").attr("class", "sort_asc");
+                    } else {
+                        $.ajax({
+                            url: "/downsortbybaseduration",
+                            data: {
+                                pageNum: $("#baseDuration").attr("num"),
+                                pageSize: pageSize
+                            },
+                            success: function (result) {
+                                $("#tab").children().remove();
+                                for (var i = 0; i < result.data.list.length; i++) {
+                                    addNewTr(result.data.list[i], result.data.pageNum);
+                                }
+                                pageInfo(result.data);
+                            }
+                        });
+                        $("#baseDuration").attr("class", "sort_desc");
+                    }
                 }
             });
 
@@ -133,19 +197,29 @@
                             costId: attr
                         },
                         success: function (result) {
-                            $("#tr" + result.data.costId).remove();
-                            if ($("#tab").children().length == 0) {
-                                $("#prePage").click();
+                            if (result.errorCode == 0) {
+                                $("#tr" + result.data.costId).remove();
+                                if ($("#tab").children().length == 0) {
+                                    $("#prePage").click();
+                                } else {
+                                    page(pageNum, pageSize);
+                                }
+                                document.getElementById("operate_result_info").innerText = "删除成功！";
+                                document.getElementById("operate_result_info").style.display = "block";
+                                window.setTimeout(function () {
+                                    document.getElementById("operate_result_info").style.display = "none";
+                                }, 1500);
                             } else {
-                                page(pageNum, pageSize);
+                                document.getElementById("operate_result_info").innerText = result.msg;
+                                document.getElementById("operate_result_info").style.display = "block";
+                                window.setTimeout(function () {
+                                    document.getElementById("operate_result_info").style.display = "none";
+                                }, 1500);
                             }
+
                         }
                     });
-                    document.getElementById("operate_result_info").innerText = "删除成功！";
-                    document.getElementById("operate_result_info").style.display = "block";
-                    window.setTimeout(function () {
-                        document.getElementById("operate_result_info").style.display = "none";
-                    }, 1500);
+
                 } else {
 
                 }
@@ -226,6 +300,17 @@
                 } else {
                     $("<a></a>").attr("id", "nextPage").click(pages).attr("no", type.nextPage).attr("size", pageSize).append("下一页").attr("href", "#").appendTo(pa);
                 }
+
+
+                var sel = $("<select></select>").change(changePageSize);
+                for (var i = 1; i < 10; i++) {
+                    if (pageSize == i) {
+                        $("<option></option>").attr("selected", "selected").attr("num", i).append(i).appendTo(sel);
+                    } else {
+                        $("<option></option>").attr("num", i).append(i).appendTo(sel);
+                    }
+                }
+                sel.appendTo(pa);
             }
 
             // 第一次获取信息
@@ -268,10 +353,10 @@
                 })
             }
 
-            $("#modiPageSize").click(function () {
-                pageSize = $("#pageSize").val();
+            function changePageSize() {
+                pageSize = $(this).find("option:selected").attr("num");
                 page(1, pageSize);
-            });
+            }
         });
 
 
@@ -359,8 +444,6 @@
 <div id="footer">
     <p>[源自北美的技术，最优秀的师资，最真实的企业环境，最适用的实战项目]</p>
     <p>版权所有(C)云科技有限公司</p>
-    每页条数:<input type="number" id="pageSize"/>
-    <input type="button" id="modiPageSize" value="确定"/>
 </div>
 </body>
 </html>

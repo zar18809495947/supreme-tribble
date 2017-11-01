@@ -3,6 +3,7 @@ package com.lanou.cost.service;
 import com.github.pagehelper.PageInfo;
 import com.lanou.cost.bean.Cost;
 import com.lanou.cost.service.exception.add.AddCostException;
+import com.lanou.cost.service.exception.del.CostDeleteException;
 
 import java.util.List;
 
@@ -35,7 +36,7 @@ public interface CostService {
      *
      * @param cost id
      */
-    void delCost(Cost cost);
+    void delCost(Cost cost) throws CostDeleteException;
 
     /**
      * 修改资费
@@ -108,26 +109,26 @@ public interface CostService {
      *
      * @return 排序之后的集合
      */
-    List<Cost> upSortByBaseCost(Integer pageNum, Integer pageSize);
+    PageInfo<Cost> upSortByBaseCost(Integer pageNum, Integer pageSize);
 
     /**
      * 基费降序排序
      *
      * @return 排序之后的集合
      */
-    List<Cost> downSortByBaseCost(Integer pageNum, Integer pageSize);
+    PageInfo<Cost> downSortByBaseCost(Integer pageNum, Integer pageSize);
 
     /**
      * 时长排序升序
      *
      * @return 排序之后的集合
      */
-    List<Cost> upSortByBaseDuration(Integer pageNum, Integer pageSize);
+    PageInfo<Cost> upSortByBaseDuration(Integer pageNum, Integer pageSize);
 
     /**
      * 时长降序排序
      *
      * @return 排序之后的集合
      */
-    List<Cost> downSortByBaseDuration(Integer pageNum, Integer pageSize);
+    PageInfo<Cost> downSortByBaseDuration(Integer pageNum, Integer pageSize);
 }

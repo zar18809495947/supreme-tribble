@@ -53,4 +53,11 @@ public interface ServiceMapper {
      * @return 查找结果
      */
     Servicezz findByOSUsername(String osUsername);
+
+    /**
+     * 通过costId查找业务账号
+     * @param costId
+     * @return
+     */
+    List<Servicezz> findByCostId(Integer costId);
 }

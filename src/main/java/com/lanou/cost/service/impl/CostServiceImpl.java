@@ -6,6 +6,10 @@ import com.lanou.cost.bean.Cost;
 import com.lanou.cost.mapper.CostMapper;
 import com.lanou.cost.service.CostService;
 import com.lanou.cost.service.exception.add.*;
+import com.lanou.cost.service.exception.del.CostDeleteException;
+import com.lanou.cost.service.exception.del.ServiceExistException;
+import com.lanou.service.bean.Servicezz;
+import com.lanou.service.mapper.ServiceMapper;
 import org.junit.Test;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +27,9 @@ public class CostServiceImpl implements CostService {
     @Resource
     private CostMapper costMapper;
 
+    @Resource
+    private ServiceMapper serviceMapper;
+
     @Override
     public List<Cost> findAllCost() {
         return costMapper.findAllCost();
@@ -39,7 +46,11 @@ public class CostServiceImpl implements CostService {
     }
 
     @Override
-    public void delCost(Cost cost) {
+    public void delCost(Cost cost) throws CostDeleteException {
+        List<Servicezz> byCostId = serviceMapper.findByCostId(cost.getCostId());
+        if (byCostId.size() != 0) {
+            throw new ServiceExistException();
+        }
         costMapper.deleteByPrimaryKey(cost.getCostId());
     }
 
@@ -50,7 +61,12 @@ public class CostServiceImpl implements CostService {
 
     @Override
     public PageInfo<Cost> findWithPageInfo(Integer pageNum, Integer pageSize) {
-        return queryCostByPage(pageNum, pageSize);
+        pageNum = pageNum == null ? 1 : pageNum;
+        pageSize = pageSize == null ? 5 : pageSize;
+        PageHelper.startPage(pageNum, pageSize);
+        List<Cost> costList = costMapper.findAllCost();
+        PageInfo<Cost> pageInfo = new PageInfo<Cost>(costList);
+        return pageInfo;
     }
 
     @Override
@@ -166,34 +182,42 @@ public class CostServiceImpl implements CostService {
     }
 
     @Override
-    public List<Cost> upSortByBaseCost(Integer pageNum, Integer pageSize) {
-        return null;
-    }
-
-    @Override
-    public List<Cost> downSortByBaseCost(Integer pageNum, Integer pageSize) {
-        return null;
-    }
-
-    @Override
-    public List<Cost> upSortByBaseDuration(Integer pageNum, Integer pageSize) {
-        return null;
-    }
-
-    @Override
-    public List<Cost> downSortByBaseDuration(Integer pageNum, Integer pageSize) {
-        return null;
-    }
-
-
-    private PageInfo<Cost> queryCostByPage(Integer pageNum, Integer pageSize) {
+    public PageInfo<Cost> upSortByBaseCost(Integer pageNum, Integer pageSize) {
         pageNum = pageNum == null ? 1 : pageNum;
         pageSize = pageSize == null ? 5 : pageSize;
         PageHelper.startPage(pageNum, pageSize);
-        List<Cost> costList = costMapper.findAllCost();
-//        System.out.println(costList);
-        PageInfo<Cost> pageInfo = new PageInfo<Cost>(costList);
-//        System.out.println(pageInfo);
+        List<Cost> costs = costMapper.upSortByBaseCost();
+        PageInfo<Cost> pageInfo = new PageInfo<Cost>(costs);
+        return pageInfo;
+    }
+
+    @Override
+    public PageInfo<Cost> downSortByBaseCost(Integer pageNum, Integer pageSize) {
+        pageNum = pageNum == null ? 1 : pageNum;
+        pageSize = pageSize == null ? 5 : pageSize;
+        PageHelper.startPage(pageNum, pageSize);
+        List<Cost> costs = costMapper.downSortByBaseCost();
+        PageInfo<Cost> pageInfo = new PageInfo<Cost>(costs);
+        return pageInfo;
+    }
+
+    @Override
+    public PageInfo<Cost> upSortByBaseDuration(Integer pageNum, Integer pageSize) {
+        pageNum = pageNum == null ? 1 : pageNum;
+        pageSize = pageSize == null ? 5 : pageSize;
+        PageHelper.startPage(pageNum, pageSize);
+        List<Cost> costs = costMapper.upSortByBaseDuration();
+        PageInfo<Cost> pageInfo = new PageInfo<Cost>(costs);
+        return pageInfo;
+    }
+
+    @Override
+    public PageInfo<Cost> downSortByBaseDuration(Integer pageNum, Integer pageSize) {
+        pageNum = pageNum == null ? 1 : pageNum;
+        pageSize = pageSize == null ? 5 : pageSize;
+        PageHelper.startPage(pageNum, pageSize);
+        List<Cost> costs = costMapper.downSortByBaseDuration();
+        PageInfo<Cost> pageInfo = new PageInfo<Cost>(costs);
         return pageInfo;
     }
 

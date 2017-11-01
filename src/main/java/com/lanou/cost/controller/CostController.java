@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.lanou.cost.bean.Cost;
 import com.lanou.cost.service.CostService;
 import com.lanou.cost.service.exception.add.AddCostException;
+import com.lanou.cost.service.exception.del.CostDeleteException;
 import com.lanou.utils.AjaxResult;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,7 +36,12 @@ public class CostController {
     }
 
     @RequestMapping(value = "/tomodicost")
-    public String toModiCost() {
+    public String toModiCost(HttpServletRequest request) {
+        request.getSession().setAttribute("judge_name", true);
+        request.getSession().setAttribute("judge_baseDuration", true);
+        request.getSession().setAttribute("judge_baseCost", true);
+        request.getSession().setAttribute("judge_unitCost", true);
+        request.getSession().setAttribute("judge_descr", true);
         return "fee/fee_modi";
     }
 
@@ -82,7 +88,11 @@ public class CostController {
     @ResponseBody
     @RequestMapping(value = "/delcost")
     public AjaxResult delCost(Cost cost) {
-        costService.delCost(cost);
+        try {
+            costService.delCost(cost);
+        } catch (CostDeleteException e) {
+            return new AjaxResult(e.getMessage(), 1, null);
+        }
         return new AjaxResult(cost);
     }
 
@@ -112,10 +122,17 @@ public class CostController {
 
     @ResponseBody
     @RequestMapping(value = "/modifycost", method = RequestMethod.POST)
-    public AjaxResult modifyCost(Cost cost) {
-        cost.setCreatime(new Timestamp(System.currentTimeMillis()).toString());
-        costService.updateCost(cost);
-        return new AjaxResult(cost);
+    public AjaxResult modifyCost(HttpServletRequest request, Cost cost) {
+        if ((boolean) request.getSession().getAttribute("judge_name") &&
+                (boolean) request.getSession().getAttribute("judge_baseDuration") &&
+                (boolean) request.getSession().getAttribute("judge_baseCost") &&
+                (boolean) request.getSession().getAttribute("judge_unitCost") &&
+                (boolean) request.getSession().getAttribute("judge_descr")) {
+            cost.setCreatime(new Timestamp(System.currentTimeMillis()).toString());
+            costService.updateCost(cost);
+            return new AjaxResult(cost);
+        }
+        return new AjaxResult("无法提交", 1, cost);
     }
 
     @ResponseBody
@@ -256,5 +273,37 @@ public class CostController {
         );
         withPageInfo.setList(list);
         return new AjaxResult(withPageInfo);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/upsortbybasecost")
+    public AjaxResult upSortByBaseCost(@RequestParam("pageNum") Integer pageNum,
+                                       @RequestParam("pageSize") Integer pageSize) {
+        PageInfo<Cost> costPageInfo = costService.upSortByBaseCost(pageNum, pageSize);
+        return new AjaxResult(costPageInfo);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/downsortbybasecost")
+    public AjaxResult downSortByBaseCost(@RequestParam("pageNum") Integer pageNum,
+                                         @RequestParam("pageSize") Integer pageSize) {
+        PageInfo<Cost> costPageInfo = costService.downSortByBaseCost(pageNum, pageSize);
+        return new AjaxResult(costPageInfo);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/upsortbybaseduration")
+    public AjaxResult upSortByBaseDuration(@RequestParam("pageNum") Integer pageNum,
+                                           @RequestParam("pageSize") Integer pageSize) {
+        PageInfo<Cost> costPageInfo = costService.upSortByBaseDuration(pageNum, pageSize);
+        return new AjaxResult(costPageInfo);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/downsortbybaseduration")
+    public AjaxResult downSortByBaseDuration(@RequestParam("pageNum") Integer pageNum,
+                                             @RequestParam("pageSize") Integer pageSize) {
+        PageInfo<Cost> costPageInfo = costService.downSortByBaseDuration(pageNum, pageSize);
+        return new AjaxResult(costPageInfo);
     }
 }

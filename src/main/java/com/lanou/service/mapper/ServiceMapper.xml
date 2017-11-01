@@ -53,6 +53,12 @@
         from service
         where service_id = #{serviceId,jdbcType=INTEGER}
     </select>
+    <select id="findByCostId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM service
+        WHERE cost_id=#{costId}
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from service
     where service_id = #{serviceId,jdbcType=INTEGER}
