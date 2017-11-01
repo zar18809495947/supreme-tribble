@@ -14,74 +14,82 @@
 
             //排序按钮的点击事件
             $("#baseCost").click(function () {
-                if ($("#baseCost").attr("class") == "sort_desc") {
-                    $.ajax({
-                        url: "/uplistbybasecost",
-                        data: {
-                            pageNum: $("#baseCost").attr("num"),
-                            pageSize: pageSize
-                        },
-                        success: function (result) {
-                            $("#tab").children().remove();
-                            for (var i = 0; i < result.data.list.length; i++) {
-                                addNewTr(result.data.list[i], result.data.pageNum);
+                if ($("#sel").find("option:selected").attr("num") == '1') {
+                    if ($("#baseCost").attr("class") == "sort_desc") {
+                        $.ajax({
+                            url: "/uplistbybasecost",
+                            data: {
+                                pageNum: $("#baseCost").attr("num"),
+                                pageSize: pageSize
+                            },
+                            success: function (result) {
+                                $("#tab").children().remove();
+                                for (var i = 0; i < result.data.list.length; i++) {
+                                    addNewTr(result.data.list[i], result.data.pageNum);
+                                }
+                                pageInfo(result.data);
                             }
-                            pageInfo(result.data);
-                        }
-                    });
-                    $("#baseCost").attr("class", "sort_asc");
+                        });
+                        $("#baseCost").attr("class", "sort_asc");
+                    } else {
+                        $.ajax({
+                            url: "/downlistbybasecost",
+                            data: {
+                                pageNum: $("#baseCost").attr("num"),
+                                pageSize: pageSize
+                            },
+                            success: function (result) {
+                                $("#tab").children().remove();
+                                for (var i = 0; i < result.data.list.length; i++) {
+                                    addNewTr(result.data.list[i], result.data.pageNum);
+                                }
+                                pageInfo(result.data);
+                            }
+                        });
+                        $("#baseCost").attr("class", "sort_desc");
+                    }
                 } else {
-                    $.ajax({
-                        url: "/downlistbybasecost",
-                        data: {
-                            pageNum: $("#baseCost").attr("num"),
-                            pageSize: pageSize
-                        },
-                        success: function (result) {
-                            $("#tab").children().remove();
-                            for (var i = 0; i < result.data.list.length; i++) {
-                                addNewTr(result.data.list[i], result.data.pageNum);
-                            }
-                            pageInfo(result.data);
-                        }
-                    });
-                    $("#baseCost").attr("class", "sort_desc");
+
                 }
             });
 
             $("#baseDuration").click(function () {
-                if ($("#baseDuration").attr("class") == "sort_desc") {
-                    $.ajax({
-                        url: "/uplistbybaseduration",
-                        data: {
-                            pageNum: $("#baseDuration").attr("num"),
-                            pageSize: pageSize
-                        },
-                        success: function (result) {
-                            $("#tab").children().remove();
-                            for (var i = 0; i < result.data.list.length; i++) {
-                                addNewTr(result.data.list[i], result.data.pageNum);
+                if ($("#sel").find("option:selected").attr("num") == '1') {
+                    if ($("#baseDuration").attr("class") == "sort_desc") {
+                        $.ajax({
+                            url: "/uplistbybaseduration",
+                            data: {
+                                pageNum: $("#baseDuration").attr("num"),
+                                pageSize: pageSize
+                            },
+                            success: function (result) {
+                                $("#tab").children().remove();
+                                for (var i = 0; i < result.data.list.length; i++) {
+                                    addNewTr(result.data.list[i], result.data.pageNum);
+                                }
+                                pageInfo(result.data);
                             }
-                            pageInfo(result.data);
-                        }
-                    });
-                    $("#baseDuration").attr("class", "sort_asc");
+                        });
+                        $("#baseDuration").attr("class", "sort_asc");
+                    } else {
+                        $.ajax({
+                            url: "/downlistbybaseduration",
+                            data: {
+                                pageNum: $("#baseDuration").attr("num"),
+                                pageSize: pageSize
+                            },
+                            success: function (result) {
+                                $("#tab").children().remove();
+                                for (var i = 0; i < result.data.list.length; i++) {
+                                    addNewTr(result.data.list[i], result.data.pageNum);
+                                }
+                                pageInfo(result.data);
+                            }
+                        });
+                        $("#baseDuration").attr("class", "sort_desc");
+                    }
                 } else {
-                    $.ajax({
-                        url: "/downlistbybaseduration",
-                        data: {
-                            pageNum: $("#baseDuration").attr("num"),
-                            pageSize: pageSize
-                        },
-                        success: function (result) {
-                            $("#tab").children().remove();
-                            for (var i = 0; i < result.data.list.length; i++) {
-                                addNewTr(result.data.list[i], result.data.pageNum);
-                            }
-                            pageInfo(result.data);
-                        }
-                    });
-                    $("#baseDuration").attr("class", "sort_desc");
+
                 }
             });
 
@@ -301,7 +309,12 @@
                 <!--<input type="button" value="月租" class="sort_asc" onclick="sort(this);" />-->
                 <input type="button" value="基费" class="sort_asc" id="baseCost"/>
                 <input type="button" value="时长" class="sort_asc" id="baseDuration"/>
+                <select id="sel">
+                    <option num="1">本页排序</option>
+                    <option num="2">所有排序</option>
+                </select>
             </div>
+
             <input type="button" value="增加" class="btn_add" onclick="window.location.href='/toaddcost';"/>
         </div>
         <!--启用操作的操作提示-->

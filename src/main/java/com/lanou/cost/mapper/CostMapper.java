@@ -52,4 +52,34 @@ public interface CostMapper {
      * @return 费用
      */
     List<Cost> findByName(String name);
+
+    /**
+     * 基费排序升序
+     *
+     * @return 排序之后的集合
+     */
+    List<Cost> upSortByBaseCost();
+
+    /**
+     * 基费降序排序
+     *
+     * @return 排序之后的集合
+     */
+    List<Cost> downSortByBaseCost();
+
+    /**
+     * 时长排序升序
+     *
+     * @return 排序之后的集合
+     */
+    List<Cost> upSortByBaseDuration();
+
+    /**
+     * 时长降序排序
+     *
+     * @return 排序之后的集合
+     */
+    List<Cost> downSortByBaseDuration();
+
+
 }

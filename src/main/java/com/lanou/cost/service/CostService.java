@@ -101,4 +101,33 @@ public interface CostService {
      * @return 是否合法
      */
     String judgeDescr(Cost cost) throws AddCostException;
+
+
+    /**
+     * 基费排序升序
+     *
+     * @return 排序之后的集合
+     */
+    List<Cost> upSortByBaseCost(Integer pageNum, Integer pageSize);
+
+    /**
+     * 基费降序排序
+     *
+     * @return 排序之后的集合
+     */
+    List<Cost> downSortByBaseCost(Integer pageNum, Integer pageSize);
+
+    /**
+     * 时长排序升序
+     *
+     * @return 排序之后的集合
+     */
+    List<Cost> upSortByBaseDuration(Integer pageNum, Integer pageSize);
+
+    /**
+     * 时长降序排序
+     *
+     * @return 排序之后的集合
+     */
+    List<Cost> downSortByBaseDuration(Integer pageNum, Integer pageSize);
 }

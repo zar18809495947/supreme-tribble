@@ -160,4 +160,24 @@
         <include refid="Base_Column_List"/>
         FROM cost WHERE name = #{name}
     </select>
+    <select id="upSortByBaseCost" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM cost ORDER BY base_cost
+    </select>
+    <select id="downSortByBaseCost" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM cost ORDER BY base_cost DESC
+    </select>
+    <select id="upSortByBaseDuration" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM cost ORDER BY base_duration
+    </select>
+    <select id="downSortByBaseDuration" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM cost ORDER BY base_duration DESC
+    </select>
 </mapper>

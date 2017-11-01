@@ -165,6 +165,27 @@ public class CostServiceImpl implements CostService {
         return "可以使用";
     }
 
+    @Override
+    public List<Cost> upSortByBaseCost(Integer pageNum, Integer pageSize) {
+        return null;
+    }
+
+    @Override
+    public List<Cost> downSortByBaseCost(Integer pageNum, Integer pageSize) {
+        return null;
+    }
+
+    @Override
+    public List<Cost> upSortByBaseDuration(Integer pageNum, Integer pageSize) {
+        return null;
+    }
+
+    @Override
+    public List<Cost> downSortByBaseDuration(Integer pageNum, Integer pageSize) {
+        return null;
+    }
+
+
     private PageInfo<Cost> queryCostByPage(Integer pageNum, Integer pageSize) {
         pageNum = pageNum == null ? 1 : pageNum;
         pageSize = pageSize == null ? 5 : pageSize;
